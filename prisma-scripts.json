@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "prisma:migrate:safe": "node prisma-safe-deploy.js"
+  }
+}
