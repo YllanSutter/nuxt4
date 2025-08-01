@@ -6,10 +6,174 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../app/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(uuid())
+  name        String
+  email       String   @unique
+  password    String
+  budget      Decimal
+  created_at  DateTime @default(now())
+  role_id     String
+  role        Role     @relation(fields: [role_id], references: [id])
+  bundles     Bundle[]
+  user_games  UserGame[]
+  user_label_visibility UserLabelVisibility[]
+}
+
+model Role {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  users       User[]
+}
+
+model Bundle {
+  id          String   @id @default(uuid())
+  user_id     String
+  name        String
+  price       Decimal
+  link        String
+  image       String
+  platform_id String
+  state_id    String
+  month_id    String
+  year_id     String
+  is_public   Boolean
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  user        User     @relation(fields: [user_id], references: [id])
+  platform    Platform @relation(fields: [platform_id], references: [id])
+  state       State    @relation(fields: [state_id], references: [id])
+  month       Month    @relation(fields: [month_id], references: [id])
+  year        Year     @relation(fields: [year_id], references: [id])
+  bundle_games BundleGame[]
+}
+
+model BundleGame {
+  id              String   @id @default(uuid())
+  bundle_id       String
+  user_game_id    String
+  order_in_bundle Int
+  bundle          Bundle   @relation(fields: [bundle_id], references: [id])
+  user_game       UserGame @relation(fields: [user_game_id], references: [id])
+}
+
+model UserGame {
+  id                 String   @id @default(uuid())
+  user_id            String
+  base_game_id       String
+  name               String
+  price              Decimal
+  black_market_price Decimal
+  sale_price         Decimal
+  initial_price      Decimal
+  playtime_hours     Decimal
+  rating             Decimal
+  tag_id             String
+  order_in_list      Int
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
+  user               User     @relation(fields: [user_id], references: [id])
+  base_game          BaseGame @relation(fields: [base_game_id], references: [id])
+  tag                Tag      @relation(fields: [tag_id], references: [id])
+  bundle_games       BundleGame[]
+  price_history      PriceHistory[]
+  game_stats         GameStat[]
+}
+
+model BaseGame {
+  id    String   @id @default(uuid())
+  name  String
+  user_games UserGame[]
+}
+
+model Label {
+  id              String   @id @default(uuid())
+  name            String
+  key             String
+  type            String
+  image           String
+  default_visible Boolean
+  position        Int
+  user_label_visibility UserLabelVisibility[]
+  color           String @default("red")
+  emplacement     emplacement[]
+}
+
+model emplacement {
+  id      String   @id @default(uuid())
+  name    String
+  label_id String
+  label   Label  @relation(fields: [label_id], references: [id])
+}
+
+model UserLabelVisibility {
+  id      String   @id @default(uuid())
+  user_id String
+  label_id String
+  visible Boolean
+  user    User   @relation(fields: [user_id], references: [id])
+  label   Label  @relation(fields: [label_id], references: [id])
+}
+
+model Platform {
+  id      String   @id @default(uuid())
+  name    String
+  image   String   @default("")
+  color   String   @default("blue")
+  bundles Bundle[]
+}
+
+model Tag {
+  id         String   @id @default(uuid())
+  name       String
+  image      String   @default("")
+  color      String   @default("green")
+  user_games UserGame[]
+}
+
+model Year {
+  id      String   @id @default(uuid())
+  name    String
+  bundles Bundle[]
+}
+
+model Month {
+  id      String   @id @default(uuid())
+  name    String
+  bundles Bundle[]
+}
+
+model State {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  bundles     Bundle[]
+}
+
+model PriceHistory {
+  id                 String   @id @default(uuid())
+  user_game_id       String
+  date               DateTime
+  price              Decimal
+  black_market_price Decimal
+  sale_price         Decimal
+  initial_price      Decimal
+  user_game          UserGame @relation(fields: [user_game_id], references: [id])
+}
+
+model GameStat {
+  id             String   @id @default(uuid())
+  user_game_id   String
+  date           DateTime
+  playtime_hours Decimal
+  rating         Decimal
+  user_game      UserGame @relation(fields: [user_game_id], references: [id])
 }

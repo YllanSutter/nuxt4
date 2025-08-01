@@ -1,0 +1,275 @@
+@import "tailwindcss";
+
+.selectTableCalc.labeltags{--label-color:#747474;}
+.selectTableCalc.labeltags.keep{--label-color:#065f46;}
+.selectTableCalc.labeltags.trade{--label-color:#991b1b;}
+.selectTableCalc.labeltags.traded{--label-color:#0c4a6e;}
+.selectTableCalc.labeltags.platine{--label-color:#854d0e;}
+
+.selectTableCalc.labeltags:not(.base) label
+{
+    background: var(--label-color);
+    z-index: 1;
+}
+
+.selectTableCalc.labeltags:not(.base) select
+{
+    border: 1Px solid var(--label-color);
+}
+
+/* -------CHECKBOX ---------------- */
+.wrapChoix::-webkit-scrollbar
+{
+    width: 1Px;
+}
+/* ----checkboxStyle ---- */
+.checkbox-wrapper label
+{
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    align-items: center;
+    justify-items: start;
+}
+.checkbox-wrapper .cbx {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    cursor: pointer;
+  }
+  .checkbox-wrapper .cbx span {
+    display: inline-block;
+    vertical-align: middle;
+    transform: translate3d(0, 0, 0);
+  }
+  .checkbox-wrapper .cbx span:first-child {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    transform: scale(1);
+    vertical-align: middle;
+    border: 1px solid #B9B8C3;
+    transition: all 0.2s ease;
+  }
+  .checkbox-wrapper .cbx span:first-child svg {
+    position: absolute;
+    z-index: 1;
+    top: 8px;
+    left: 6px;
+    fill: none;
+    stroke: white;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 16px;
+    stroke-dashoffset: 16px;
+    transition: all 0.3s ease;
+    transition-delay: 0.1s;
+    transform: translate3d(0, 0, 0);
+  }
+  .checkbox-wrapper .cbx span:first-child:before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    background: #00412e;
+    display: block;
+    transform: scale(0);
+    opacity: 1;
+    border-radius: 50%;
+    transition-delay: 0.2s;
+  }
+  .checkbox-wrapper .cbx span:last-child {
+    margin-left: 8px;
+  }
+  .checkbox-wrapper .cbx span:last-child:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    height: 1px;
+    width: 100%;
+    background: #B9B8C3;
+    transform-origin: 0 0;
+    transform: scaleX(0);
+  }
+  .checkbox-wrapper .cbx:hover span:first-child {
+    border-color: #00412e;
+  }
+
+  .checkbox-wrapper .inp-cbx:checked + .cbx span:first-child {
+    border-color: #00412e;
+    background: #00412e;
+    animation: check-15 0.6s ease;
+  }
+  .checkbox-wrapper .inp-cbx:checked + .cbx span:first-child svg {
+    stroke-dashoffset: 0;
+  }
+  .checkbox-wrapper .inp-cbx:checked + .cbx span:first-child:before {
+    transform: scale(2.2);
+    opacity: 0;
+    transition: all 0.6s ease;
+  }
+  .checkbox-wrapper .inp-cbx:not(:checked) + .cbx span:last-child {
+    color: #B9B8C3;
+    transition: all 0.3s ease;
+  }
+  .checkbox-wrapper .inp-cbx:not(:checked) + .cbx span:last-child:after {
+    transform: scaleX(1);
+    transition: all 0.3s ease;
+  }
+
+  @keyframes check-15 {
+    50% {
+      transform: scale(1.2);
+    }
+  }
+
+  @keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.mainHeader {
+    width: 100%;
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+}
+
+.avatarPlaceholder {
+    border: var(--custom-border);
+    border-radius: var(--custom-border-radius);
+    width: 35px;
+    height: 35px;
+    background-color: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* .form-widget {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-widget>.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background-color: #444444;
+    text-transform: none !important;
+    transition: all 0.2s ease;
+}
+
+.form-widget .button:hover {
+    background-color: #2a2a2a;
+} */
+
+.form-widget .button>.loader {
+    width: 17px;
+    animation: spin 1s linear infinite;
+    filter: invert(1);
+}
+/* FOND */
+.bgfond {
+  position: absolute;
+  width: 100%;
+  height: 100%; /* Assure que la div prend toute la hauteur de la fenêtre */
+  overflow: hidden; /* Empêche le débordement */
+  z-index:  -1;
+}
+
+.bgfond.loginFond
+{
+  z-index: 0;
+}
+
+.bgfond::before,.bgfond::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/assets/images/leaves.jpg');
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.75; 
+  pointer-events: none;
+  z-index: -2;
+}
+.bgfond::after {
+  background: linear-gradient(to bottom,#000000ee,#000000cb,#000000ee);
+  z-index: -1;
+  opacity: 1;
+}
+
+.bgfond.loginFond::after
+{
+  background: linear-gradient(to bottom,#00000090,#000 80%);
+  z-index: 0;
+}
+
+/* tableaux */
+.custom-scrollbar {
+  padding-bottom: 20Px;
+  scrollbar-width: thin; /* Pour Firefox */
+  scrollbar-color: #111 #000; /* Pour Firefox */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #111; 
+}
+
+.wrapTableauUnique::-webkit-scrollbar {
+  display: none; /* Masque la barre de défilement sur les navigateurs basés sur WebKit */
+}
+
+/* .wrapTableauUnique {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+} */
+/* .TableauTop thead,.tab-button.active {
+  clip-path: polygon(1% 5%, 99% 0%, 96% 100%, 3% 96%);
+} */
+.tableauxPrincipaux .tabs
+{
+  margin-left: -15px;
+}
+@media (min-width:1025px)
+{
+.TableauTop::before
+{
+  clip-path: polygon(1% 5%, 100% 0%, 96% 100%, 3% 96%);
+}
+.TableauTop::before,.TableauTop::after
+{
+  content:"";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 30px);
+  background: #00251a;
+  z-index: -1;
+}
+.TableauTop::after
+{
+  transform: skew(25deg);
+}
+}
+@media (max-width:1024px)
+{
+  .filter-group>*,.selectWrap>*
+  {
+    border: none!important;
+  }
+}
