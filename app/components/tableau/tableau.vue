@@ -16,6 +16,11 @@ import { DropdownMenu, TableauRadioGroup } from '../../../.nuxt/components';
   const years = computed(() => allOptions.value?.year || [])
   const labels = computed(() => allOptions.value?.label || [])
   const emplacements = computed(() => allOptions.value?.emplacement || [])
+  const mainLabels = computed(() => {
+    const mainEmplacement = emplacements.value.find((emp: any) => emp.name === 'main')
+    if (!mainEmplacement) return []
+    return labels.value.filter((label: any) => label.emplacement_id === mainEmplacement.id)
+  })
   const tags = computed(() => allOptions.value?.tag || [])
   const platforms = computed(() => allOptions.value?.platform || [])
   const bundles = computed(() => allOptions.value?.bundle || [])
@@ -78,20 +83,24 @@ import { DropdownMenu, TableauRadioGroup } from '../../../.nuxt/components';
     </button>
   </div>
   
-  <div v-else-if="!userGames.length || !labels.length" class="p-4">
+  <div v-else-if="!userGames.length || !mainLabels.length" class="p-4">
     Chargement des données du tableau...
   </div>
   
   <div v-else>
-    <Table :key="`table-${userGames.length}-${labels.length}`">
+    <Table :key="`table-${userGames.length}-${mainLabels.length}`">
       <TableHeader>
         <TableRow>
-          <TableHead v-for="label in labels" :key="label.id">{{ label.name }}</TableHead>
+          <TableHead v-for="label in mainLabels" :key="label.id">{{ label.name }}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         <TableRow v-for="userGame in userGames" :key="userGame.id">
-          <TableCell v-for="label in labels" :key="label.id" class="font-medium">
+          <TableCell 
+            v-for="label in mainLabels" 
+            :key="label.id" 
+            class="font-medium"
+          >
            
             <div class="flex items-center gap-1">                
                 <TableauRadioGroup 

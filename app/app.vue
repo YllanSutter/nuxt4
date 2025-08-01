@@ -3,7 +3,6 @@
     <!-- Header avec le bouton de mode couleur -->
     <header class="border-b border-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div class="container flex h-14 items-center justify-between px-4">
-        <h1 class="text-lg font-semibold">Mon App Nuxt 4</h1>
         <ColorModeToggle />
       </div>
     </header>

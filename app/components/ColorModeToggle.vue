@@ -13,24 +13,18 @@
       v-else-if="colorMode.preference === 'light'"
       class="h-4 w-4" 
     />
-    <Laptop 
-      v-else
-      class="h-4 w-4" 
-    />
     <span class="sr-only">Basculer le mode couleur</span>
   </Button>
 </template>
 
 <script setup lang="ts">
-import { Sun, Moon, Laptop } from 'lucide-vue-next'
+import { Sun, Moon } from 'lucide-vue-next'
 
 const colorMode = useColorMode()
 
 const toggleColorMode = () => {
   if (colorMode.preference === 'light') {
     colorMode.preference = 'dark'
-  } else if (colorMode.preference === 'dark') {
-    colorMode.preference = 'system'
   } else {
     colorMode.preference = 'light'
   }

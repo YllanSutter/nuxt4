@@ -104,14 +104,14 @@ model Label {
   position        Int
   user_label_visibility UserLabelVisibility[]
   color           String @default("red")
-  emplacements    Emplacement[]
+  emplacement_id  String
+  emplacement     Emplacement @relation(fields: [emplacement_id], references: [id])
 }
 
 model Emplacement {
   id      String   @id @default(uuid())
   name    String
-  label_id String
-  label   Label  @relation(fields: [label_id], references: [id])
+  labels  Label[]
 }
 
 model UserLabelVisibility {
