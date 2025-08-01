@@ -104,10 +104,10 @@ model Label {
   position        Int
   user_label_visibility UserLabelVisibility[]
   color           String @default("red")
-  emplacement     emplacement[]
+  emplacements    Emplacement[]
 }
 
-model emplacement {
+model Emplacement {
   id      String   @id @default(uuid())
   name    String
   label_id String
