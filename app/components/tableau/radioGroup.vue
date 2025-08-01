@@ -28,7 +28,14 @@ const modelValue = useVModel(props, 'modelValue', emits, {
 <template>
  <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button :class="['w-full ']" variant="outline" :style="{ borderBottom: `1px solid ${props.options?.find(opt => opt.name === modelValue)?.color || ''}` }">{{ modelValue || props.label || 'Sélectionner' }}</Button>
+        <Button :class="['w-full ']" variant="outline" :style="{ borderBottom: `1px solid ${props.options?.find(opt => opt.name === modelValue)?.color || ''}` }">
+          <Icon
+            :style="{ color: props.options?.find((opt: any) => opt.name === modelValue)?.color || '' }"
+            :name="props.options?.find((opt: any) => opt.name === modelValue)?.image || ''"
+            :size="20"
+          ></Icon>
+          {{ modelValue || props.label || 'Sélectionner' }}
+        </Button>
       </DropdownMenuTrigger>
       
       <DropdownMenuContent class="w-56" align="start">
