@@ -43,6 +43,7 @@
     
     <TableauFiltres
     :main-labels=filtres
+    :bundles=bundles
     />
     <TableauGroup
     :main-labels=mainLabels
