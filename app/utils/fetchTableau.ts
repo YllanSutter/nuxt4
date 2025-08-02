@@ -53,10 +53,23 @@ export const useTableauData = (models?: string[] | string) => {
     color: tag.color, 
     image: tag.image 
   })))
-  const optionsMonths = computed(() => months.value.map((month: any) => ({ 
-    id: month.id, 
-    name: month.name 
-  })))
+  
+  // Ordre chronologique correct pour les mois français
+  const monthOrder = [
+    'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
+    'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'
+  ]
+  
+  const optionsMonths = computed(() => {
+    return months.value
+      .map((month: any) => ({ id: month.id, name: month.name }))
+      .sort((a: any, b: any) => {
+        const aIndex = monthOrder.findIndex(m => m.toLowerCase() === a.name.toLowerCase())
+        const bIndex = monthOrder.findIndex(m => m.toLowerCase() === b.name.toLowerCase())
+        return aIndex - bIndex
+      })
+  })
+  
   const optionsYears = computed(() => years.value.map((year: any) => ({ 
     id: year.id, 
     name: year.name 

@@ -17,7 +17,7 @@ const cachedFilterResults = ref<{
 export const useTableauFilters = () => {
   // Fonction pour mettre à jour un filtre
   const setFilter = (labelKey: string, value: any) => {
-    if (!value || value === '' || value === labelKey || value.startsWith('Tous les')) {
+    if (!value || value === '' || value === labelKey || value.startsWith('Tout')) {
       delete globalFilters.value[labelKey]
     } else {
       globalFilters.value[labelKey] = value

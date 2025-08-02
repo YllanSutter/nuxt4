@@ -9,7 +9,6 @@
   
   const mainLabels = computed(() => getLabelsByEmplacement('main'));
   const filtres = computed(() => getLabelsByEmplacement('filtres'));
-
   const { bundles, refresh: refreshBundles } = useTableauData(['bundle'])
   
   // Fonction pour forcer le refresh de toutes les données
@@ -17,6 +16,7 @@
     await Promise.all([refresh(), refreshBundles()])
     console.log('Données rafraîchies')
   }
+
   
 </script>
 

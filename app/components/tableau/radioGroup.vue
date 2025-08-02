@@ -28,7 +28,7 @@ const modelValue = useVModel(props, 'modelValue', emits, {
 <template>
  <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button :class="['w-full justify-start ']" variant="outline" :style="{ borderBottom: `1px solid ${props.options?.find(opt => opt.name === modelValue)?.color || ''}` }">
+        <Button :class="['w-full justify-start pt-1 ']" variant="outline" :style="{ borderBottom: `1px solid ${props.options?.find(opt => opt.name === modelValue)?.color || ''}` }">
           <Icon
             :style="{ color: props.options?.find((opt: any) => opt.name === modelValue)?.color || '' }"
             :name="props.options?.find((opt: any) => opt.name === modelValue)?.image || ''"
@@ -39,7 +39,6 @@ const modelValue = useVModel(props, 'modelValue', emits, {
       </DropdownMenuTrigger>
       
       <DropdownMenuContent class="w-56 max-h-96 overflow-y-auto" align="start">
-        <DropdownMenuLabel>{{ props.label }}</DropdownMenuLabel>
         <DropdownMenuGroup>
           <DropdownMenuItem 
             v-for="option in props.options" 

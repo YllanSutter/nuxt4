@@ -26,8 +26,12 @@ export default defineEventHandler(async (event) => {
   try {
     const modelsConfig: Record<string, any> = {
       role: { name: 'asc' },
-      month: { id: 'asc' },
-      year: { id: 'asc' },
+      month: { 
+        orderBy: { id: 'asc' }, // Ordre chronologique par ID
+        // Alternative si les IDs ne sont pas dans l'ordre chronologique :
+        // Vous pouvez ajouter un champ 'order' dans le modèle Month si nécessaire
+      },
+      year: { name: 'asc' },
       label: { 
         orderBy: { position: 'asc' },
         include: {

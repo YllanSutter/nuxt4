@@ -42,10 +42,13 @@
 </script>
 
 <template>
-  
-  <div v-if="filteredBundles.length !== 0" class="relative w-full overflow-auto max-w-[1200px] mx-auto mt-6" v-for="(bundle, index) in filteredBundles" :key="bundle.id" :class="'bundle-' + index">
-    <div class="mb-2 font-semibold">{{ bundle.name }}</div>
-    
+
+  <div v-if="filteredBundles.length !== 0" class="relative justify-start gap-10 overflow-auto max-w-[1200px] mx-auto mt-6 mb-2 font-semibold text-xs">
+
+    <div v-for="(bundle, index) in filteredBundles" :key="bundle.id" :class="['cursor-pointer mr-2 mb-1 uppercase p-2 inline-flex  text-[8px]  lg:text-[11px] tracking-widest border-1 border-[#ffffff20] hover:bg-[#ffffff20] transition-all duration-400 rounded-md items-center', 'bundle-' + index, index == 0 ? 'bg-[#ffffff20]' : '']">    <Icon size="13" class="mr-1" v-if="index == 0" name="mingcute:square-arrow-down-fill" ></Icon>{{ bundle.name }}</div>
+  </div>
+
+  <div v-if="filteredBundles.length !== 0" :class="['relative w-full overflow-auto max-w-[1200px] mx-auto mt-6 ',index == 0 ? ' ':'hidden ',' bundle-' + index]" v-for="(bundle, index) in filteredBundles" :key="bundle.id">
     <div v-if="getUserGamesForBundle(bundle.id).length === 0" class="p-4 text-center">
       Aucun jeu trouvé pour ce bundle avec les filtres actuels
     </div>
