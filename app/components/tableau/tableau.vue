@@ -5,13 +5,14 @@
     userGames, 
     bundles,
     getLabelsByEmplacement,
+    mainLabels,
+    filtres,
     refresh 
-  } = useTableauData(['userGame', 'label', 'emplacement', 'bundleGame', 'bundle']) // Récupérer tout en une fois
+  } = useTableauData(['userGame', 'label', 'emplacement', 'bundleGame', 'bundle']) 
   
-  const mainLabels = computed(() => getLabelsByEmplacement('main'));
-  const filtres = computed(() => getLabelsByEmplacement('filtres'));
+
   
-  // Fonction pour forcer le refresh de toutes les données
+
   const forceRefresh = async () => {
     await refresh()
     console.log('Données rafraîchies')

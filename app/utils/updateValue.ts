@@ -52,12 +52,12 @@ export const updateValue = async (
     try {
       updateLocalDataFn(elem.id, normalizedLabel.field, value, normalizedLabel.table);
     } catch (error) {
-      console.log('⚠️ Erreur lors de la mise à jour locale:', error);
+      //console.log('⚠️ Erreur lors de la mise à jour locale:', error);
     }
   }
   
-  console.log(`📝 Modification enregistrée: ${elem.id}.${cible} = "${value}"`);
-  console.log(`📊 Total modifications en attente: ${pendingModifications.size}`);
+  //console.log(`📝 Modification enregistrée: ${elem.id}.${cible} = "${value}"`);
+  //console.log(`📊 Total modifications en attente: ${pendingModifications.size}`);
   
   const existingTimer = debounceTimers.get(key);
   if (existingTimer) {
@@ -65,9 +65,9 @@ export const updateValue = async (
   }
   
   const timer = setTimeout(() => {
-    console.log(`⏰ Timer local déclenché pour ${key}`);
+    //console.log(`⏰ Timer local déclenché pour ${key}`);
     debounceTimers.delete(key);
-    console.log(`🕐 Timers restants: ${debounceTimers.size}`);
+    //console.log(`🕐 Timers restants: ${debounceTimers.size}`);
   }, DEBOUNCE_DELAY);
   
   debounceTimers.set(key, timer);
@@ -77,7 +77,7 @@ export const updateValue = async (
   }
   
   globalSaveTimer = setTimeout(async () => {
-    console.log('🔄 Auto-sauvegarde globale déclenchée');
+    //console.log('🔄 Auto-sauvegarde globale déclenchée');
     await saveAllModifications();
     globalSaveTimer = null;
   }, GLOBAL_SAVE_DELAY);
@@ -139,7 +139,7 @@ export const clearAllModifications = () => {
   }
   
   pendingModifications.clear();
-  console.log('🧹 Toutes les modifications ont été effacées');
+  //console.log('🧹 Toutes les modifications ont été effacées');
 }
 
 export const saveAllModifications = async () => {
@@ -156,15 +156,15 @@ export const saveAllModifications = async () => {
       clearTimeout(timer);
       debounceTimers.delete(key);
       const [elemId, cible] = key.split(':');
-      console.log(`⚡ Forçage sauvegarde: ${elemId}.${cible}`);
+      //console.log(`⚡ Forçage sauvegarde: ${elemId}.${cible}`);
     }
   }
   
   const modifications = getPendingModifications();
-  console.log(`💾 Sauvegarde de ${modifications.length} modification(s) en base de données`);
+  //console.log(`💾 Sauvegarde de ${modifications.length} modification(s) en base de données`);
   
   if (modifications.length === 0) {
-    console.log('ℹ️  Aucune modification à sauvegarder');
+    //console.log('ℹ️  Aucune modification à sauvegarder');
     return [];
   }
   
@@ -183,7 +183,7 @@ export const saveAllModifications = async () => {
       await updateTableBatch(table, mods);
     }
     
-    console.log('✅ Sauvegarde terminée avec succès');
+    //console.log('✅ Sauvegarde terminée avec succès');
     
     clearAllModifications();
     
@@ -203,7 +203,7 @@ export const hasPendingModifications = (): boolean => {
 }
 
 export const updateTableBatch = async(table: any, mods: any) => {
-  console.log('🔥 updateTableBatch appelée avec:', { table, mods });
+  //console.log('🔥 updateTableBatch appelée avec:', { table, mods });
   try {
     const response = await fetch('/api/actions/updateElem', {
       method: 'POST',
@@ -227,7 +227,7 @@ export const updateTableBatch = async(table: any, mods: any) => {
     }
     
     const result = await response.json();
-    console.log('✅ Réponse API:', result);
+    //console.log('✅ Réponse API:', result);
     return result;
   } catch (error) {
     console.error('❌ Erreur lors de la mise à jour:', error);

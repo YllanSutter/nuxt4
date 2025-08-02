@@ -173,7 +173,7 @@ export const useTableauData = (models?: string[] | string) => {
   }
 
   const updateLocalData = (elemId: string, field: string, value: string, table: string) => {
-    console.log(`🔄 Mise à jour locale: ${table}.${elemId}.${field} = "${value}"`);
+    // console.log(`🔄 Mise à jour locale: ${table}.${elemId}.${field} = "${value}"`);
     
     const tableMap: Record<string, any> = {
       'UserGame': userGames,
@@ -208,6 +208,8 @@ export const useTableauData = (models?: string[] | string) => {
     console.log('✅ Cache vidé et données rafraîchies');
   }
 
+  const filtres = computed(() => getLabelsByEmplacement('filtres'));
+
   return {
     allOptions,
     pending,
@@ -237,6 +239,7 @@ export const useTableauData = (models?: string[] | string) => {
     optionsYears,
     optionsPlatforms,
     optionsBundles,
+    filtres,
     getUserGameValue,
     getOptionsForLabel,
     getLabelsByEmplacement,
