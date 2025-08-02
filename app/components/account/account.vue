@@ -119,6 +119,7 @@ onMounted(() => {
           <input
             id="email"
             type="text"
+            autocomplete="email"
             class="bg-transparent border-b border-t p-4 border-[#ffffff50] mb-2  min-w-full w-full"
             :value="user?.email || ''"
             disabled
@@ -128,6 +129,7 @@ onMounted(() => {
           <label for="name" class="text-[11px]  absolute left-5 top-0 px-2 py-1 leading-none bg-greenSpe rounded-full inline-flex items-center z-[1]">Nom</label>
           <input
             id="name"
+            autocomplete="username"
             type="text"
             class="bg-transparent border p-4 border-[#ffffff50] rounded-lg  min-w-full w-full"
             v-model="name"

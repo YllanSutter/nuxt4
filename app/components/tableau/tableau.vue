@@ -3,17 +3,17 @@
     pending, 
     error, 
     userGames, 
+    bundles,
     getLabelsByEmplacement,
     refresh 
-  } = useTableauData(['userGame', 'label', 'emplacement', 'bundleGame']) // Ajouter bundleGame 
+  } = useTableauData(['userGame', 'label', 'emplacement', 'bundleGame', 'bundle']) // Récupérer tout en une fois
   
   const mainLabels = computed(() => getLabelsByEmplacement('main'));
   const filtres = computed(() => getLabelsByEmplacement('filtres'));
-  const { bundles, refresh: refreshBundles } = useTableauData(['bundle'])
   
   // Fonction pour forcer le refresh de toutes les données
   const forceRefresh = async () => {
-    await Promise.all([refresh(), refreshBundles()])
+    await refresh()
     console.log('Données rafraîchies')
   }
 

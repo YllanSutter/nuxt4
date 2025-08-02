@@ -27,9 +27,7 @@ export default defineEventHandler(async (event) => {
     const modelsConfig: Record<string, any> = {
       role: { name: 'asc' },
       month: { 
-        orderBy: { id: 'asc' }, // Ordre chronologique par ID
-        // Alternative si les IDs ne sont pas dans l'ordre chronologique :
-        // Vous pouvez ajouter un champ 'order' dans le modèle Month si nécessaire
+        orderBy: { id: 'asc' },
       },
       year: { name: 'asc' },
       label: { 
@@ -101,7 +99,6 @@ export default defineEventHandler(async (event) => {
       }
     };
     
-    // Filtrer les modèles à récupérer si spécifié
     const modelsToFetch = requestedModels ? 
       Object.fromEntries(
         Object.entries(modelsConfig).filter(([key]) => requestedModels.includes(key))
@@ -119,7 +116,6 @@ export default defineEventHandler(async (event) => {
             return { [modelKey]: [] };
           }
           
-          // Si la config a un orderBy, include et where séparés, les utiliser
           if (config.orderBy || config.include || config.where) {
             const queryOptions: any = {};
             
@@ -130,7 +126,6 @@ export default defineEventHandler(async (event) => {
             const data = await model.findMany(queryOptions);
             return { [modelKey]: data };
           }
-          // Sinon, utiliser la config comme orderBy direct
           else {
             const data = await model.findMany({ orderBy: config });
             return { [modelKey]: data };
@@ -142,7 +137,6 @@ export default defineEventHandler(async (event) => {
       })
     );
     
-    // Fusion des résultats
     const finalResult = results.reduce((acc, result) => ({ ...acc, ...result }), {});
     
     return finalResult;
