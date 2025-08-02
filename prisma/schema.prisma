@@ -104,14 +104,24 @@ model Label {
   position        Int
   user_label_visibility UserLabelVisibility[]
   color           String @default("red")
-  emplacement_id  String
-  emplacement     Emplacement @relation(fields: [emplacement_id], references: [id])
+  label_emplacements LabelEmplacement[]
 }
 
 model Emplacement {
   id      String   @id @default(uuid())
   name    String
-  labels  Label[]
+  label_emplacements LabelEmplacement[]
+}
+
+model LabelEmplacement {
+  id              String      @id @default(uuid())
+  label_id        String
+  emplacement_id  String
+  position        Int         @default(0)
+  label           Label       @relation(fields: [label_id], references: [id], onDelete: Cascade)
+  emplacement     Emplacement @relation(fields: [emplacement_id], references: [id], onDelete: Cascade)
+  
+  @@unique([label_id, emplacement_id])
 }
 
 model UserLabelVisibility {

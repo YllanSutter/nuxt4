@@ -38,7 +38,7 @@ const modelValue = useVModel(props, 'modelValue', emits, {
         </Button>
       </DropdownMenuTrigger>
       
-      <DropdownMenuContent class="w-56" align="start">
+      <DropdownMenuContent class="w-56 max-h-96 overflow-y-auto" align="start">
         <DropdownMenuLabel>{{ props.label }}</DropdownMenuLabel>
         <DropdownMenuGroup>
           <DropdownMenuItem 
@@ -46,7 +46,15 @@ const modelValue = useVModel(props, 'modelValue', emits, {
             :key="option.id"
             @click="modelValue = option.name"
           >
-            {{ option.name }}
+            <div class="flex items-center gap-2 w-full">
+              <Icon
+                v-if="option.image"
+                :style="{ color: option.color || '' }"
+                :name="option.image"
+                :size="16"
+              ></Icon>
+              <span>{{ option.name }}</span>
+            </div>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

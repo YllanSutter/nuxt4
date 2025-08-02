@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   const prisma = event.context.prisma;
 
   if (event.method === 'GET') {
-    return await prisma.User.findMany({ 
+    return await prisma.user.findMany({ 
       include: { 
         bundles: true,
         role: true,
@@ -20,11 +20,16 @@ export default defineEventHandler(async (event) => {
 
   if (event.method === 'POST') {
     const body = await readBody(event);
-    return await prisma.User.create({
+    
+    // Hash le mot de passe avant de l'enregistrer
+    const bcrypt = await import('bcryptjs');
+    const hashedPassword = await bcrypt.hash(body.password, 10);
+    
+    return await prisma.user.create({
       data: {
         name: body.name,
         email: body.email,
-        password: body.password,
+        password: hashedPassword,
         budget: body.budget ?? 0,
         role_id: body.role_id
       }
