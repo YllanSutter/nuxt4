@@ -15,30 +15,67 @@ export default defineEventHandler(async (event) => {
         };
       }
 
-      if (!bundleData || !bundleData.name) {
+      if (!bundleData) {
         return {
           statusCode: 400,
-          body: { error: 'Les données du bundle sont requises avec un nom' },
+          body: { error: 'Les données du bundle sont requises' },
         };
       }
 
-      // Créer d'abord le bundle
-      const createdBundle = await prisma.bundle.create({
-        data: {
-          name: bundleData.name,
-          price: parseFloat(bundleData.price) || 0,
-          user_id: bundleData.user_id,
-          link: '',
-          image: '',
-          platform_id: 'platform-1',
-          state_id: 'private-state-id',
-          month_id: 'month-8',
-          year_id: 'year-3',
-          is_public: false,
-          created_at: new Date(),
-          updated_at: new Date(),
-        },
-      });
+      // Vérifier selon le type d'opération
+      if (bundleData.isNewBundle && !bundleData.name) {
+        return {
+          statusCode: 400,
+          body: { error: 'Le nom du bundle est requis pour créer un nouveau bundle' },
+        };
+      }
+
+      if (!bundleData.isNewBundle && !bundleData.existingBundleId) {
+        return {
+          statusCode: 400,
+          body: { error: 'L\'ID du bundle existant est requis pour ajouter à un bundle' },
+        };
+      }
+
+      let createdBundle = null;
+      let targetBundleId = null;
+
+      if(bundleData.isNewBundle) {
+        // Créer un nouveau bundle
+        createdBundle = await prisma.bundle.create({
+          data: {
+            name: bundleData.name,
+            price: parseFloat(bundleData.price) || 0,
+            user_id: bundleData.user_id,
+            link: '',
+            image: '',
+            platform_id: 'platform-1',
+            state_id: 'private-state-id',
+            month_id: 'month-8',
+            year_id: 'year-3',
+            is_public: false,
+            created_at: new Date(),
+            updated_at: new Date(),
+          },
+        });
+        targetBundleId = createdBundle.id;
+      } else {
+        // Utiliser le bundle existant
+        targetBundleId = bundleData.existingBundleId;
+        
+        // Vérifier que le bundle existe
+        const existingBundle = await prisma.bundle.findUnique({
+          where: { id: targetBundleId }
+        });
+        
+        if (!existingBundle) {
+          return {
+            statusCode: 404,
+            body: { error: 'Bundle non trouvé' },
+          };
+        }
+      }
+     
 
       // Créer d'abord les BaseGame si nécessaire
       const baseGamePromises = elems.map(async (elem: any) => {
@@ -60,17 +97,20 @@ export default defineEventHandler(async (event) => {
 
       // Créer les données formatées pour Prisma
       const userGamesData = elems.map((elem: any, index: number) => {
-        // Calculer le prix réparti pour chaque élément
-        const pricePerElem = parseFloat(bundleData.price) / elems.length;
+        // Pour un nouveau bundle, répartir le prix total
+        // Pour un bundle existant, utiliser le prix individuel de l'elem
+        const price = bundleData.isNewBundle ? 
+          (parseFloat(bundleData.price) / elems.length) : 
+          (parseFloat(elem.price) || 0);
 
         return {
           user_id: elem.user_id,
           base_game_id: baseGames[index].id,
-          name: '',
-          price: pricePerElem,
+          name: elem.name || '',
+          price: price,
           black_market_price: 0,
           sale_price: 0,
-          initial_price: 0,
+          initial_price: price,
           playtime_hours: 0,
           rating: 0,
           tag_id: elem.tag_id || 'tag-1',
@@ -88,7 +128,7 @@ export default defineEventHandler(async (event) => {
       // Récupérer les UserGame créés pour les lier au bundle
       const createdUserGameRecords = await prisma.userGame.findMany({
         where: {
-          user_id: bundleData.user_id,
+          user_id: bundleData.isNewBundle ? bundleData.user_id : elems[0]?.user_id,
           created_at: {
             gte: new Date(Date.now() - 5000) // Créés dans les dernières 5 secondes
           }
@@ -99,27 +139,47 @@ export default defineEventHandler(async (event) => {
         }
       });
 
+      // Obtenir le prochain order_in_bundle pour le bundle cible
+      const maxOrder = await prisma.bundleGame.aggregate({
+        where: { bundle_id: targetBundleId },
+        _max: { order_in_bundle: true }
+      });
+      
+      const nextOrderStart = (maxOrder._max.order_in_bundle || 0) + 1;
+
       // Créer les relations BundleGame
       const bundleGameData = createdUserGameRecords.map((userGame, index) => ({
-        bundle_id: createdBundle.id,
+        bundle_id: targetBundleId,
         user_game_id: userGame.id,
-        order_in_bundle: index + 1,
+        order_in_bundle: nextOrderStart + index,
       }));
 
       await prisma.bundleGame.createMany({
         data: bundleGameData,
       });
 
-      return {
-        statusCode: 201,
-        body: {
-          success: true,
-          bundle: createdBundle,
-          userGamesCount: createdUserGames.count,
-          bundleGamesCount: bundleGameData.length,
-          message: `Bundle "${createdBundle.name}" créé avec ${createdUserGames.count} jeux`
-        },
-      };
+      if(bundleData.isNewBundle && createdBundle) {
+        return {
+          statusCode: 201,
+          body: {
+            success: true,
+            bundle: createdBundle,
+            userGamesCount: createdUserGames.count,
+            bundleGamesCount: bundleGameData.length,
+            message: `Bundle "${createdBundle.name}" créé avec ${createdUserGames.count} jeux`
+          },
+        };
+      } else {
+        return {
+          statusCode: 201,
+          body: {
+            success: true,
+            userGamesCount: createdUserGames.count,
+            bundleGamesCount: bundleGameData.length,
+            message: `${createdUserGames.count} jeux ajoutés au bundle existant`
+          },
+        };
+      }
     } catch (error) {
       console.error('❌ Erreur lors de la création des éléments:', error);
       return {

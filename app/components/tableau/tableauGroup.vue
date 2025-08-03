@@ -39,6 +39,26 @@ import { Platform } from '../../generated/prisma/index';
   const getUserGamesForBundle = (bundleId: string) => {
     return filteredData.value.bundleGameMap.get(bundleId) || []
   }
+
+  // Gérer l'ajout de lignes
+  const handleLinesAdded = () => {
+    console.log('✅ Lignes ajoutées - données actualisées')
+  }
+
+  // Gérer la suppression de bundle
+  const handleBundleDeleted = () => {
+    console.log('✅ Bundle supprimé - données actualisées')
+    // Revenir au premier onglet s'il existe
+    if (filteredBundles.value.length > 0) {
+      activeTabIndex.value = 0
+    }
+  }
+
+  // Gérer la suppression de ligne
+  const handleLineDeleted = () => {
+    console.log('✅ Ligne supprimée - données actualisées')
+  }
+
   const activeTabIndex = ref(0);
   const setActiveTab = (index: number, event: MouseEvent) => {
     activeTabIndex.value = index
@@ -75,7 +95,7 @@ import { updateElem,hasPendingModifications,saveAllModifications } from '@/utils
 
   <div v-if="filteredBundles.length !== 0" class="relative gap-2 overflow-auto max-w-[1200px] mx-auto mt-6 mb-2 font-semibold text-xs ">
     
-    <UiTableauPopOverGroupShadcn />
+    <UiTableauAddBundle />
     <p class="inline-block mr-2"></p>
     <div @click="setActiveTab(index, $event)" v-for="(bundle, index) in filteredBundles" :key="bundle.id" :class="['cursor-pointer mr-2 mb-1 uppercase p-2 inline-flex text-[8px] lg:text-[11px] tracking-widest border-1 border-[#ffffff20] hover:bg-[#ffffff20] transition-all duration-400 rounded-md items-center', 'bundle-' + index, activeTabIndex === index ? 'bg-[#ffffff20]' : '']" :style="{ borderBottom: '1px solid ' + (optionsPlatforms?.find((opt: any) => opt.id === bundle.platform_id)?.color || '#ffffff20') }">
       <Icon v-if="optionsPlatforms?.find((opt: any) => opt.id === bundle.platform_id)?.image" size="13" class="mr-1" :name="optionsPlatforms?.find((opt: any) => opt.id === bundle.platform_id)?.image" :style="{ color: optionsPlatforms?.find((opt: any) => opt.id === bundle.platform_id)?.color }" />{{ bundle.name }}
@@ -100,7 +120,10 @@ import { updateElem,hasPendingModifications,saveAllModifications } from '@/utils
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow v-for="userGame in getUserGamesForBundle(bundle.id)" :key="userGame.id">
+        <TableRow 
+          v-for="userGame in getUserGamesForBundle(bundle.id)" 
+          :key="userGame.id"
+        >
           <TableCell 
             v-for="label in props.mainLabels" 
             :key="label.id" 
@@ -125,6 +148,11 @@ import { updateElem,hasPendingModifications,saveAllModifications } from '@/utils
                     }
                   }"
                 />
+                <UiTableauDeleteLine
+                  v-else-if="label.key === 'delete'"
+                  :userGameId="userGame.id"
+                  @lineDeleted="handleLineDeleted"
+                />
                 <Input 
                   v-else
                   :model-value="getUserGameValue(userGame, label.key) || ''"
@@ -137,11 +165,28 @@ import { updateElem,hasPendingModifications,saveAllModifications } from '@/utils
                   }"
                 >
                 </Input>
-              <UiTableauSuffix v-if="label.type !== 'select'" :label="label"></UiTableauSuffix>
+              <UiTableauSuffix v-if="label.type !== 'select' && label.key !== 'delete'" :label="label"></UiTableauSuffix>
             </div>
           </TableCell>
         </TableRow>
       </TableBody>
+      <TableFooter>
+        <TableRow>
+          <TableCell colspan="100%">
+            <div class="flex gap-2 justify-between items-center">
+              <UiTableauAddLine 
+                :activeBundleId="filteredBundles[activeTabIndex]?.id"
+                @linesAdded="handleLinesAdded"
+              />
+              <UiTableauDeleteBundle
+                :bundleId="filteredBundles[activeTabIndex]?.id"
+                :bundleName="filteredBundles[activeTabIndex]?.name"
+                @bundleDeleted="handleBundleDeleted"
+              />
+            </div>
+          </TableCell>
+        </TableRow>
+      </TableFooter>
     </Table>
   </div>
 </template>

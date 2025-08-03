@@ -16,7 +16,7 @@ export const useBundleActions = () => {
   const numberGames = ref<number | undefined>(undefined);
   const priceBundle = ref<number | undefined>(undefined);
 
-  const addMultipleElem = async (name: string, number: number, cible: string, price?: number) => {
+  const addMultipleElem = async (name: string, number: number, cible: string, price?: number, activeBundleId?: string) => {
     const elems: any[] = [];
     const currentDate = new Date().toISOString();
     
@@ -35,13 +35,23 @@ export const useBundleActions = () => {
       });
     }
 
-    // Préparer les données du bundle
-    const bundleData = {
-      name: nameBundle.value || name,
-      price: priceBundle.value || price || 0,
-      numberGames: number,
-      user_id: userId.value
-    };
+    let bundleData;
+    
+    if(cible == "line" && activeBundleId) {
+      console.log('test');
+      bundleData = {
+        existingBundleId: activeBundleId,
+        isNewBundle: false
+      };
+    } else {
+      bundleData = {
+        name: nameBundle.value || name,
+        price: priceBundle.value || price || 0,
+        numberGames: number,
+        user_id: userId.value,
+        isNewBundle: true
+      };
+    }
     
     try {
       const response = await $fetch('/api/actions/addElem', {
@@ -54,11 +64,6 @@ export const useBundleActions = () => {
       
       console.log('✅ Bundle et éléments créés avec succès:', response);
       
-      // Réinitialiser les champs après succès
-      nameBundle.value = '';
-      numberGames.value = undefined;
-      priceBundle.value = undefined;
-      
       return response;
     } catch (error) {
       console.error('❌ Erreur lors de l\'ajout:', error);
@@ -66,22 +71,28 @@ export const useBundleActions = () => {
     }
   };
 
-  const createBundle = async () => {
+  const createElem = async (cible: string, activeBundleId?: string) => {
     const nameBundleVal = nameBundle.value;
     const numberGamesVal = numberGames.value;
     const priceVal = priceBundle.value;
     
-    if (nameBundleVal && numberGamesVal && priceVal) {
-      return await addMultipleElem(nameBundleVal, numberGamesVal, 'bundle', priceVal);
+    if (cible === "line" && activeBundleId) {
+      if (numberGamesVal) {
+        return await addMultipleElem('', numberGamesVal, cible, priceVal || 0, activeBundleId);
+      } else {
+        console.warn('⚠️ Le nombre est requis pour ajouter une ligne');
+        return null;
+      }
     } else {
-      console.warn('⚠️ Tous les champs requis ne sont pas remplis');
-      return null;
+      if (nameBundleVal && numberGamesVal && priceVal) {
+        return await addMultipleElem(nameBundleVal, numberGamesVal, cible, priceVal);
+      } else {
+        console.warn('⚠️ Tous les champs requis ne sont pas remplis');
+        return null;
+      }
     }
   };
 
-  const createGame = async (name: string, bundleId?: string) => {
-    return await addMultipleElem(name, 1, 'game', 0);
-  };
 
   const validateBundleData = () => {
     const errors: string[] = [];
@@ -108,6 +119,43 @@ export const useBundleActions = () => {
     priceBundle.value = undefined;
   };
 
+  // Fonctions de suppression
+  const deleteBundle = async (bundleId: string) => {
+    try {
+      const response = await $fetch('/api/actions/deleteElem', {
+        method: 'DELETE',
+        body: { 
+          type: 'bundle',
+          bundleId: bundleId
+        }
+      });
+      
+      console.log('✅ Bundle supprimé avec succès:', response);
+      return response;
+    } catch (error) {
+      console.error('❌ Erreur lors de la suppression du bundle:', error);
+      throw error;
+    }
+  };
+
+  const deleteLine = async (userGameId: string) => {
+    try {
+      const response = await $fetch('/api/actions/deleteElem', {
+        method: 'DELETE',
+        body: { 
+          type: 'line',
+          userGameId: userGameId
+        }
+      });
+      
+      console.log('✅ Ligne supprimée avec succès:', response);
+      return response;
+    } catch (error) {
+      console.error('❌ Erreur lors de la suppression de la ligne:', error);
+      throw error;
+    }
+  };
+
   return {
     nameBundle,
     numberGames,
@@ -115,10 +163,11 @@ export const useBundleActions = () => {
     user,
     userId,
     
-    createBundle,
-    createGame,
+    createElem,
     addMultipleElem,
     validateBundleData,
-    resetForm
+    resetForm,
+    deleteBundle,
+    deleteLine
   };
 };
