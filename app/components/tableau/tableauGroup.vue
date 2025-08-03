@@ -4,8 +4,8 @@ import { Platform } from '../../generated/prisma/index';
     getUserGameValue, 
     getOptionsForLabel, 
     userGames,
-    bundleGames, // Récupérer les bundleGames pour faire la liaison
-    // Options préenregistrées pour performance optimale
+    bundles,
+    bundleGames,
     optionsTags,
     optionsMonths,
     optionsYears,
@@ -13,7 +13,7 @@ import { Platform } from '../../generated/prisma/index';
     optionsBundles,
     updateLocalData,
     clearCacheAndRefresh
-  } = useTableauData(['userGame', 'bundleGame', 'tag', 'month', 'year', 'platform', 'bundle']);
+  } = useTableauData(['userGame', 'label', 'emplacement', 'bundleGame', 'bundle', 'tag', 'month', 'year', 'platform']);
 
   const { filterAllData } = useTableauFilters()
 
@@ -23,7 +23,9 @@ import { Platform } from '../../generated/prisma/index';
   }>();
 
   const filteredData = computed(() => {
-    if (!props.bundles || !userGames.value || !bundleGames.value) {
+    forceUpdateKey.value;
+    
+    if (!bundles.value || !userGames.value || !bundleGames.value) {
       return {
         filteredBundles: [],
         bundleGameMap: new Map(),
@@ -31,7 +33,7 @@ import { Platform } from '../../generated/prisma/index';
       }
     }
     
-    return filterAllData(props.bundles, userGames.value, bundleGames.value)
+    return filterAllData(bundles.value, userGames.value, bundleGames.value)
   })
 
   const filteredBundles = computed(() => filteredData.value.filteredBundles)
@@ -40,29 +42,47 @@ import { Platform } from '../../generated/prisma/index';
     return filteredData.value.bundleGameMap.get(bundleId) || []
   }
 
-  // Gérer l'ajout de lignes
-  const handleLinesAdded = () => {
-    console.log('✅ Lignes ajoutées - données actualisées')
-  }
-
-  // Gérer la suppression de bundle
-  const handleBundleDeleted = () => {
-    console.log('✅ Bundle supprimé - données actualisées')
-    // Revenir au premier onglet s'il existe
-    if (filteredBundles.value.length > 0) {
-      activeTabIndex.value = 0
-    }
-  }
-
-  // Gérer la suppression de ligne
-  const handleLineDeleted = () => {
-    console.log('✅ Ligne supprimée - données actualisées')
-  }
-
   const activeTabIndex = ref(0);
+  const forceUpdateKey = ref(0);
+  
   const setActiveTab = (index: number, event: MouseEvent) => {
     activeTabIndex.value = index
   }
+
+  const handleLinesAdded = () => {
+    console.log('✅ Lignes ajoutées - données actualisées')
+    forceUpdateKey.value++
+  }
+
+  const handleBundleCreated = () => {
+    console.log('✅ Bundle créé - données actualisées')
+    forceUpdateKey.value++
+  }
+
+  const handleBundleDeleted = () => {
+    console.log('✅ Bundle supprimé - données actualisées')
+    console.log('🔍 PARENT - État après suppression bundle:')
+    console.log('📦 filteredBundles:', filteredBundles.value?.length || 0)
+    console.log('📊 userGames:', userGames.value?.length || 0)
+    console.log('🔗 bundleGames:', bundleGames.value?.length || 0)
+    
+    forceUpdateKey.value++
+    
+    nextTick(() => {
+      if (filteredBundles.value.length > 0) {
+        activeTabIndex.value = 0
+      }
+    })
+  }
+
+  const handleLineDeleted = async () => {
+    console.log('✅ Ligne supprimée - données actualisées')
+    
+    forceUpdateKey.value++
+    
+    await nextTick()
+    
+   }
  
 import { updateElem,hasPendingModifications,saveAllModifications } from '@/utils/updateValue';
 
@@ -70,11 +90,9 @@ import { updateElem,hasPendingModifications,saveAllModifications } from '@/utils
     if (hasPendingModifications()) {
       await saveAllModifications();
     }
-    // Vider le cache avant de quitter la page
     await clearCacheAndRefresh();
   });
 
-  // Vider le cache avant le rafraîchissement/fermeture de la page
   onMounted(() => {
     const handleBeforeUnload = async (event: BeforeUnloadEvent) => {
       if (hasPendingModifications()) {
@@ -92,10 +110,9 @@ import { updateElem,hasPendingModifications,saveAllModifications } from '@/utils
 </script>
 
 <template>
-
   <div v-if="filteredBundles.length !== 0" class="relative gap-2 overflow-auto max-w-[1200px] mx-auto mt-6 mb-2 font-semibold text-xs ">
     
-    <UiTableauAddBundle />
+    <UiTableauAddBundle @bundle-created="handleBundleCreated" />
     <p class="inline-block mr-2"></p>
     <div @click="setActiveTab(index, $event)" v-for="(bundle, index) in filteredBundles" :key="bundle.id" :class="['cursor-pointer mr-2 mb-1 uppercase p-2 inline-flex text-[8px] lg:text-[11px] tracking-widest border-1 border-[#ffffff20] hover:bg-[#ffffff20] transition-all duration-400 rounded-md items-center', 'bundle-' + index, activeTabIndex === index ? 'bg-[#ffffff20]' : '']" :style="{ borderBottom: '1px solid ' + (optionsPlatforms?.find((opt: any) => opt.id === bundle.platform_id)?.color || '#ffffff20') }">
       <Icon v-if="optionsPlatforms?.find((opt: any) => opt.id === bundle.platform_id)?.image" size="13" class="mr-1" :name="optionsPlatforms?.find((opt: any) => opt.id === bundle.platform_id)?.image" :style="{ color: optionsPlatforms?.find((opt: any) => opt.id === bundle.platform_id)?.color }" />{{ bundle.name }}
@@ -107,13 +124,12 @@ import { updateElem,hasPendingModifications,saveAllModifications } from '@/utils
     <div v-if="getUserGamesForBundle(bundle.id).length === 0" class="p-4 text-center">
       Aucun jeu trouvé pour ce bundle avec les filtres actuels
     </div>
-    
-    <Table v-else :key="`table-${userGames.length}-${props.mainLabels.length}`">
+    <Table v-else :key="`table-${userGames.length}-${props.mainLabels.length}-${forceUpdateKey}`">
       <TableHeader>
         <TableRow>
           <TableHead v-for="label in props.mainLabels" :key="label.id">
             <div class="flex items-center gap-1">
-              <!-- <Icon :name="label.image"></Icon> -->
+              <Icon :name=label.image></Icon>
               {{ label.name }}
             </div>
           </TableHead>

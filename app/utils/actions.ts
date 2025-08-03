@@ -15,6 +15,51 @@ export const useBundleActions = () => {
   const nameBundle = ref('');
   const numberGames = ref<number | undefined>(undefined);
   const priceBundle = ref<number | undefined>(undefined);
+  
+  // Utiliser les valeurs actuelles par défaut comme dans useFilterHelpers
+  const getCurrentDefaults = () => {
+    const currentDate = new Date()
+    const currentYear = currentDate.getFullYear().toString()
+    const currentMonth = currentDate.toLocaleDateString('fr-FR', { month: 'long' })
+    
+    return { currentYear, currentMonth }
+  }
+  
+  const { currentYear, currentMonth } = getCurrentDefaults()
+  
+  // Fonction pour trouver les IDs correspondants depuis les options
+  const findCurrentIds = () => {
+    const { optionsMonths, optionsYears, optionsPlatforms } = useTableauData(['month', 'year', 'platform'])
+    
+    // Trouver l'ID du mois actuel
+    const currentMonthOption = optionsMonths.value?.find((month: any) => 
+      month.name === currentMonth
+    )
+    
+    // Trouver l'ID de l'année actuelle  
+    const currentYearOption = optionsYears.value?.find((year: any) => 
+      year.name === currentYear
+    )
+    
+    return {
+      monthId: currentMonthOption?.id || 'month-1', // Fallback vers month-1 qui existe probablement
+      yearId: currentYearOption?.id || 'year-1'     // Fallback vers year-1 qui existe probablement
+    }
+  }
+  
+  const { monthId, yearId } = findCurrentIds()
+  
+  // Utiliser des valeurs par défaut qui existent dans votre DB
+  const selectedPlatformId = ref('platform-1'); // Utiliser platform-1 qui existe
+  const selectedMonthId = ref(monthId);
+  const selectedYearId = ref(yearId);
+
+  // Array pour boucle dans le template
+  const selectBundle = [
+    { key: 'platform_id', ref: selectedPlatformId },
+    { key: 'month_id', ref: selectedMonthId },
+    { key: 'year_id', ref: selectedYearId }
+  ]
 
   const addMultipleElem = async (name: string, number: number, cible: string, price?: number, activeBundleId?: string) => {
     const elems: any[] = [];
@@ -26,10 +71,10 @@ export const useBundleActions = () => {
         name: name,
         price: price || 0,
         link: '',
-        platform_id: 'platform-4',
+        platform_id: selectedPlatformId.value,
         state_id: 'private-state-id',
-        month_id: 'month-8',
-        year_id: 'year-3',
+        month_id: selectedMonthId.value,
+        year_id: selectedYearId.value,
         created_at: currentDate,
         updated_at: currentDate
       });
@@ -49,8 +94,18 @@ export const useBundleActions = () => {
         price: priceBundle.value || price || 0,
         numberGames: number,
         user_id: userId.value,
+        platform_id: selectedPlatformId.value,
+        year_id: selectedYearId.value,
+        month_id: selectedMonthId.value,
         isNewBundle: true
       };
+      
+      // Debug logs pour vérifier les IDs
+      console.log('🔍 Bundle data:', {
+        platform_id: selectedPlatformId.value,
+        month_id: selectedMonthId.value,
+        year_id: selectedYearId.value
+      });
     }
     
     try {
@@ -117,6 +172,12 @@ export const useBundleActions = () => {
     nameBundle.value = '';
     numberGames.value = undefined;
     priceBundle.value = undefined;
+    selectedPlatformId.value = 'platform-1'; // Utiliser platform-1 qui existe
+    
+    // Reset vers les valeurs actuelles
+    const { monthId: currentMonthId, yearId: currentYearId } = findCurrentIds()
+    selectedMonthId.value = currentMonthId;
+    selectedYearId.value = currentYearId;
   };
 
   // Fonctions de suppression
@@ -162,7 +223,7 @@ export const useBundleActions = () => {
     priceBundle,
     user,
     userId,
-    
+    selectBundle,
     createElem,
     addMultipleElem,
     validateBundleData,

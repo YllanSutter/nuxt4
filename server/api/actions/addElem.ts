@@ -49,10 +49,10 @@ export default defineEventHandler(async (event) => {
             user_id: bundleData.user_id,
             link: '',
             image: '',
-            platform_id: 'platform-1',
+            platform_id: bundleData.platform_id || 'platform-1', // Utiliser la plateforme envoyée
             state_id: 'private-state-id',
-            month_id: 'month-8',
-            year_id: 'year-3',
+            month_id: bundleData.month_id || 'month-1',
+            year_id: bundleData.year_id || 'year-1',
             is_public: false,
             created_at: new Date(),
             updated_at: new Date(),
@@ -106,7 +106,7 @@ export default defineEventHandler(async (event) => {
         return {
           user_id: elem.user_id,
           base_game_id: baseGames[index].id,
-          name: elem.name || '',
+          name: '',
           price: price,
           black_market_price: 0,
           sale_price: 0,

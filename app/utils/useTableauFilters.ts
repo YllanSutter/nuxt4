@@ -4,11 +4,13 @@ const globalFilters = ref<Record<string, any>>({})
 // Store global pour la performance des filtres avec cache
 const cachedFilterResults = ref<{
   lastFilters: Record<string, any>
+  lastDataSignature: string
   filteredBundles: any[]
   bundleGameMap: Map<string, any[]>
   filteredUserGames: any[]
 }>({
   lastFilters: {},
+  lastDataSignature: '',
   filteredBundles: [],
   bundleGameMap: new Map(),
   filteredUserGames: []
@@ -37,16 +39,29 @@ export const useTableauFilters = () => {
 
     // Vérifier si le cache est encore valide
     const filtersChanged = JSON.stringify(globalFilters.value) !== JSON.stringify(cachedFilterResults.value.lastFilters)
+    const dataSignature = `${bundles.length}-${userGames.length}-${bundleGames.length}`
+    const cachedDataSignature = cachedFilterResults.value.lastDataSignature || ''
+    const dataChanged = dataSignature !== cachedDataSignature
     
-    if (!filtersChanged && 
+    // console.log('🔍 Cache check:', { 
+    //   filtersChanged, 
+    //   dataChanged, 
+    //   dataSignature, 
+    //   cachedDataSignature 
+    // })
+    
+    if (!filtersChanged && !dataChanged && 
         cachedFilterResults.value.filteredBundles.length > 0) {
-      // Retourner le cache si les filtres n'ont pas changé
+      // Retourner le cache si ni les filtres ni les données n'ont changé
+      // console.log('📦 Cache utilisé')
       return {
         filteredBundles: cachedFilterResults.value.filteredBundles,
         bundleGameMap: cachedFilterResults.value.bundleGameMap,
         filteredUserGames: cachedFilterResults.value.filteredUserGames
       }
     }
+    
+    // console.log('🔄 Recalcul complet des filtres...')
 
     // Séparer les filtres de bundles et de jeux
     const allFilters = Object.entries(globalFilters.value)
@@ -146,6 +161,7 @@ export const useTableauFilters = () => {
     // Mettre à jour le cache
     cachedFilterResults.value = {
       lastFilters: { ...globalFilters.value },
+      lastDataSignature: dataSignature,
       filteredBundles,
       bundleGameMap,
       filteredUserGames
@@ -243,6 +259,7 @@ export const useTableauFilters = () => {
     // Vider le cache quand on reset
     cachedFilterResults.value = {
       lastFilters: {},
+      lastDataSignature: '',
       filteredBundles: [],
       bundleGameMap: new Map(),
       filteredUserGames: []

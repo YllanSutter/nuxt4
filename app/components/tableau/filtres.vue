@@ -1,42 +1,22 @@
 <script setup lang="ts">
-
-  const { setFilter, clearAllFilters, hasActiveFilters, filters } = useTableauFilters()
-
   const props = defineProps<{
     mainLabels: any;
-    bundles: any; // Ajout des bundles en props
+    bundles: any;
   }>();
 
-  // Définir les filtres par défaut AVANT de charger les données
-  const setInitialFilters = () => {
-    const currentDate = new Date()
-    const currentYear = currentDate.getFullYear().toString()
-    const currentMonth = currentDate.toLocaleDateString('fr-FR', { month: 'long' })
+  const {
+    filters,
+    hasActiveFilters,
+    getFilterValue,
+    handleFilterChange,
+    getPrecomputedOptions,
+    setInitialFilters,
+    resetToDefaultFilters,
+    clearAllFilters
+  } = useFilterHelpers()
 
-    // Définir les filtres par défaut si les labels existent dans mainLabels
-    const yearLabel = props.mainLabels?.find((label: any) => label.key === 'year_id')
-    const monthLabel = props.mainLabels?.find((label: any) => label.key === 'month_id')
-
-    if (yearLabel) {
-      setFilter('year_id', currentYear)
-    }
-    if (monthLabel) {
-      setFilter('month_id', currentMonth)
-    }
-  }
-
-  // Appliquer les filtres initiaux dès que les mainLabels sont disponibles
-  watch(() => props.mainLabels, (newLabels) => {
-    if (newLabels && newLabels.length > 0 && Object.keys(filters.value).length === 0) {
-      setInitialFilters()
-    }
-  }, { immediate: true })
-
-  // MAINTENANT charger les données avec les filtres déjà appliqués
   const { 
-    getOptionsForLabel, 
     labels,
-    // Options préenregistrées pour performance optimale
     optionsTags,
     optionsMonths,
     optionsYears,
@@ -44,81 +24,19 @@
     optionsBundles,
   } = useTableauData(['tag', 'month', 'year', 'platform', 'bundle'])
 
-  // Calculer les bundles disponibles selon les filtres (sauf le filtre bundle)
-  const getAvailableBundles = computed(() => {
-    if (!props.bundles) {
-      return []
+  // Appliquer les filtres initiaux dès que les mainLabels sont disponibles
+  watch(() => props.mainLabels, (newLabels) => {
+    if (newLabels && newLabels.length > 0 && Object.keys(filters.value).length === 0) {
+      setInitialFilters(newLabels)
     }
-    
-    // Filtrer les bundles basé sur les autres filtres (pas le bundle_id)
-    const activeFilters = Object.entries(filters.value).filter(([key]) => key !== 'bundle_id')
-    
-    if (activeFilters.length === 0) {
-      return props.bundles // Tous les bundles si pas d'autres filtres
-    }
-    
-    // Filtrer les bundles selon les critères actifs
-    return props.bundles.filter((bundle: any) => {
-      return activeFilters.every(([filterKey, filterValue]) => {
-        if (!filterValue || filterValue === '' || filterValue.startsWith('Tout')) {
-          return true
-        }
-        
-        switch(filterKey) {
-          case 'month_id':
-            return bundle.month?.name === filterValue
-          case 'year_id':
-            return bundle.year?.name === filterValue
-          case 'platform_id':
-            return bundle.platform?.name === filterValue
-          default:
-            return true
-        }
-      })
-    })
-  })
-
-  const getFilteredOptionsForLabel = (labelKey: string) => {
-    switch(labelKey) {
-      case 'bundle_id':
-      case 'bundleId':
-        // Utiliser les bundles disponibles (filtrés par les autres critères, pas par bundle_id)
-        return getAvailableBundles.value.map((bundle: any) => ({ 
-          id: bundle.id, 
-          name: bundle.name 
-        }))
-      default:
-        return getOptionsForLabel(labelKey)
-    }
-  }
+  }, { immediate: true })
 
   const precomputedOptions = computed(() => {
-    const cache: Record<string, any[]> = {}
-    
-    props.mainLabels?.forEach((label: any) => {
-      const baseOptions = getFilteredOptionsForLabel(label.key)
-      // Ajouter seulement l'option "Tous les ..." une seule fois, pas de doublon
-      cache[label.key] = baseOptions.length > 0 ? [
-        { id: '', name: 'Tout'}, 
-        ...baseOptions
-      ] : baseOptions
-    })
-    
-    return cache
+    return getPrecomputedOptions(props.mainLabels, props.bundles)
   })
 
-  const handleFilterChange = (labelKey: string, newValue: any) => {
-    setFilter(labelKey, newValue)
-  }
-
-  const getFilterValue = (labelKey: string) => {
-    return filters.value[labelKey] || ''
-  }
-
-  // Fonction pour remettre les filtres par défaut
-  const resetToDefaultFilters = () => {
-    clearAllFilters()
-    setInitialFilters()
+  const handleResetToDefault = () => {
+    resetToDefaultFilters(props.mainLabels)
   }
 </script>
 
@@ -128,7 +46,7 @@
         <h3 class="text-lg font-semibold">Filtres</h3>
         <div class="flex gap-2">
           <Button 
-            @click="resetToDefaultFilters()" 
+            @click="handleResetToDefault()" 
             variant="outline" 
             size="sm"
           >
