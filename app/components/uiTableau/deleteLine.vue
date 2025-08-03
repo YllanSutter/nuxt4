@@ -3,13 +3,15 @@ import { Button } from '~/components/ui/button'
 
 const emit = defineEmits<{
   lineDeleted: []
+  bundleDeleted: []
 }>()
 
-const { deleteLine } = useBundleActions()
-const { userGames, bundleGames, allOptions } = useTableauData(['userGame', 'label', 'emplacement', 'bundleGame', 'bundle', 'tag', 'month', 'year', 'platform'])
+const { deleteLine, deleteBundle } = useBundleActions()
+const { userGames, bundleGames, bundles, allOptions } = useTableauData(['userGame', 'label', 'emplacement', 'bundleGame', 'bundle', 'tag', 'month', 'year', 'platform'])
 
 const props = defineProps<{
   userGameId: string
+  bundleId?: string
 }>()
 
 const isDeleting = ref(false)
@@ -22,10 +24,10 @@ const handleDeleteLine = async () => {
   const originalBundleGames = [...(bundleGames.value || [])]
 
   try {
-    console.log('🗑️ AVANT suppression ligne:')
-    console.log('📊 UserGames total:', userGames.value?.length || 0)
-    console.log('🔗 BundleGames total:', bundleGames.value?.length || 0)
-    console.log('🎯 UserGame à supprimer:', props.userGameId)
+    // console.log('🗑️ AVANT suppression ligne:')
+    // console.log('📊 UserGames total:', userGames.value?.length || 0)
+    // console.log('🔗 BundleGames total:', bundleGames.value?.length || 0)
+    // console.log('🎯 UserGame à supprimer:', props.userGameId)
     
     // Suppression optimiste dans le cache
     if (allOptions.value) {
@@ -40,15 +42,45 @@ const handleDeleteLine = async () => {
       ) || []
     }
     
-    console.log('📊 APRÈS suppression optimiste:', userGames.value?.length || 0)
+    // console.log('📊 APRÈS suppression optimiste:', userGames.value?.length || 0)
     
     // Appeler l'API
     const result = await deleteLine(props.userGameId)
-    console.log('✅ API result:', result)
+    // console.log('✅ API result:', result)
     
     // Vérifier si l'API a réussi
     if (result.statusCode !== 200) {
       throw new Error(`Erreur API: ${result.statusCode} - ${JSON.stringify(result.body)}`)
+    }
+    
+    // Vérifier s'il reste des UserGames dans le bundle après suppression
+    if (props.bundleId) {
+      const remainingUserGamesInBundle = bundleGames.value?.filter(
+        (bg: any) => bg.bundle_id === props.bundleId
+      ) || []
+      
+      console.log(`🔍 UserGames restants dans bundle ${props.bundleId}:`, remainingUserGamesInBundle.length)
+      
+      // Si plus aucun UserGame dans le bundle, supprimer le bundle
+      if (remainingUserGamesInBundle.length === 0) {
+        console.log('🗑️ Suppression du bundle vide:', props.bundleId)
+        
+        try {
+          const bundleResult = await deleteBundle(props.bundleId)
+          if (bundleResult.statusCode === 200) {
+            // Supprimer le bundle du cache
+            if (allOptions.value) {
+              allOptions.value.bundle = bundles.value?.filter(
+                (bundle: any) => bundle.id !== props.bundleId
+              ) || []
+            }
+            emit('bundleDeleted')
+            console.log('✅ Bundle vide supprimé avec succès!')
+          }
+        } catch (bundleError) {
+          console.error('❌ Erreur lors de la suppression du bundle:', bundleError)
+        }
+      }
     }
     
     emit('lineDeleted')
@@ -75,7 +107,7 @@ const handleDeleteLine = async () => {
     @click="handleDeleteLine()" 
     :disabled="isDeleting"
   >
-    <Icon v-if="isDeleting" name="eos-icons:loading" />
-    <Icon v-else name="mdi:delete" />
+    <Icon v-if="isDeleting" name="eos-icons:loading" style='color:green' :size="20" />
+    <Icon v-else name="solar:close-circle-broken" style='color:#f00' :size="20" />
   </Button>
 </template>

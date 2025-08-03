@@ -49,7 +49,7 @@ const handleDeleteBundle = async () => {
 <template>
     <Popover>
     <PopoverTrigger as-child>
-      <Button variant="outline" class="text-red-400 cursor-pointer"> <Icon name="solar:close-circle-broken" /> Delete a bundle</Button>
+      <Button variant="outline" class="text-red-400 cursor-pointer"> <Icon name="solar:close-circle-broken" /> Delete {{props.bundleName}}</Button>
     </PopoverTrigger>
     <PopoverContent class="w-80">
       <Button 
@@ -60,7 +60,7 @@ const handleDeleteBundle = async () => {
     >
         <Icon v-if="isDeleting" name="eos-icons:loading" class="mr-2" />
         <Icon v-else name="solar:close-circle-broken" class="mr-2" />
-        {{ isDeleting ? 'Suppression...' : 'Supprimer Bundle' }}
+        {{ isDeleting ? 'Suppression...' : 'yes, i want to delete' }}
     </Button>
     </PopoverContent>
   </Popover>

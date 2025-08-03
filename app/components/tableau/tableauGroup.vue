@@ -1,4 +1,4 @@
-import { Platform } from '../../generated/prisma/index';
+
 <script setup lang="ts">
   const { 
     getUserGameValue, 
@@ -50,21 +50,14 @@ import { Platform } from '../../generated/prisma/index';
   }
 
   const handleLinesAdded = () => {
-    // console.log('✅ Lignes ajoutées - données actualisées')
     forceUpdateKey.value++
   }
 
   const handleBundleCreated = () => {
-    // console.log('✅ Bundle créé - données actualisées')
     forceUpdateKey.value++
   }
 
   const handleBundleDeleted = () => {
-    // console.log('✅ Bundle supprimé - données actualisées')
-    // console.log('🔍 PARENT - État après suppression bundle:')
-    // console.log('📦 filteredBundles:', filteredBundles.value?.length || 0)
-    // console.log('📊 userGames:', userGames.value?.length || 0)
-    // console.log('🔗 bundleGames:', bundleGames.value?.length || 0)
     
     forceUpdateKey.value++
     
@@ -101,7 +94,6 @@ import { updateElem,hasPendingModifications,saveAllModifications } from '@/utils
       if (hasPendingModifications()) {
         await saveAllModifications();
       }
-      // clearCacheAndRefresh retiré car il cause des recalculs inutiles lors du hot reload Vite
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
@@ -124,10 +116,8 @@ import { updateElem,hasPendingModifications,saveAllModifications } from '@/utils
   </div>
 
   <div v-if="filteredBundles.length !== 0" v-for="(bundle, index) in filteredBundles" :key="bundle.id" :class="['relative w-full overflow-auto max-w-[1200px] mx-auto mt-6 pb-20', activeTabIndex === index ? '' : 'hidden', 'bundle-' + index]">
-    <div v-if="getUserGamesForBundle(bundle.id).length === 0" class="p-4 text-center">
-      Aucun jeu trouvé pour ce bundle avec les filtres actuels
-    </div>
-    <Table v-else :key="`table-${userGames.length}-${props.mainLabels.length}-${forceUpdateKey}`">
+
+    <Table :key="`table-${userGames.length}-${props.mainLabels.length}-${forceUpdateKey}`">
       <TableHeader>
         <TableRow>
           <TableHead v-for="label in props.mainLabels" :key="label.id">
@@ -170,7 +160,9 @@ import { updateElem,hasPendingModifications,saveAllModifications } from '@/utils
                 <UiTableauDeleteLine
                   v-else-if="label.key === 'delete'"
                   :userGameId="userGame.id"
+                  :bundleId="filteredBundles[activeTabIndex]?.id"
                   @lineDeleted="handleLineDeleted"
+                  @bundleDeleted="handleBundleDeleted"
                 />
                 <Input 
                   v-else
@@ -190,6 +182,13 @@ import { updateElem,hasPendingModifications,saveAllModifications } from '@/utils
         </TableRow>
       </TableBody>
       <TableFooter>
+        <TableRow>
+           <TableauCalculs
+              :activeBundle="filteredBundles[activeTabIndex]"
+              :userGamesBundle = getUserGamesForBundle(bundle.id)
+              :labels="mainLabels"
+           />
+        </TableRow>
         <TableRow>
           <TableCell colspan="100%">
             <div class="flex gap-2 justify-between items-center">
