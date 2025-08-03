@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
     const modsByFieldAndValue = new Map<string, string[]>();
     
     mods.forEach(mod => {
-      const groupKey = `${mod.label.table}.${mod.label.field}.${mod.value}`;
+      const groupKey = `${mod.label.table}|${mod.label.field}|${mod.value}`;
       if (!modsByFieldAndValue.has(groupKey)) {
         modsByFieldAndValue.set(groupKey, []);
       }
@@ -42,10 +42,12 @@ export default defineEventHandler(async (event) => {
     
     // Exécuter updateMany pour chaque groupe
     for (const [groupKey, elemIds] of modsByFieldAndValue) {
-      const [tableName, fieldName, value] = groupKey.split('.');
+      const [tableName, fieldName, value] = groupKey.split('|');
       const mod = mods.find(m => m.label.table === tableName && m.label.field === fieldName);
       
       if (!mod) continue;
+      
+      console.log(`🔍 Debug - Table: ${tableName}, Field: ${fieldName}, Value: "${value}", Type: "${mod.label.type}"`);
       
       const updateResult = await updateTable(tableName, fieldName, value, elemIds, mod.label.type);
       results.push(updateResult);
@@ -80,9 +82,11 @@ async function updateTable(
   // Conversion de valeur selon le type
   let convertedValue: any = value;
   
+  console.log(`🔧 Conversion - Input: "${value}" (${typeof value}), Type: "${fieldType}"`);
+  
   switch (fieldType) {
     case 'number':
-      convertedValue = parseInt(value) || 0;
+      convertedValue = parseFloat(value) || 0;
       break;
     case 'decimal':
       convertedValue = parseFloat(value) || 0;
@@ -96,6 +100,8 @@ async function updateTable(
     default:
       convertedValue = value;
   }
+  
+  console.log(`🔧 Conversion - Output: "${convertedValue}" (${typeof convertedValue})`);
 
   const updateData = { [fieldName]: convertedValue };
   

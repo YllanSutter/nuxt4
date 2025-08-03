@@ -8,6 +8,7 @@ const props = defineProps<{
   modelValue?: string | number
   label?: string
   class?: HTMLAttributes['class']
+  type?: string
 }>()
 
 const minSize = 8;
@@ -28,6 +29,7 @@ const modelValue = useVModel(props, 'modelValue', emits, {
   <input
     v-model="modelValue"
     data-slot="input"
+    v-bind="props.type ? { type: props.type } : {}"
     :placeholder="label === 'recherche' || label === 'name' ? '...':'0'"
     :style="label === 'name' ? { minWidth: ((modelValue?.toString()?.length ?? 2) * 1) + 'ch' } : { minWidth: labelLength + 'ch' }"
     :class="cn(

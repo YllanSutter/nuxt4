@@ -168,6 +168,7 @@ import { updateElem,hasPendingModifications,saveAllModifications } from '@/utils
                   v-else
                   :model-value="getUserGameValue(userGame, label.key) || ''"
                   :label="label.key"
+                  :type="label.type"
                   @change="updateElem(userGame,getUserGameValue(userGame, label.key),label, 'userGame', updateLocalData)"
                   @update:model-value="(newValue) => {
                     if (newValue !== null && newValue !== undefined) {
@@ -182,13 +183,11 @@ import { updateElem,hasPendingModifications,saveAllModifications } from '@/utils
         </TableRow>
       </TableBody>
       <TableFooter>
-        <TableRow>
-           <TableauCalculs
-              :activeBundle="filteredBundles[activeTabIndex]"
-              :userGamesBundle = getUserGamesForBundle(bundle.id)
-              :labels="mainLabels"
-           />
-        </TableRow>
+          <TableauCalculs
+            :activeBundle="filteredBundles[activeTabIndex]"
+            :userGamesBundle = getUserGamesForBundle(bundle.id)
+            :labels="mainLabels"
+          />
         <TableRow>
           <TableCell colspan="100%">
             <div class="flex gap-2 justify-between items-center">
