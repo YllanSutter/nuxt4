@@ -3,7 +3,7 @@
 
 <template>
   <div class="min-h-screen bg-background text-foreground">
-    <main class="container">
+    <main>
       <NuxtPage />
     </main>
   </div>

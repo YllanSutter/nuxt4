@@ -9,7 +9,7 @@
 <template>
 
     <header class="border-b border-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 mb-4">
-      <div class="container flex gap-2 h-14 items-center px-4">
+      <div class=" flex gap-2 h-14 items-center px-4">
         <ColorModeToggle />
          <Button 
           @click="exportDatabase()" 

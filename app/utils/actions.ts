@@ -26,7 +26,7 @@ export const useBundleActions = () => {
         name: name,
         price: price || 0,
         link: '',
-        platform_id: 'platform-1',
+        platform_id: 'platform-4',
         state_id: 'private-state-id',
         month_id: 'month-8',
         year_id: 'year-3',
@@ -79,12 +79,10 @@ export const useBundleActions = () => {
     }
   };
 
-  // Fonction pour créer des jeux individuels
   const createGame = async (name: string, bundleId?: string) => {
     return await addMultipleElem(name, 1, 'game', 0);
   };
 
-  // Fonction pour valider les données
   const validateBundleData = () => {
     const errors: string[] = [];
     
@@ -104,7 +102,6 @@ export const useBundleActions = () => {
     };
   };
 
-  // Fonction pour réinitialiser le formulaire
   const resetForm = () => {
     nameBundle.value = '';
     numberGames.value = undefined;
@@ -112,14 +109,12 @@ export const useBundleActions = () => {
   };
 
   return {
-    // État réactif
     nameBundle,
     numberGames,
     priceBundle,
     user,
     userId,
     
-    // Actions
     createBundle,
     createGame,
     addMultipleElem,

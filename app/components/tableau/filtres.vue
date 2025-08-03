@@ -1,4 +1,5 @@
 <script setup lang="ts">
+
   const { setFilter, clearAllFilters, hasActiveFilters, filters } = useTableauFilters()
 
   const props = defineProps<{
@@ -163,7 +164,7 @@
             >
              
               <div class="flex items-center gap-1">   
-                  <TableauRadioGroup 
+                  <UiTableauRadioGroup 
                     :model-value="getFilterValue(label.key)"
                     v-if="label.type == 'select'"
                     :label="'Tout'"
@@ -178,7 +179,7 @@
                     @update:model-value="(newValue) => handleFilterChange(label.key, newValue)"
                   >
                   </Input>
-                <TableauSuffix v-if="label.type !== 'select'" :label="label"></TableauSuffix>
+                <UiTableauSuffix v-if="label.type !== 'select'" :label="label"></UiTableauSuffix>
               </div>
             </TableCell>
           </TableRow>

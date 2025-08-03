@@ -44,7 +44,7 @@ import { Platform } from '../../generated/prisma/index';
     activeTabIndex.value = index
   }
  
-   import { updateElem,hasPendingModifications,saveAllModifications } from '@/utils/updateValue';
+import { updateElem,hasPendingModifications,saveAllModifications } from '@/utils/updateValue';
 
    onBeforeRouteLeave(async () => {
     if (hasPendingModifications()) {
@@ -75,7 +75,7 @@ import { Platform } from '../../generated/prisma/index';
 
   <div v-if="filteredBundles.length !== 0" class="relative gap-2 overflow-auto max-w-[1200px] mx-auto mt-6 mb-2 font-semibold text-xs ">
     
-    <TableauPopOverGroupShadcn />
+    <UiTableauPopOverGroupShadcn />
     <p class="inline-block mr-2"></p>
     <div @click="setActiveTab(index, $event)" v-for="(bundle, index) in filteredBundles" :key="bundle.id" :class="['cursor-pointer mr-2 mb-1 uppercase p-2 inline-flex text-[8px] lg:text-[11px] tracking-widest border-1 border-[#ffffff20] hover:bg-[#ffffff20] transition-all duration-400 rounded-md items-center', 'bundle-' + index, activeTabIndex === index ? 'bg-[#ffffff20]' : '']" :style="{ borderBottom: '1px solid ' + (optionsPlatforms?.find((opt: any) => opt.id === bundle.platform_id)?.color || '#ffffff20') }">
       <Icon v-if="optionsPlatforms?.find((opt: any) => opt.id === bundle.platform_id)?.image" size="13" class="mr-1" :name="optionsPlatforms?.find((opt: any) => opt.id === bundle.platform_id)?.image" :style="{ color: optionsPlatforms?.find((opt: any) => opt.id === bundle.platform_id)?.color }" />{{ bundle.name }}
@@ -108,7 +108,7 @@ import { Platform } from '../../generated/prisma/index';
           >
            
             <div class="flex items-center gap-1">
-                <TableauRadioGroup 
+                <UiTableauRadioGroup 
                   v-if="label.type == 'select'"
                   :model-value="getUserGameValue(userGame, label.key) || ''"
                   :label="label.name"
@@ -137,7 +137,7 @@ import { Platform } from '../../generated/prisma/index';
                   }"
                 >
                 </Input>
-              <TableauSuffix v-if="label.type !== 'select'" :label="label"></TableauSuffix>
+              <UiTableauSuffix v-if="label.type !== 'select'" :label="label"></UiTableauSuffix>
             </div>
           </TableCell>
         </TableRow>
