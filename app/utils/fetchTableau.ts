@@ -44,12 +44,14 @@ export const useTableauData = (models?: string[] | string) => {
   const gameStats = computed(() => allOptions.value?.gameStat || [])
   const users = computed(() => allOptions.value?.user || [])
 
-  const optionsTags = computed(() => tags.value.map((tag: any) => ({ 
-    id: tag.id, 
-    name: tag.name, 
-    color: tag.color, 
-    image: tag.image 
-  })))
+  const optionsTags = computed(() => {
+    return tags.value.map((tag: any) => ({ 
+      id: tag.id, 
+      name: tag.name, 
+      color: tag.color, 
+      image: tag.image 
+    }))
+  })
   
   const monthOrder = [
     'janvier', 'février', 'mars', 'avril', 'mai', 'juin',
@@ -70,12 +72,14 @@ export const useTableauData = (models?: string[] | string) => {
     id: year.id, 
     name: year.name 
   })))
-  const optionsPlatforms = computed(() => platforms.value.map((platform: any) => ({ 
-    id: platform.id, 
-    name: platform.name, 
-    color: platform.color, 
-    image: platform.image 
-  })))
+  const optionsPlatforms = computed(() => {
+    return platforms.value.map((platform: any) => ({ 
+      id: platform.id, 
+      name: platform.name, 
+      color: platform.color, 
+      image: platform.image 
+    }))
+  })
   const optionsBundles = computed(() => bundles.value.map((bundle: any) => ({ 
     id: bundle.id, 
     name: bundle.name 
@@ -198,14 +202,15 @@ export const useTableauData = (models?: string[] | string) => {
   const mainLabels = computed(() => getLabelsByEmplacement('main'))
 
   const clearCacheAndRefresh = async () => {
-    console.log('🔄 Vidage du cache et rafraîchissement des données...');
+    console.log('🔄 [fetchTableau] Vidage du cache et rafraîchissement des données...');
+    console.trace('🔍 [fetchTableau] Appelé depuis:');
     // Vider le cache Nuxt
     if (existingData) {
       existingData.value = null;
     }
     // Rafraîchir les données depuis l'API
     await refresh();
-    console.log('✅ Cache vidé et données rafraîchies');
+    console.log('✅ [fetchTableau] Cache vidé et données rafraîchies');
   }
 
   const filtres = computed(() => getLabelsByEmplacement('filtres'));

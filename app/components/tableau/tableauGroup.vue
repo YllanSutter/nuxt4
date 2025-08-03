@@ -50,21 +50,21 @@ import { Platform } from '../../generated/prisma/index';
   }
 
   const handleLinesAdded = () => {
-    console.log('✅ Lignes ajoutées - données actualisées')
+    // console.log('✅ Lignes ajoutées - données actualisées')
     forceUpdateKey.value++
   }
 
   const handleBundleCreated = () => {
-    console.log('✅ Bundle créé - données actualisées')
+    // console.log('✅ Bundle créé - données actualisées')
     forceUpdateKey.value++
   }
 
   const handleBundleDeleted = () => {
-    console.log('✅ Bundle supprimé - données actualisées')
-    console.log('🔍 PARENT - État après suppression bundle:')
-    console.log('📦 filteredBundles:', filteredBundles.value?.length || 0)
-    console.log('📊 userGames:', userGames.value?.length || 0)
-    console.log('🔗 bundleGames:', bundleGames.value?.length || 0)
+    // console.log('✅ Bundle supprimé - données actualisées')
+    // console.log('🔍 PARENT - État après suppression bundle:')
+    // console.log('📦 filteredBundles:', filteredBundles.value?.length || 0)
+    // console.log('📊 userGames:', userGames.value?.length || 0)
+    // console.log('🔗 bundleGames:', bundleGames.value?.length || 0)
     
     forceUpdateKey.value++
     
@@ -86,11 +86,14 @@ import { Platform } from '../../generated/prisma/index';
  
 import { updateElem,hasPendingModifications,saveAllModifications } from '@/utils/updateValue';
 
-   onBeforeRouteLeave(async () => {
+   onBeforeRouteLeave(async (to, from) => {
     if (hasPendingModifications()) {
       await saveAllModifications();
     }
-    await clearCacheAndRefresh();
+    // clearCacheAndRefresh seulement si on quitte vraiment la page (pas un hot reload)
+    if (to.path !== from.path) {
+      await clearCacheAndRefresh();
+    }
   });
 
   onMounted(() => {
@@ -98,7 +101,7 @@ import { updateElem,hasPendingModifications,saveAllModifications } from '@/utils
       if (hasPendingModifications()) {
         await saveAllModifications();
       }
-      await clearCacheAndRefresh();
+      // clearCacheAndRefresh retiré car il cause des recalculs inutiles lors du hot reload Vite
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);

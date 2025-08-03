@@ -14,8 +14,8 @@ interface ModificationEntry {
 const pendingModifications = new Map<string, ModificationEntry>();
 const debounceTimers = new Map<string, NodeJS.Timeout>();
 let globalSaveTimer: NodeJS.Timeout | null = null;
-const DEBOUNCE_DELAY = 2000;
-const GLOBAL_SAVE_DELAY = 3000;
+const DEBOUNCE_DELAY = 1000;
+const GLOBAL_SAVE_DELAY = 2000;
 
 export const updateValue = async (
   elem: any, 
@@ -203,7 +203,6 @@ export const hasPendingModifications = (): boolean => {
 }
 
 export const updateTableBatch = async(table: any, mods: any) => {
-  //console.log('🔥 updateTableBatch appelée avec:', { table, mods });
   try {
     const response = await fetch('/api/actions/updateElem', {
       method: 'POST',

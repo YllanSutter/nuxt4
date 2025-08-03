@@ -99,7 +99,6 @@ async function updateTable(
 
   const updateData = { [fieldName]: convertedValue };
   
-  // Mapping des noms de table vers les modèles Prisma
   const tableModels: Record<string, any> = {
     'UserGame': prisma.userGame,
     'Bundle': prisma.bundle,
