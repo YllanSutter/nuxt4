@@ -13,7 +13,7 @@ export const useBundleActions = () => {
   const userId = computed(() => user.value?.id);
 
   const nameBundle = ref('');
-  const numberGames = ref<number | undefined>(undefined);
+  const numberGames = ref<number | undefined>(1);
   const priceBundle = ref<number | undefined>(undefined);
   
   // Utiliser les valeurs actuelles par défaut comme dans useFilterHelpers

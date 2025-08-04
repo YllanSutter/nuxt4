@@ -214,6 +214,7 @@ export const useTableauData = (models?: string[] | string) => {
   }
 
   const filtres = computed(() => getLabelsByEmplacement('filtres'));
+  const calcLabels = computed(() => getLabelsByEmplacement('calculs'));
 
   return {
     allOptions,
@@ -245,6 +246,7 @@ export const useTableauData = (models?: string[] | string) => {
     optionsPlatforms,
     optionsBundles,
     filtres,
+    calcLabels,
     getUserGameValue,
     getOptionsForLabel,
     getLabelsByEmplacement,

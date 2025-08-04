@@ -7,6 +7,7 @@
     getLabelsByEmplacement,
     mainLabels,
     filtres,
+    calcLabels,
     refresh 
   } = useTableauData(['userGame', 'label', 'emplacement', 'bundleGame', 'bundle']) 
   
@@ -48,6 +49,7 @@
     />
     <TableauGroup
     :main-labels=mainLabels
+    :calc-labels=calcLabels
     :bundles=bundles
     />
   </div>

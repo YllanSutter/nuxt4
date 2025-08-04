@@ -1,1 +1,24 @@
 npx prisma studio
+
+------------------------
+
+INSERT INTO "Label" (id, name, key, type, image, default_visible, position, color) VALUES
+('label-search', 'Search', 'search', 'text', 'mingcute:search-line', true, 15, '#6c757d'),
+('label-image', 'Image', 'image', 'text', 'mingcute:pic-line', true, 16, '#17a2b8'),
+('label-stats', 'Stats', 'stats', 'text', 'mingcute:chart-line', true, 17, '#28a745'),
+('label-ratio', 'Ratio', 'ratio', 'text', 'mingcute:calculator-line', true, 18, '#fd7e14');
+
+INSERT INTO "Emplacement" (id, name) VALUES
+('emplacement-calculs', 'calculs');
+
+INSERT INTO "LabelEmplacement" (id, label_id, emplacement_id, "position") VALUES
+('calc-name-001', (SELECT id FROM "Label" WHERE key = 'name'), 'emplacement-calculs', 1),
+('calc-price-002', (SELECT id FROM "Label" WHERE key = 'price'), 'emplacement-calculs', 2),
+('calc-black-003', (SELECT id FROM "Label" WHERE key = 'black_market_price'), 'emplacement-calculs', 3),
+('calc-sale-004', (SELECT id FROM "Label" WHERE key = 'sale_price'), 'emplacement-calculs', 4),
+('calc-initial-005', (SELECT id FROM "Label" WHERE key = 'initial_price'), 'emplacement-calculs', 5),
+('calc-playtime-006', (SELECT id FROM "Label" WHERE key = 'playtime_hours'), 'emplacement-calculs', 6),
+('calc-rating-007', (SELECT id FROM "Label" WHERE key = 'rating'), 'emplacement-calculs', 7);
+
+INSERT INTO "LabelEmplacement" (id, label_id, emplacement_id, "position") VALUES
+('le-search-filtres', (SELECT id FROM "Label" WHERE key = 'search'), 'emplacement-filtres', 6)

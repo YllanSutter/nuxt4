@@ -41,13 +41,12 @@
 </script>
 
 <template>
-    <div class="relative w-full overflow-auto max-w-[1200px] mx-auto">
+    <div class="relative w-full overflow-auto max-w-[1000px] mx-auto z-10">
       <div class="flex items-center justify-between mb-3">
         <h3 class="text-lg font-semibold">Filtres</h3>
         <div class="flex gap-2">
           <Button 
             @click="handleResetToDefault()" 
-            variant="outline" 
             size="sm"
           >
             Mois/Année actuels
@@ -81,7 +80,7 @@
               class="font-medium"
             >
              
-              <div class="flex items-center gap-1">   
+              <div class="flex items-center gap-1 bg-muted rounded-md overflow-hidden">   
                   <UiTableauRadioGroup 
                     :model-value="getFilterValue(label.key)"
                     v-if="label.type == 'select'"

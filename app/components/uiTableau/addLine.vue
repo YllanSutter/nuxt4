@@ -47,7 +47,7 @@ const handleAddLine = async () => {
     emit('linesAdded')
     
     // Reset le formulaire
-    numberGames.value = undefined
+    numberGames.value = 1
     
   } catch (error) {
     console.error('❌ Erreur lors de l\'ajout:', error)

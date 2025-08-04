@@ -106,6 +106,7 @@ const handleDeleteLine = async () => {
     size="sm"
     @click="handleDeleteLine()" 
     :disabled="isDeleting"
+    class="cursor-pointer"
   >
     <Icon v-if="isDeleting" name="eos-icons:loading" style='color:green' :size="20" />
     <Icon v-else name="solar:close-circle-broken" style='color:#f00' :size="20" />

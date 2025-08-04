@@ -4,6 +4,7 @@ const props= defineProps<{
     labels:any;
     activeBundle:any;
     userGamesBundle:any;
+    listClass:string;
 }>();
 
 const elems = computed(() => {
@@ -40,6 +41,7 @@ const elems = computed(() => {
     result[ratingIndex].elems[0] = Math.round((result[ratingIndex].elems[0] / props.userGamesBundle.length) * 100) / 100;
   }
 
+
   result.forEach((item: any) => {
     if (typeof item.elems[0] === 'number') {
       item.elems[0] = Math.round(item.elems[0] * 100) / 100;
@@ -69,6 +71,7 @@ const ratios = computed(() => {
   const totalPrice = getTotalByKey('price');
   const totalInitialPrice = getTotalByKey('initial_price');
   const totalPlaytimeHours = getTotalByKey('playtime_hours');
+  const totalNumberGames = getTotalByKey('name');
 
   for (let j = 0; j < props.labels.length; j++) {
     const key = props.labels[j].key;
@@ -84,6 +87,15 @@ const ratios = computed(() => {
         result[j].elems[0] = Math.round((totalPrice / totalPlaytimeHours) * 100) / 100;
       } else {
         result[j].elems[0] = 'Aucune heure';
+      }
+      continue;
+    }
+
+       if (key === 'price') {
+      if (totalNumberGames > 0) {
+        result[j].elems[0] = Math.round((totalPrice / totalNumberGames) * 100) / 100;
+      } else {
+        result[j].elems[0] = 'Aucun jeu';
       }
       continue;
     }
@@ -107,7 +119,7 @@ const ratios = computed(() => {
     }
   }
 
-  console.log('Ratios calculés:', result);
+  // console.log('Ratios calculés:', result);
 
   return result;
 });
@@ -116,7 +128,7 @@ const ratios = computed(() => {
 
 <template>
     
-    <TableRow class="bg-muted/50">
+    <TableRow :class="props.listClass">
         <TableCell v-for="(label, index) in labels" :key="index" class="text-right">
             <div v-if="label.key !== 'delete' && label.key !== 'order_in_list' && label.key !== 'tag_id'"  >
                 {{ elems[index]?.elems[0] }}
@@ -124,15 +136,18 @@ const ratios = computed(() => {
             </div>
         </TableCell>
    </TableRow> 
-   <TableRow class="bg-muted/50">
-        <TableCell v-for="(label, index) in labels" :key="index" class="text-right border-b border-[#ffffff20]" >
+   <TableRow :class="props.listClass">
+        <TableCell v-for="(label, index) in labels" :key="index" class="text-right " >
             <div v-if="ratios[index]?.elems[0] !== null" class=" border-t pt-2 -mt-2 border-[#ffffff20]">
                 <span class="text-sm text-muted-foreground">
                   <template v-if="label.key === 'playtime_hours' && typeof ratios[index]?.elems[0] === 'number'">
-                    {{ ratios[index]?.elems[0] }}€/h
+                    {{ ratios[index]?.elems[0] }}€/<UiTableauSuffix :label=label></UiTableauSuffix>
+                  </template>
+                   <template v-else-if="label.key === 'price' && typeof ratios[index]?.elems[0] === 'number'">
+                    {{ ratios[index]?.elems[0] }}<UiTableauSuffix :label=label></UiTableauSuffix>/jeu
                   </template>
                   <template v-else-if="typeof ratios[index]?.elems[0] === 'number'">
-                    x{{ ratios[index]?.elems[0] }}
+                    x{{ ratios[index]?.elems[0] }}<UiTableauSuffix :label=label></UiTableauSuffix>
                   </template>
                   <template v-else>
                     {{ ratios[index]?.elems[0] }}
