@@ -74,7 +74,8 @@ export const useTableauFilters = () => {
     const gameFilters = allFilters.filter(([labelKey]) => 
       labelKey === 'tag_id' || labelKey === 'tagId' || 
       labelKey === 'name' || labelKey === 'order_in_list' || labelKey === 'order' ||
-      labelKey === 'search' || labelKey === 'recherche'
+      labelKey === 'search' || labelKey === 'recherche' ||
+      labelKey === 'rating' || labelKey === 'note'
     )
 
     // Étape 1: Filtrer les bundles

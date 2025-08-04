@@ -92,7 +92,7 @@
                   <Input 
                     v-else
                     :model-value="getFilterValue(label.key)"
-                    :placeholder="'Filtrer par ' + label.name"
+                    :placeholder="'Filter ' + label.name"
                     @update:model-value="(newValue) => handleFilterChange(label.key, newValue)"
                   >
                   </Input>

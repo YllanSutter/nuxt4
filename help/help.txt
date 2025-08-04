@@ -21,4 +21,5 @@ INSERT INTO "LabelEmplacement" (id, label_id, emplacement_id, "position") VALUES
 ('calc-rating-007', (SELECT id FROM "Label" WHERE key = 'rating'), 'emplacement-calculs', 7);
 
 INSERT INTO "LabelEmplacement" (id, label_id, emplacement_id, "position") VALUES
-('le-search-filtres', (SELECT id FROM "Label" WHERE key = 'search'), 'emplacement-filtres', 6)
+('le-search-filtres', (SELECT id FROM "Label" WHERE key = 'search'), 'emplacement-filtres', 7),
+('le-search-rating', (SELECT id FROM "Label" WHERE key = 'rating'), 'emplacement-filtres', 6);
