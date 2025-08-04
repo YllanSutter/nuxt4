@@ -73,7 +73,8 @@ export const useTableauFilters = () => {
     )
     const gameFilters = allFilters.filter(([labelKey]) => 
       labelKey === 'tag_id' || labelKey === 'tagId' || 
-      labelKey === 'name' || labelKey === 'order_in_list' || labelKey === 'order'
+      labelKey === 'name' || labelKey === 'order_in_list' || labelKey === 'order' ||
+      labelKey === 'search' || labelKey === 'recherche'
     )
 
     // Étape 1: Filtrer les bundles
@@ -82,7 +83,6 @@ export const useTableauFilters = () => {
       filteredBundles = bundles.filter((bundle) => {
         return bundleFilters.every(([labelKey, filterValue]) => {
           let bundleValue
-          
           switch (labelKey) {
             case 'month_id':
             case 'monthId':
@@ -100,6 +100,7 @@ export const useTableauFilters = () => {
             case 'bundleId':
               bundleValue = bundle.name || ''
               break
+              
             default:
               bundleValue = bundle[labelKey]
           }
@@ -123,10 +124,22 @@ export const useTableauFilters = () => {
             gameValue = userGame.tag?.name || ''
           } else if (labelKey === 'order_in_list' || labelKey === 'order') {
             gameValue = userGame.order_in_list
+          } else if (labelKey === 'search' || labelKey === 'recherche') {
+            // Recherche dans le nom du jeu pour le filtre search
+            gameValue = userGame.name || ''
           } else {
             gameValue = userGame[labelKey]
           }
           
+          // Pour les tags, faire une comparaison exacte (insensible à la casse)
+          if (labelKey === 'tag_id' || labelKey === 'tagId') {
+            if (typeof gameValue === 'string' && typeof filterValue === 'string') {
+              return gameValue.toLowerCase() === filterValue.toLowerCase()
+            }
+            return gameValue == filterValue
+          }
+          
+          // Pour les autres champs, garder la recherche par sous-chaîne
           if (typeof gameValue === 'string' && typeof filterValue === 'string') {
             return gameValue.toLowerCase().includes(filterValue.toLowerCase())
           }
@@ -174,81 +187,6 @@ export const useTableauFilters = () => {
     }
   }
 
-  // Anciennes fonctions pour rétrocompatibilité (utiliseront la nouvelle logique)
-  const filterUserGames = (userGames: any[]) => {
-    if (!userGames) return userGames
-    
-    const gameFilters = Object.entries(globalFilters.value).filter(([labelKey]) => 
-      labelKey === 'tag_id' || labelKey === 'tagId' || labelKey === 'name' || labelKey === 'order_in_list' || labelKey === 'order'
-    )
-    
-    if (gameFilters.length === 0) return userGames
-    
-    return userGames.filter((userGame) => {
-      return gameFilters.every(([labelKey, filterValue]) => {
-        let gameValue
-        
-        if (labelKey === 'tag_id' || labelKey === 'tagId') {
-          gameValue = userGame.tag?.name || ''
-        } else if (labelKey === 'order_in_list' || labelKey === 'order') {
-          gameValue = userGame.order_in_list
-        } else {
-          gameValue = userGame[labelKey]
-        }
-        
-        if (typeof gameValue === 'string' && typeof filterValue === 'string') {
-          return gameValue.toLowerCase().includes(filterValue.toLowerCase())
-        }
-        return gameValue == filterValue
-      })
-    })
-  }
-
-  const filterBundles = (bundles: any[]) => {
-    if (!bundles) return bundles
-    
-    const bundleFilters = Object.entries(globalFilters.value).filter(([labelKey]) => 
-      labelKey === 'bundle_id' || labelKey === 'bundleId' || 
-      labelKey === 'month_id' || labelKey === 'monthId' || 
-      labelKey === 'year_id' || labelKey === 'yearId' || 
-      labelKey === 'platform_id' || labelKey === 'plateformeId'
-    )
-    
-    if (bundleFilters.length === 0) return bundles
-    
-    return bundles.filter((bundle) => {
-      return bundleFilters.every(([labelKey, filterValue]) => {
-        let bundleValue
-        
-        switch (labelKey) {
-          case 'month_id':
-          case 'monthId':
-            bundleValue = bundle.month?.name || ''
-            break
-          case 'year_id':
-          case 'yearId':
-            bundleValue = bundle.year?.name || ''
-            break
-          case 'platform_id':
-          case 'plateformeId':
-            bundleValue = bundle.platform?.name || ''
-            break
-          case 'bundle_id':
-          case 'bundleId':
-            bundleValue = bundle.name || ''
-            break
-          default:
-            bundleValue = bundle[labelKey]
-        }
-        
-        if (typeof bundleValue === 'string' && typeof filterValue === 'string') {
-          return bundleValue.toLowerCase().includes(filterValue.toLowerCase())
-        }
-        return bundleValue == filterValue
-      })
-    })
-  }
-
   // Computed pour avoir un état réactif des filtres
   const activeFilters = computed(() => globalFilters.value)
   const hasActiveFilters = computed(() => Object.keys(globalFilters.value).length > 0)
@@ -269,13 +207,8 @@ export const useTableauFilters = () => {
   return {
     filters: activeFilters,
     setFilter,
-    filterUserGames, // Ancienne fonction (rétrocompatibilité)
-    filterBundles, // Ancienne fonction (rétrocompatibilité)
-    filterAllData, // Nouvelle fonction optimisée
+    filterAllData, // Fonction optimisée
     hasActiveFilters,
     clearAllFilters
   }
 }
-
-// Alias pour la version optimisée
-export const useTableauFiltersOptimized = useTableauFilters
