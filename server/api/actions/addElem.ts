@@ -112,7 +112,8 @@ export default defineEventHandler(async (event) => {
           sale_price: 0,
           initial_price: price,
           playtime_hours: 0,
-          rating: 0,
+          rating: 0, // legacy, à supprimer du schéma plus tard
+          rating_id: elem.rating_id || elem.rating_ref?.id || null,
           tag_id: elem.tag_id || 'tag-1',
           order_in_list: index + 1,
           created_at: new Date(elem.created_at) || new Date(),

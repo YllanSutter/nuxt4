@@ -64,7 +64,6 @@ export const useBundleActions = () => {
   const addMultipleElem = async (name: string, number: number, cible: string, price?: number, activeBundleId?: string) => {
     const elems: any[] = [];
     const currentDate = new Date().toISOString();
-    
     for (let i = 0; i < number; i++) {
       elems.push({
         user_id: userId.value,
@@ -75,6 +74,7 @@ export const useBundleActions = () => {
         state_id: 'private-state-id',
         month_id: selectedMonthId.value,
         year_id: selectedYearId.value,
+        rating_id: 'rating-0', 
         created_at: currentDate,
         updated_at: currentDate
       });

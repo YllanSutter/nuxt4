@@ -109,7 +109,7 @@ const handleCreateElem = async (cible: string) => {
     <PopoverTrigger as-child>
       <Button variant="outline"> <Icon name="stash:list-add" /> Add a bundle</Button>
     </PopoverTrigger>
-    <PopoverContent class="w-[500px]">
+    <PopoverContent class="w-[400px]">
       <div class="grid gap-4">
         <div class="space-y-2">
           <h4 class="font-medium leading-none">Add a bundle</h4>
@@ -124,30 +124,32 @@ const handleCreateElem = async (cible: string) => {
               type="text"
               v-model="nameBundle"
               placeholder="Bundle Name"
-              class="col-span-2"
+              class="col-span-2 border-0"
             />
           </div>
-          <div class="grid grid-cols-3 items-center gap-4">
-            <label class="text-sm font-medium">Games</label>
-            <Input
-              type="number"
-              placeholder="5"
-              class="col-span-2"
-              v-model="numberGames"
-            />
+          <div class="grid grid-cols-2 gap-2 border-t border-[#ffffff20] pt-4">
+            <div class="grid grid-cols-3 items-center gap-4 border-r border-[#ffffff20]">
+              <label class="text-sm font-medium">Games</label>
+              <Input
+                type="number"
+                placeholder="5"
+                class="col-span-2 border-0"
+                v-model="numberGames"
+              />
+            </div>
+            <div class="grid grid-cols-3 items-center gap-4">
+              <label class="text-sm font-medium">Price</label>
+              <Input
+                type="number"
+                placeholder="5"
+                class="col-span-2 border-0"
+                v-model="priceBundle"
+              />
+            </div>
           </div>
-          <div class="grid grid-cols-3 items-center gap-4">
-            <label class="text-sm font-medium">Price</label>
-            <Input
-              type="number"
-              placeholder="5"
-              class="col-span-2"
-              v-model="priceBundle"
-            />
-          </div>
-          <div class="grid grid-cols-3 gap-2">
-            <div v-for="label in filtres.filter((l: { type: string; name: string; }) => l.type === 'select' && l.name !== 'Bundle' && l.name !== 'Tag')" :key="label.id" class="grid items-center gap-4">
-              <label class="text-sm font-medium">{{ label.name }}</label>
+          <div class="flex flex-wrap gap-2 mt-2">
+            <div v-for="label in filtres.filter((l: { type: string; name: string; }) => l.type === 'select' && l.name !== 'Bundle' && l.name !== 'Tag' && l.name !== 'Rating')" :key="label.id" class="grid items-center gap-4">
+
               <UiTableauRadioGroup 
                 v-if="selectBundle.find(s => s.key === label.key)"
                 v-model="selectBundle.find(s => s.key === label.key)!.ref.value"
@@ -158,7 +160,6 @@ const handleCreateElem = async (cible: string) => {
                   const option = (precomputedOptions[label.key] || []).find((opt: any) => opt.name === newValue)
                   const selectedId = option ? option.id : String(newValue)
                   
-                  // Mettre à jour la sélection du bundle avec l'ID
                   bundleItem.ref.value = selectedId
                 }"
               />
@@ -168,11 +169,12 @@ const handleCreateElem = async (cible: string) => {
                 :options="precomputedOptions[label.key] || []"
               />      
             </div>
+            <Button @click="handleCreateElem('bundle')" :disabled="isCreating" class="w-[35px] p-0 items-center flex text-center">
+              <Icon v-if="isCreating" name="eos-icons:loading"/>
+              <Icon v-else name="lucide:send"/>
+            </Button>
           </div>
-          <Button @click="handleCreateElem('bundle')" :disabled="isCreating">
-            <Icon v-if="isCreating" name="eos-icons:loading" class="mr-2" />
-            {{ isCreating ? 'Création...' : 'Create' }}
-          </Button>
+     
         </div>
       </div>
     </PopoverContent>
