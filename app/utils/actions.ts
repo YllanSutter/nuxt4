@@ -29,7 +29,7 @@ export const useBundleActions = () => {
   
   // Fonction pour trouver les IDs correspondants depuis les options
   const findCurrentIds = () => {
-    const { optionsMonths, optionsYears, optionsPlatforms } = useTableauData(['month', 'year', 'platform'])
+    const { optionsMonths, optionsYears, optionsPlatforms } = useTableauData(['month', 'year', 'platform', 'rating'])
     
     // Trouver l'ID du mois actuel
     const currentMonthOption = optionsMonths.value?.find((month: any) => 

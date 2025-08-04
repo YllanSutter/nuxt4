@@ -75,13 +75,15 @@ model UserGame {
   sale_price         Decimal
   initial_price      Decimal
   playtime_hours     Decimal
-  rating             Decimal
+  rating             Decimal  // Ancien champ - sera supprimé plus tard
+  rating_id          String   // Nouveau champ
   tag_id             String
   order_in_list      Int
   created_at         DateTime @default(now())
   updated_at         DateTime @updatedAt
   user               User     @relation(fields: [user_id], references: [id])
   base_game          BaseGame @relation(fields: [base_game_id], references: [id])
+  rating_ref         Rating   @relation(fields: [rating_id], references: [id])
   tag                Tag      @relation(fields: [tag_id], references: [id])
   bundle_games       BundleGame[]
   price_history      PriceHistory[]
@@ -146,6 +148,15 @@ model Tag {
   name       String
   image      String?
   color      String   @default("green")
+  user_games UserGame[]
+}
+
+model Rating {
+  id         String   @id @default(uuid())
+  name       String
+  value      Int
+  image      String?
+  color      String   @default("orange")
   user_games UserGame[]
 }
 

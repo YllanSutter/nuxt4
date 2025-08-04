@@ -20,7 +20,13 @@ const elems = computed(() => {
   for (let i = 0; i < props.userGamesBundle.length; i++) {
     for (let j = 0; j < props.labels.length; j++) {
       const key = props.labels[j].key;
-      const value = props.userGamesBundle[i][key];
+      let value = props.userGamesBundle[i][key];
+      
+      // Gestion spéciale pour rating_id : récupérer la valeur numérique depuis la relation
+      if (key === 'rating_id' && props.userGamesBundle[i].rating_ref) {
+        value = props.userGamesBundle[i].rating_ref.value;
+      }
+      
       if (typeof value === 'number') {
         result[j].elems[0] += value;
       } else if (typeof value === 'string' && !isNaN(parseFloat(value))) {
@@ -36,15 +42,27 @@ const elems = computed(() => {
     }
   }
 
-  const ratingIndex = props.labels.findIndex((label: any) => label.key === "rating");
+  const ratingIndex = props.labels.findIndex((label: any) => label.key === "rating_id");
   if (ratingIndex !== -1 && props.userGamesBundle.length > 0) {
-    result[ratingIndex].elems[0] = Math.round((result[ratingIndex].elems[0] / props.userGamesBundle.length) * 100) / 100;
+    // Calculer la moyenne en excluant les ratings = 0 (non notés)
+    const validRatings = props.userGamesBundle
+      .map((game: any) => game.rating_ref?.value || 0)
+      .filter((rating: number) => rating > 0);
+    
+    if (validRatings.length > 0) {
+      const totalRating = validRatings.reduce((sum: number, rating: number) => sum + rating, 0);
+      // Formatage strict pour l'hydration : string avec 2 décimales
+      result[ratingIndex].elems[0] = (totalRating / validRatings.length).toFixed(2);
+    } else {
+      result[ratingIndex].elems[0] = "0.00";
+    }
   }
 
-
-  result.forEach((item: any) => {
+  result.forEach((item: any, idx: number) => {
+    // Pour la cellule rating, garder le format string (déjà fait ci-dessus)
+    if (props.labels[idx]?.key === "rating_id") return;
     if (typeof item.elems[0] === 'number') {
-      item.elems[0] = Math.round(item.elems[0] * 100) / 100;
+      item.elems[0] = item.elems[0].toFixed(2);
     }
   });
 
@@ -76,7 +94,7 @@ const ratios = computed(() => {
   for (let j = 0; j < props.labels.length; j++) {
     const key = props.labels[j].key;
     
-    const excludedFields = ['name', 'delete', 'order_in_list', 'tag_id', 'rating'];
+    const excludedFields = ['name', 'delete', 'order_in_list', 'tag_id', 'rating_id'];
     if (excludedFields.includes(key)) {
       result[j].elems[0] = null;
       continue;
@@ -109,9 +127,9 @@ const ratios = computed(() => {
       } else if (currentTotal > 0 && totalPrice > 0 && key !== 'price') {
         result[j].elems[0] = Math.round((currentTotal / totalPrice) * 100) / 100;
       } else if (key === 'initial_price') {
-        result[j].elems[0] = 'N/A';
+        result[j].elems[0] = '...';
       } else {
-        result[j].elems[0] = null;
+        result[j].elems[0] = '...';
       }
     } else {
       // Autres champs
@@ -130,12 +148,18 @@ const ratios = computed(() => {
     
     <TableRow :class="props.listClass">
         <TableCell v-for="(label, index) in labels" :key="index" class="text-right">
-            <div v-if="label.key !== 'delete' && label.key !== 'order_in_list' && label.key !== 'tag_id'"  >
-                {{ elems[index]?.elems[0] }}
-                <UiTableauSuffix :label=label :emplacement="'footer'"/>
+            <div v-if="label.key !== 'delete' && label.key !== 'order_in_list' && label.key !== 'tag_id'">
+                <ClientOnly v-if="label.key === 'rating_id'">
+                  {{ elems[index]?.elems[0] }}
+                  <UiTableauSuffix :label=label :emplacement="'footer'"/>
+                </ClientOnly>
+                <template v-else>
+                  {{ elems[index]?.elems[0] }}
+                  <UiTableauSuffix :label=label :emplacement="'footer'"/>
+                </template>
             </div>
         </TableCell>
-   </TableRow> 
+   </TableRow>
    <TableRow :class="props.listClass">
         <TableCell v-for="(label, index) in labels" :key="index" class="text-right " >
             <div v-if="ratios[index]?.elems[0] !== null" class=" border-t pt-2 -mt-2 border-[#ffffff20]">

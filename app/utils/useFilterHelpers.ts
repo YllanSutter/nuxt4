@@ -1,6 +1,6 @@
 export const useFilterHelpers = () => {
   const { setFilter, clearAllFilters, hasActiveFilters, filters } = useTableauFilters()
-  const { getOptionsForLabel } = useTableauData(['tag', 'month', 'year', 'platform', 'bundle'])
+  const { getOptionsForLabel } = useTableauData(['tag', 'month', 'year', 'platform', 'rating', 'bundle'])
 
   // Calculer les bundles disponibles selon les filtres (sauf le filtre bundle)
   const getAvailableBundles = (bundles: any[]) => {
@@ -19,7 +19,7 @@ export const useFilterHelpers = () => {
         if (!filterValue || filterValue === '' || filterValue.startsWith('Tout')) {
           return true
         }
-        
+
         switch(filterKey) {
           case 'month_id':
             return bundle.month?.name === filterValue
@@ -27,6 +27,9 @@ export const useFilterHelpers = () => {
             return bundle.year?.name === filterValue
           case 'platform_id':
             return bundle.platform?.name === filterValue
+          case 'rating_id':
+            // Filtrer sur l'id du rating, direct ou via la relation
+            return bundle.rating_id === filterValue || bundle.rating_ref?.id === filterValue
           default:
             return true
         }

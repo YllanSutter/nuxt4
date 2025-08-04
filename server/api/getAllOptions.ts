@@ -51,6 +51,7 @@ export default defineEventHandler(async (event) => {
         }
       },
       tag: { name: 'asc' },
+      rating: { value: 'asc' },
       platform: { name: 'asc' },
       bundle: { 
         orderBy: { created_at: 'desc' },
@@ -80,6 +81,7 @@ export default defineEventHandler(async (event) => {
         include: {
           user: true,
           base_game: true,
+          rating_ref: true,
           tag: true
         },
         where: userId ? {

@@ -9,7 +9,7 @@
     filtres,
     calcLabels,
     refresh 
-  } = useTableauData(['userGame', 'label', 'emplacement', 'bundleGame', 'bundle']) 
+  } = useTableauData(['userGame', 'label', 'emplacement', 'bundleGame', 'bundle', 'rating']) 
   
 
   

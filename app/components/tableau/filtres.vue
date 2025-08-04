@@ -21,8 +21,9 @@
     optionsMonths,
     optionsYears,
     optionsPlatforms,
+    optionsRatings,
     optionsBundles,
-  } = useTableauData(['tag', 'month', 'year', 'platform', 'bundle'])
+  } = useTableauData(['tag', 'month', 'year', 'platform', 'rating', 'bundle'])
 
   // Appliquer les filtres initiaux dès que les mainLabels sont disponibles
   watch(() => props.mainLabels, (newLabels) => {

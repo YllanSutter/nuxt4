@@ -75,7 +75,7 @@ export const useTableauFilters = () => {
       labelKey === 'tag_id' || labelKey === 'tagId' || 
       labelKey === 'name' || labelKey === 'order_in_list' || labelKey === 'order' ||
       labelKey === 'search' || labelKey === 'recherche' ||
-      labelKey === 'rating' || labelKey === 'note'
+      labelKey === 'rating' || labelKey === 'note' || labelKey === 'rating_id'
     )
 
     // Étape 1: Filtrer les bundles
@@ -120,18 +120,20 @@ export const useTableauFilters = () => {
       filteredUserGames = userGames.filter((userGame) => {
         return gameFilters.every(([labelKey, filterValue]) => {
           let gameValue
-          
+
           if (labelKey === 'tag_id' || labelKey === 'tagId') {
             gameValue = userGame.tag?.name || ''
           } else if (labelKey === 'order_in_list' || labelKey === 'order') {
             gameValue = userGame.order_in_list
           } else if (labelKey === 'search' || labelKey === 'recherche') {
-            // Recherche dans le nom du jeu pour le filtre search
             gameValue = userGame.name || ''
+          } else if (labelKey === 'rating_id' || labelKey === 'note') {
+            // Filtrage sur le nom du rating (relation) ou fallback sur l'id
+            gameValue = userGame.rating_ref?.name || ''
           } else {
             gameValue = userGame[labelKey]
           }
-          
+
           // Pour les tags, faire une comparaison exacte (insensible à la casse)
           if (labelKey === 'tag_id' || labelKey === 'tagId') {
             if (typeof gameValue === 'string' && typeof filterValue === 'string') {
@@ -139,7 +141,15 @@ export const useTableauFilters = () => {
             }
             return gameValue == filterValue
           }
-          
+          // Pour le rating, même logique que tag (nom insensible à la casse)
+          if (labelKey === 'rating_id' || labelKey === 'note') {
+            if (typeof gameValue === 'string' && typeof filterValue === 'string') {
+              return gameValue.toLowerCase() === filterValue.toLowerCase()
+            }
+            // Fallback sur l'id si le nom n'est pas disponible
+            return (userGame.rating_id == filterValue || userGame.rating_ref?.id == filterValue)
+          }
+
           // Pour les autres champs, garder la recherche par sous-chaîne
           if (typeof gameValue === 'string' && typeof filterValue === 'string') {
             return gameValue.toLowerCase().includes(filterValue.toLowerCase())

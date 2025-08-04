@@ -33,6 +33,7 @@ export const useTableauData = (models?: string[] | string) => {
   const emplacements = computed(() => allOptions.value?.emplacement || [])
 
   const tags = computed(() => allOptions.value?.tag || [])
+  const ratings = computed(() => allOptions.value?.rating || [])
   const platforms = computed(() => allOptions.value?.platform || [])
   const bundles = computed(() => allOptions.value?.bundle || [])
   const bundleGames = computed(() => allOptions.value?.bundleGame || [])
@@ -50,6 +51,16 @@ export const useTableauData = (models?: string[] | string) => {
       name: tag.name, 
       color: tag.color, 
       image: tag.image 
+    }))
+  })
+
+  const optionsRatings = computed(() => {
+    return ratings.value.map((rating: any) => ({ 
+      id: rating.id, 
+      name: rating.name, 
+      value: rating.value,
+      color: rating.color, 
+      image: rating.image 
     }))
   })
   
@@ -128,6 +139,15 @@ export const useTableauData = (models?: string[] | string) => {
       }
     }
 
+    if(labelKey == 'rating_id' || labelKey == 'rating') {
+      if (userGame['rating_ref']) {
+        value = userGame['rating_ref'].name;
+      } else if (userGame['rating_id']) {
+        const rating = optionsRatings.value.find((r: { id: any; }) => r.id === userGame['rating_id']);
+        value = rating ? rating.name : userGame['rating_id'];
+      }
+    }
+
     if(labelKey == 'order_in_list') {
       value = userGame['order_in_list'];
     }
@@ -144,6 +164,10 @@ export const useTableauData = (models?: string[] | string) => {
       case 'tag_id':
       case 'tagId':
         return optionsTags.value
+      case 'rating_id':
+      case 'ratingId':
+      case 'rating':
+        return optionsRatings.value
       case 'month_id':
       case 'monthId':
         return optionsMonths.value
@@ -177,22 +201,32 @@ export const useTableauData = (models?: string[] | string) => {
   }
 
   const updateLocalData = (elemId: string, field: string, value: string, table: string) => {
-    // console.log(`🔄 Mise à jour locale: ${table}.${elemId}.${field} = "${value}"`);
-    
+    // Gestion spéciale pour rating_id : mettre à jour aussi rating_ref.value localement
     const tableMap: Record<string, any> = {
       'UserGame': userGames,
       'Bundle': bundles,
       'User': users,
       'Platform': platforms,
       'Tag': tags,
+      'Rating': ratings,
     };
-    
     const targetArray = tableMap[table];
     if (targetArray?.value) {
       const item = targetArray.value.find((item: any) => item.id === elemId);
       if (item) {
         const oldValue = item[field];
         item[field] = value;
+        // Si on modifie rating_id, mettre à jour rating_ref aussi
+        if (field === 'rating_id' && item.rating_ref) {
+          // Chercher la nouvelle note dans optionsRatings
+          const ratingObj = optionsRatings.value.find((r: any) => r.id === value);
+          if (ratingObj) {
+            item.rating_ref.value = ratingObj.value;
+            item.rating_ref.name = ratingObj.name;
+            item.rating_ref.color = ratingObj.color;
+            item.rating_ref.image = ratingObj.image;
+          }
+        }
         console.log(`✅ ${table}.${elemId}.${field}: "${oldValue}" → "${value}"`);
       }
     }
@@ -229,6 +263,7 @@ export const useTableauData = (models?: string[] | string) => {
     emplacements,
     mainLabels,
     tags,
+    ratings,
     platforms,
     bundles,
     bundleGames,
@@ -241,6 +276,7 @@ export const useTableauData = (models?: string[] | string) => {
     users,
     // Options préenregistrées optimisées
     optionsTags,
+    optionsRatings,
     optionsMonths,
     optionsYears,
     optionsPlatforms,

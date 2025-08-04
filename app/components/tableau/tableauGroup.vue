@@ -13,10 +13,11 @@ const {
   optionsMonths,
   optionsYears,
   optionsPlatforms,
+  optionsRatings,
   optionsBundles,
   updateLocalData,
   clearCacheAndRefresh
-} = useTableauData(['userGame', 'label', 'emplacement', 'bundleGame', 'bundle', 'tag', 'month', 'year', 'platform']);
+} = useTableauData(['userGame', 'label', 'emplacement', 'bundleGame', 'bundle', 'tag', 'month', 'year', 'platform', 'rating']);
 
 const { filterAllData } = useTableauFilters()
 

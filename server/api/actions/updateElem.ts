@@ -81,26 +81,27 @@ async function updateTable(
 ) {
   // Conversion de valeur selon le type
   let convertedValue: any = value;
-  
-  console.log(`🔧 Conversion - Input: "${value}" (${typeof value}), Type: "${fieldType}"`);
-  
-  switch (fieldType) {
-    case 'number':
-      convertedValue = parseFloat(value) || 0;
-      break;
-    case 'decimal':
-      convertedValue = parseFloat(value) || 0;
-      break;
-    case 'boolean':
-      convertedValue = value === 'true' || value === '1';
-      break;
-    case 'date':
-      convertedValue = value ? new Date(value) : null;
-      break;
-    default:
-      convertedValue = value;
+  // Pour rating_id, toujours stocker l'id (string), pas la valeur numérique
+  if (fieldName === 'rating_id') {
+    convertedValue = value;
+  } else {
+    switch (fieldType) {
+      case 'number':
+        convertedValue = parseFloat(value) || 0;
+        break;
+      case 'decimal':
+        convertedValue = parseFloat(value) || 0;
+        break;
+      case 'boolean':
+        convertedValue = value === 'true' || value === '1';
+        break;
+      case 'date':
+        convertedValue = value ? new Date(value) : null;
+        break;
+      default:
+        convertedValue = value;
+    }
   }
-  
   console.log(`🔧 Conversion - Output: "${convertedValue}" (${typeof convertedValue})`);
 
   const updateData = { [fieldName]: convertedValue };
@@ -112,6 +113,7 @@ async function updateTable(
     'BaseGame': prisma.baseGame,
     'Platform': prisma.platform,
     'Tag': prisma.tag,
+    'Rating': prisma.rating,
     'Label': prisma.label,
     'State': prisma.state,
     'Month': prisma.month,

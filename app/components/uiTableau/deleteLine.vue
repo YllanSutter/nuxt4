@@ -7,7 +7,7 @@ const emit = defineEmits<{
 }>()
 
 const { deleteLine, deleteBundle } = useBundleActions()
-const { userGames, bundleGames, bundles, allOptions } = useTableauData(['userGame', 'label', 'emplacement', 'bundleGame', 'bundle', 'tag', 'month', 'year', 'platform'])
+const { userGames, bundleGames, bundles, allOptions } = useTableauData(['userGame', 'label', 'emplacement', 'bundleGame', 'bundle', 'tag', 'month', 'year', 'platform', 'rating'])
 
 const props = defineProps<{
   userGameId: string

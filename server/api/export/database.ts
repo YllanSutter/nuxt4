@@ -29,6 +29,7 @@ export default defineEventHandler(async (event) => {
         where: { user_id: userId },
         include: {
           base_game: true,
+          rating_ref: true,
           tag: true,
           bundle_games: {
             include: {

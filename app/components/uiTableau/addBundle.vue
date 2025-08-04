@@ -27,7 +27,7 @@ const {
   resetForm
 } = useBundleActions()
 
-const { bundles, userGames, bundleGames, allOptions, filtres, optionsPlatforms } = useTableauData(['userGame', 'label', 'emplacement', 'bundleGame', 'bundle', 'tag', 'month', 'year', 'platform'])
+const { bundles, userGames, bundleGames, allOptions, filtres, optionsPlatforms } = useTableauData(['userGame', 'label', 'emplacement', 'bundleGame', 'bundle', 'tag', 'month', 'year', 'platform', 'rating'])
 
 const {
   filters,
@@ -43,15 +43,12 @@ const precomputedOptions = computed(() => {
   return getPrecomputedOptions(filtres.value, bundles.value)
 })
 
-// Synchroniser les sélections du bundle avec les filtres
 watch(filters, (newFilters) => {
-  // Synchroniser avec les filtres actuels
   const platformFilter = newFilters['platform_id']
   const monthFilter = newFilters['month_id'] 
   const yearFilter = newFilters['year_id']
   
   if (platformFilter && platformFilter !== '') {
-    // Trouver l'ID correspondant au nom du filtre
     const platformOption = (precomputedOptions.value['platform_id'] || []).find((opt: any) => opt.name === platformFilter)
     if (platformOption) {
       selectBundle.find(s => s.key === 'platform_id')!.ref.value = platformOption.id
