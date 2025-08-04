@@ -23,8 +23,18 @@ export default defineEventHandler(async (event) => {
     const exportData = {
       exportDate: new Date().toISOString(),
       userId: userId,
-      
+
       // Données utilisateur
+      user: await prisma.user.findUnique({
+        where: { id: userId },
+        include: {
+          user_label_visibility: {
+            include: { label: true }
+          },
+          role: true
+        }
+      }),
+
       userGames: await prisma.userGame.findMany({
         where: { user_id: userId },
         include: {
@@ -106,7 +116,7 @@ export default defineEventHandler(async (event) => {
         orderBy: { name: 'asc' }
       }),
 
-      userLabelVisibilities: await prisma.userLabelVisibility.findMany({
+      user_label_visibility: await prisma.userLabelVisibility.findMany({
         where: { user_id: userId },
         include: {
           label: true

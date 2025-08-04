@@ -89,14 +89,15 @@ export default defineEventHandler(async (event) => {
         } : undefined
       },
       baseGame: { name: 'asc' },
-      userLabelVisibility: { id: 'asc' },
+      user_label_visibility: { id: 'asc' },
       state: { name: 'asc' },
       priceHistory: { date: 'desc' },
       gameStat: { date: 'desc' },
       user: { 
         orderBy: { name: 'asc' },
         include: {
-          role: true
+          role: true,
+          user_label_visibility: true,
         }
       }
     };

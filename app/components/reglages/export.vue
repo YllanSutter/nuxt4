@@ -1,5 +1,9 @@
 <script setup lang="ts">
-  import { exportDatabase, exportGamesCSV } from '~/utils/export'
+  import { exportDatabase, exportGamesCSV } from '~/utils/export';
+
+  
+const userCookie = useCookie('user');
+const user = computed(() => userCookie.value);
   
   const forceRefresh = () => {
     window.location.reload()
@@ -43,6 +47,15 @@
                 <Icon name="lucide:history" :size="16"></Icon>
                 Actualiser
               </Button>
+          </PopoverContent>
+        </Popover>
+         <Popover>
+          <PopoverTrigger as-child>
+            <Button variant="outline"> <Icon name="lucide:eye" /></Button>
+          </PopoverTrigger>
+          <PopoverContent class="w-[500px] flex gap-2">
+            {{ user }}
+             <!-- {{ user?.map((ug:any) => ug.id).join(', ') }} -->
           </PopoverContent>
         </Popover>
          

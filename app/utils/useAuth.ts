@@ -5,6 +5,11 @@ interface User {
   budget: number;
   role_id: string;
   created_at: string;
+  user_label_visibility?: Array<{
+    label_id: string;
+    visible: boolean;
+    id: string;
+  }>;
   role?: {
     id: string;
     name: string;
@@ -12,13 +17,12 @@ interface User {
 }
 
 export const useAuth = () => {
-  // Cookie pour stocker l'utilisateur connecté
   const userCookie = useCookie<User | null>('user', {
     default: () => null,
     httpOnly: false,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
-    maxAge: 60 * 60 * 24 * 7 // 7 jours
+    maxAge: 60 * 60 * 24 * 7 
   });
 
   const user = computed(() => userCookie.value);
@@ -44,24 +48,22 @@ export const useAuth = () => {
   };
 
   // Fonction d'inscription
-  const signup = async (userData: { email: string, password: string, name: string, budget?: number }) => {
+  const signup = async (userData: { email: string, password: string, name: string, budget?: number, roles:any, labels:any }) => {
     try {
-      // D'abord, obtenir un rôle par défaut via useTableauData
-      const { roles } = useTableauData();
-      await nextTick(); // Attendre que les données soient chargées
-      
-      const defaultRole = roles.value?.[0];
-      
-      if (!defaultRole) {
-        throw new Error('Aucun rôle disponible');
-      }
+      const roleId = typeof userData.roles === 'string' ? userData.roles : userData.roles?.id || 'user-role-id';
+      const userLabelVisibility = Array.isArray(userData.labels?.value)
+        ? userData.labels.value.map((label: any) => ({ label_id: label.id, visible: true }))
+        : [];
 
       const response = await $fetch<User>('/api/users', {
         method: 'POST',
         body: {
-          ...userData,
-          role_id: defaultRole.id,
-          budget: userData.budget || 0
+          email: userData.email,
+          password: userData.password,
+          name: userData.name,
+          budget: userData.budget || 0,
+          role_id: roleId,
+          user_label_visibility: userLabelVisibility
         }
       });
 

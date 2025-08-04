@@ -9,6 +9,12 @@ const router = useRouter();
 // Utiliser le composable d'authentification
 const { login, signup } = useAuth();
 
+
+const {
+  roles,
+  labels
+} = useTableauData(['role', 'label']);
+
 const handleSignup = async () => {
   try {
     loading.value = true;
@@ -19,6 +25,8 @@ const handleSignup = async () => {
       password: signupForm.value.password,
       name: signupForm.value.name,
       budget: signupForm.value.budget,
+      roles : roles,
+      labels : labels
     });
 
     alert('Compte créé avec succès !');
@@ -51,7 +59,7 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <div class="bg-teal-950 h-svh grid items-center justify-center relative">
+  <div class="bg-teal-950 h-svh grid items-center justify-center relative content-center">
     <div class="bgfond loginFond"></div>
     <div class="font-['Oswald'] wrapTitle lg:text-9xl md:text-5xl sm:text-4xl text-white font-bold text-center absolute top-1/3 left-1/2 transform -translate-y-1/2 -translate-x-1/2 z-20">
       Steam Utilities
@@ -92,7 +100,7 @@ const handleLogin = async () => {
       </div>
     </div>
 
-  <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+  <p v-if="errorMessage" class="text-white z-20 text-center">{{ errorMessage }}</p>
 </div>
 </template>
 
