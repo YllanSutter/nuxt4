@@ -26,7 +26,8 @@ const localValue = ref('')
 function truncate2Decimals(val: string | number) {
   const num = parseFloat(String(val));
   if (Number.isNaN(num)) return '';
-  return (Math.floor(num * 100) / 100).toFixed(2);
+  // Correction flottant : arrondi à l'entier le plus proche avant division
+  return (Math.floor(num * 100 + 1e-8) / 100).toFixed(2);
 }
 
 const displayValue = computed({
