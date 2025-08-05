@@ -22,24 +22,59 @@ const emits = defineEmits<{
 // Utiliser un ref local pour le contrôle complet de l'affichage
 const localValue = ref('')
 
+// Affichage tronqué à 2 décimales si type number/decimal
+function truncate2Decimals(val: string | number) {
+  const num = parseFloat(String(val));
+  if (Number.isNaN(num)) return '';
+  return (Math.floor(num * 100) / 100).toFixed(2);
+}
+
+const displayValue = computed({
+  get() {
+    if ((props.type === 'number' || props.type === 'decimal') && localValue.value !== '') {
+      return truncate2Decimals(localValue.value);
+    }
+    return localValue.value;
+  },
+  set(val: string) {
+    localValue.value = val;
+  }
+});
+
 // Watcher pour synchroniser avec modelValue externe
 watch(() => props.modelValue, (newValue) => {
   // Convertir 0 en chaîne vide pour l'affichage
-  localValue.value = (newValue === 0 || newValue === '0') ? '' : String(newValue || '')
+  let displayValue = (newValue === 0 || newValue === '0') ? '' : String(newValue || '');
+  if (
+    (props.type === 'number' || props.type === 'decimal') &&
+    typeof newValue === 'number'
+  ) {
+    displayValue = newValue.toFixed(2);
+  }
+  localValue.value = displayValue;
 }, { immediate: true })
 
 // Watcher pour émettre les changements
 watch(localValue, (newValue) => {
-  // Convertir chaîne vide en 0 pour le stockage
-  const numericValue = newValue === '' ? 0 : newValue
-  emits('update:modelValue', numericValue)
+  let formattedValue = newValue;
+  if (
+    (props.type === 'number' || props.type === 'decimal') &&
+    typeof newValue === 'string' &&
+    newValue !== ''
+  ) {
+    // Tronque la valeur émise à 2 décimales
+    const num = parseFloat(newValue);
+    formattedValue = Number.isNaN(num) ? '0' : num.toFixed(2);
+  }
+  emits('update:modelValue', newValue === '' ? 0 : formattedValue);
 })
 </script>
 
 <template>
   <input
-    v-model="localValue"
+    v-model="displayValue"
     data-slot="input"
+    :type="type"
     :placeholder="label === 'recherche' || label === 'name' ? '...':'0'"
     :style="label === 'name' ? { minWidth: ((localValue?.length ?? 2) * 1.1) + 'ch' } : { minWidth: labelLength + 'ch' }"
     :class="cn(
