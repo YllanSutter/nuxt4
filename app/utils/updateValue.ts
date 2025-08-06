@@ -24,8 +24,6 @@ export const updateValue = async (
   cible: string,
   updateLocalDataFn?: (elemId: string, field: string, value: string, table: string) => void
 ) => {
-  const key = `${elem.id}:${cible}`;
-  
   let normalizedLabel: { table: string; field: string; type?: 'string' | 'number' | 'decimal' | 'boolean' | 'date' };
   
   if (label.table && label.field) {
@@ -37,6 +35,9 @@ export const updateValue = async (
       type: getTypeFromLabel(label)
     };
   }
+  
+  // Inclure le field dans la clé pour différencier les champs du même élément
+  const key = `${elem.id}:${cible}:${normalizedLabel.field}`;
   
   pendingModifications.set(key, {
     elemId: elem.id,
@@ -155,8 +156,8 @@ export const saveAllModifications = async () => {
     if (timer) {
       clearTimeout(timer);
       debounceTimers.delete(key);
-      const [elemId, cible] = key.split(':');
-      //console.log(`⚡ Forçage sauvegarde: ${elemId}.${cible}`);
+      const [elemId, cible, field] = key.split(':');
+      //console.log(`⚡ Forçage sauvegarde: ${elemId}.${cible}.${field}`);
     }
   }
   

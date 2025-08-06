@@ -18,7 +18,7 @@ model User {
   name        String
   email       String   @unique
   password    String
-  budget      Decimal
+  budget      Decimal  @db.Decimal(10, 2)
   created_at  DateTime @default(now())
   role_id     String
   role        Role     @relation(fields: [role_id], references: [id])
@@ -38,7 +38,7 @@ model Bundle {
   id          String   @id @default(uuid())
   user_id     String
   name        String
-  price       Decimal
+  price       Decimal  @db.Decimal(10, 2)
   link        String
   image       String
   platform_id String
@@ -70,12 +70,12 @@ model UserGame {
   user_id            String
   base_game_id       String
   name               String
-  price              Decimal
-  black_market_price Decimal
-  sale_price         Decimal
-  initial_price      Decimal
-  playtime_hours     Decimal
-  rating             Decimal  // Ancien champ - sera supprimé plus tard
+  price              Decimal  @db.Decimal(10, 2)
+  black_market_price Decimal  @db.Decimal(10, 2)
+  sale_price         Decimal  @db.Decimal(10, 2)
+  initial_price      Decimal  @db.Decimal(10, 2)
+  playtime_hours     Decimal  @db.Decimal(10, 2)
+  rating             Decimal  @db.Decimal(5, 2)  // Ancien champ - sera supprimé plus tard
   rating_id          String   // Nouveau champ
   tag_id             String
   order_in_list      Int
@@ -183,10 +183,10 @@ model PriceHistory {
   id                 String   @id @default(uuid())
   user_game_id       String
   date               DateTime
-  price              Decimal
-  black_market_price Decimal
-  sale_price         Decimal
-  initial_price      Decimal
+  price              Decimal  @db.Decimal(10, 2)
+  black_market_price Decimal  @db.Decimal(10, 2)
+  sale_price         Decimal  @db.Decimal(10, 2)
+  initial_price      Decimal  @db.Decimal(10, 2)
   user_game          UserGame @relation(fields: [user_game_id], references: [id])
 }
 
@@ -194,7 +194,7 @@ model GameStat {
   id             String   @id @default(uuid())
   user_game_id   String
   date           DateTime
-  playtime_hours Decimal
-  rating         Decimal
+  playtime_hours Decimal  @db.Decimal(10, 2)
+  rating         Decimal  @db.Decimal(5, 2)
   user_game      UserGame @relation(fields: [user_game_id], references: [id])
 }

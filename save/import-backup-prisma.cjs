@@ -333,7 +333,7 @@ async function main() {
     console.log('🚀 Début de l\'importation avec Prisma...');
     
     // Charger les données du backup
-    const backupPath = 'c:\\Users\\Yllan\\Downloads\\backup_2025-08-05 (2).json';
+    const backupPath = 'c:\\Users\\Yllan\\Downloads\\neonbundle.json';
     console.log('📖 Lecture du fichier de sauvegarde...');
     const data = loadBackupData(backupPath);
     
