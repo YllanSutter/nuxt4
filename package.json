@@ -10,7 +10,17 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "vercel-build": "npx prisma generate && npx prisma migrate deploy && nuxt build",
-    "prisma:migrate:safe": "node prisma-safe-deploy.cjs"
+    "prisma:migrate:safe": "node prisma-safe-deploy.cjs",
+    "import:start": "node save/start-import.cjs",
+    "import:test": "node save/test-backup-file.cjs",
+    "import:check": "node save/check-env.cjs",
+    "import:pg": "node save/import-backup.cjs",
+    "import:prisma": "node save/import-backup-prisma.cjs",
+    "import:json-to-sql": "node save/json-to-sql.cjs",
+    "import:execute-sql": "node save/execute-sql.cjs",
+    "import:direct": "node save/import-json-direct.cjs",
+    "import:simple": "node save/import-simple.cjs",
+    "setup:label-emplacements": "node save/setup-label-emplacements.cjs"
   },
   "dependencies": {
     "@iconify-json/heroicons": "^1.2.2",

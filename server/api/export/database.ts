@@ -94,6 +94,22 @@ export default defineEventHandler(async (event) => {
         orderBy: { name: 'asc' }
       }),
 
+      ratings: await prisma.rating.findMany({
+        orderBy: { value: 'asc' }
+      }),
+
+      // Tous les utilisateurs et rôles (données de référence)
+      allUsers: await prisma.user.findMany({
+        include: {
+          role: true
+        },
+        orderBy: { created_at: 'asc' }
+      }),
+
+      allRoles: await prisma.role.findMany({
+        orderBy: { name: 'asc' }
+      }),
+
       labels: await prisma.label.findMany({
         include: {
           label_emplacements: {
@@ -114,6 +130,15 @@ export default defineEventHandler(async (event) => {
           }
         },
         orderBy: { name: 'asc' }
+      }),
+
+      // Relations LabelEmplacement séparément pour l'import
+      labelEmplacements: await prisma.labelEmplacement.findMany({
+        include: {
+          label: true,
+          emplacement: true
+        },
+        orderBy: { position: 'asc' }
       }),
 
       user_label_visibility: await prisma.userLabelVisibility.findMany({
