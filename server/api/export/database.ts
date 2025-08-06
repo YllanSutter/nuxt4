@@ -19,14 +19,25 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
+
+    // Récupérer le rôle de l'utilisateur
+    const currentUser = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { role_id: true }
+    });
+
     // Exporter toutes les données de l'utilisateur
     const exportData = {
       exportDate: new Date().toISOString(),
       userId: userId,
 
-      // Données utilisateur
-      user: await prisma.user.findUnique({
-        where: { id: userId },
+      
+
+    // Données utilisateur
+      user: await prisma.user.findMany({
+        where: currentUser?.role_id === 'admin-role-id'
+          ? undefined
+          : { id: userId },
         include: {
           user_label_visibility: {
             include: { label: true }
@@ -99,14 +110,14 @@ export default defineEventHandler(async (event) => {
       }),
 
       // Tous les utilisateurs et rôles (données de référence)
-      allUsers: await prisma.user.findMany({
-        include: {
-          role: true
-        },
-        orderBy: { created_at: 'asc' }
-      }),
+      // allUsers: await prisma.user.findMany({
+      //   include: {
+      //     role: true
+      //   },
+      //   orderBy: { created_at: 'asc' }
+      // }),
 
-      allRoles: await prisma.role.findMany({
+      roles: await prisma.role.findMany({
         orderBy: { name: 'asc' }
       }),
 
