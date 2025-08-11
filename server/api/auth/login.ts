@@ -1,8 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
-const prisma = new PrismaClient();
-
 export default defineEventHandler(async (event) => {
   const { email, password } = await readBody(event);
 
@@ -12,6 +10,9 @@ export default defineEventHandler(async (event) => {
       statusMessage: 'Email et mot de passe requis.',
     });
   }
+
+  // Create a fresh Prisma client instance to avoid cached plan issues
+  const prisma = new PrismaClient();
 
   try {
     // Chercher l'utilisateur par email
@@ -43,11 +44,23 @@ export default defineEventHandler(async (event) => {
       success: true,
       user: userWithoutPassword,
     };
-  } catch (error) {
+  } catch (error:any) {
     console.error('Erreur de connexion:', error);
+    
+    // Handle specific PostgreSQL cached plan error
+    if (error.message && error.message.includes('cached plan must not change result type')) {
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Erreur de cache de base de données. Veuillez réessayer.',
+      });
+    }
+    
     throw createError({
       statusCode: 500,
       statusMessage: 'Erreur lors de la connexion.',
     });
+  } finally {
+    // Always disconnect the Prisma client to avoid connection leaks
+    await prisma.$disconnect();
   }
 });

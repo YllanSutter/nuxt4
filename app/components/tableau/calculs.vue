@@ -5,6 +5,7 @@ const props= defineProps<{
     activeBundle:any;
     userGamesBundle:any;
     listClass:string;
+    emplacement?:string
 }>();
 
 const elems = computed(() => {
@@ -147,6 +148,8 @@ const ratios = computed(() => {
 <template>
     
     <TableRow :class="props.listClass">
+      
+        <td v-if="emplacement === 'footer'"></td>
         <TableCell v-for="(label, index) in labels" :key="index" class="text-right">
             <div v-if="label.key !== 'delete' && label.key !== 'order_in_list' && label.key !== 'tag_id'">
                 <ClientOnly v-if="label.key === 'rating_id'">
@@ -161,6 +164,8 @@ const ratios = computed(() => {
         </TableCell>
    </TableRow>
    <TableRow :class="props.listClass">
+    
+        <td v-if="emplacement === 'footer'"></td>
         <TableCell v-for="(label, index) in labels" :key="index" class="text-right " >
             <div v-if="ratios[index]?.elems[0] !== null" class=" border-t pt-2 -mt-2 border-[#ffffff20]">
                 <span class="text-sm text-muted-foreground">

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { getUserGamesForBundle, handleValueUpdate, handleModelUpdate, type TableauDataProps } from '@/utils/tableauHelpers'
+import TableBodyFull from '../ui/table/TableBodyFull.vue';
 
 const props = defineProps<{
   mode: 'showAll' | 'singleBundle'
@@ -58,6 +59,19 @@ const calculationData = computed(() => {
     }
   }
 })
+
+function handleOrderChanged(newOrder : any) {
+  newOrder.forEach((userGame : any) => {
+    // Appelle ta logique métier pour chaque ligne modifiée
+    props.updateElem(
+      userGame,
+      userGame.order_in_list,
+      { key: 'order_in_list', type: 'number' },
+      'userGame',
+      props.updateLocalData
+    )
+  })
+}
 </script>
 
 <template>
@@ -149,6 +163,7 @@ const calculationData = computed(() => {
       <Table :key="`table-${bundle.id}-${props.userGamesLength}-${props.mainLabels.length}-${props.forceUpdateKey}`">
         <TableHeader>
           <TableRow>
+            <td></td>
             <TableHead v-for="label in props.mainLabels" :key="label.id">
               <div class="flex items-center gap-1">
                 <Icon :name="label.image"></Icon>
@@ -157,57 +172,55 @@ const calculationData = computed(() => {
             </TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
-          <TableRow 
-            v-for="userGame in getGamesForBundle(bundle)" 
-            :key="userGame.id"
-          >
-            <TableCell 
-              v-for="label in props.mainLabels" 
-              :key="label.id" 
-              class="font-medium"
-            >
-              <div class="flex items-center">
-                <UiTableauRadioGroup 
-                  v-if="label.type == 'select'"
-                  :model-value="props.getUserGameValue(userGame, label.key) || ''"
-                  :label="label.name"
-                  :options="props.getOptionsForLabel(label.key)"
-                  @update:model-value="(newValue) => handleValueUpdate(
-                    userGame, 
-                    newValue, 
-                    label, 
-                    props.updateElem, 
-                    props.updateLocalData, 
-                    props.getOptionsForLabel
-                  )"
-                />
-                <UiTableauDeleteLine
-                  v-else-if="label.key === 'delete'"
-                  :userGameId="userGame.id"
-                  :bundleId="bundle.id"
-                  @lineDeleted="handleLineDeleted"
-                  @bundleDeleted="handleBundleDeleted"
-                />
-                <Input 
-                  v-else
-                  :model-value="props.getUserGameValue(userGame, label.key) || ''"
-                  :label="label.key"
-                  :type="label.type"
-                  
-                  @change="props.updateElem(userGame, props.getUserGameValue(userGame, label.key), label, 'userGame', props.updateLocalData)"
-                  @update:model-value="(newValue) => handleModelUpdate(userGame, newValue, label.key)"
-                />
-                <UiTableauSuffix v-if="label.type !== 'select' && label.key !== 'delete'" :label="label"></UiTableauSuffix>
-              </div>
-            </TableCell>
-          </TableRow>
-        </TableBody>
+        <TableBodyFull :games="getGamesForBundle(bundle)"  @orderChanged="handleOrderChanged">
+          <template #default="{ userGame, index }">
+
+              <TableCell 
+                v-for="label in props.mainLabels" 
+                :key="label.id" 
+                class="font-medium"
+              >
+                <div class="flex items-center">
+                  <UiTableauRadioGroup 
+                    v-if="label.type == 'select'"
+                    :model-value="props.getUserGameValue(userGame, label.key) || ''"
+                    :label="label.name"
+                    :options="props.getOptionsForLabel(label.key)"
+                    @update:model-value="(newValue) => handleValueUpdate(
+                      userGame, 
+                      newValue, 
+                      label, 
+                      props.updateElem, 
+                      props.updateLocalData, 
+                      props.getOptionsForLabel
+                    )"
+                  />
+                  <UiTableauDeleteLine
+                    v-else-if="label.key === 'delete'"
+                    :userGameId="userGame.id"
+                    :bundleId="bundle.id"
+                    @lineDeleted="handleLineDeleted"
+                    @bundleDeleted="handleBundleDeleted"
+                  />
+                  <Input 
+                    v-else
+                    :model-value="props.getUserGameValue(userGame, label.key) || ''"
+                    :label="label.key"
+                    :type="label.type"
+                    @change="props.updateElem(userGame, props.getUserGameValue(userGame, label.key), label, 'userGame', props.updateLocalData)"
+                    @update:model-value="(newValue) => handleModelUpdate(userGame, newValue, label.key)"
+                  />
+                  <UiTableauSuffix v-if="label.type !== 'select' && label.key !== 'delete'" :label="label"></UiTableauSuffix>
+                </div>
+              </TableCell>
+          </template>
+        </TableBodyFull>
         <TableFooter>
           <TableauCalculs
             :activeBundle="calculationData.activeBundle"
             :userGamesBundle="calculationData.userGamesBundle"
             :labels="props.mainLabels"
+            :emplacement="'footer'"
             listClass="bg-muted/50"
           />
           <TableRow>
