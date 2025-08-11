@@ -145,7 +145,10 @@ onMounted(() => {
     </Table>
   </div>
 
-  <div class="max-w-[1200px] mx-auto mb-20 overflow-auto" v-if="filteredBundles.length !== 0">
+  <div  class="max-w-[1200px] mx-auto mb-20 overflow-auto" v-if="filteredBundles.length == 0"> 
+    <UiTableauAddBundle :refresh="true" @bundle-created="handleBundleCreated"  />
+  </div>
+  <div class="max-w-[1200px] mx-auto mb-20 overflow-auto" v-else>
     <div class="relative w-full overflow-auto max-w-[1200px] mx-auto flex flex-wrap items-center gap-1">
       <UiTableauAddBundle @bundle-created="handleBundleCreated" />
       <Button 

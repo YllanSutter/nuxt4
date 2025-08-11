@@ -37,9 +37,6 @@
     </button>
   </div>
   
-  <div v-else-if="!userGames || !userGames.length || !mainLabels || !mainLabels.length" class="p-4">
-    Chargement des données du tableau...
-  </div>
   
   <div v-else>
     

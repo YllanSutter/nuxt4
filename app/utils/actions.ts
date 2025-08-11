@@ -11,6 +11,7 @@ export const useBundleActions = () => {
     }
   });
   const userId = computed(() => user.value?.id);
+  const userRole = computed(() => user.value?.role_id);
 
   const nameBundle = ref('');
   const numberGames = ref<number | undefined>(1);
@@ -67,6 +68,7 @@ export const useBundleActions = () => {
     for (let i = 0; i < number; i++) {
       elems.push({
         user_id: userId.value,
+        role_id:userRole.value,
         name: name,
         price: price || 0,
         link: '',
@@ -94,6 +96,7 @@ export const useBundleActions = () => {
         price: priceBundle.value || price || 0,
         numberGames: number,
         user_id: userId.value,
+        role_id:userRole.value,
         platform_id: selectedPlatformId.value,
         year_id: selectedYearId.value,
         month_id: selectedMonthId.value,

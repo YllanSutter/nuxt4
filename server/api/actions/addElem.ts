@@ -39,6 +39,9 @@ export default defineEventHandler(async (event) => {
 
       let createdBundle = null;
       let targetBundleId = null;
+      let state = bundleData.role_id == "user-role-id" ? 'private-state-id': 'public-state-id';
+      let publicState = state == 'public-state-id' ? true : false;
+      console.log(bundleData);
 
       if(bundleData.isNewBundle) {
         // Créer un nouveau bundle
@@ -50,10 +53,10 @@ export default defineEventHandler(async (event) => {
             link: '',
             image: '',
             platform_id: bundleData.platform_id || 'platform-1', // Utiliser la plateforme envoyée
-            state_id: 'private-state-id',
+            state_id: state,
             month_id: bundleData.month_id || 'month-1',
             year_id: bundleData.year_id || 'year-1',
-            is_public: false,
+            is_public: publicState,
             created_at: new Date(),
             updated_at: new Date(),
           },
@@ -97,8 +100,6 @@ export default defineEventHandler(async (event) => {
 
       // Créer les données formatées pour Prisma
       const userGamesData = elems.map((elem: any, index: number) => {
-        // Pour un nouveau bundle, répartir le prix total
-        // Pour un bundle existant, utiliser le prix individuel de l'elem
         const price = bundleData.isNewBundle ? 
           (parseFloat(bundleData.price) / elems.length) : 
           (parseFloat(elem.price) || 0);

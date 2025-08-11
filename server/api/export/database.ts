@@ -35,7 +35,7 @@ export default defineEventHandler(async (event) => {
 
     // Données utilisateur
       user: await prisma.user.findMany({
-        where: currentUser?.role_id === 'admin-role-id'
+        where: currentUser?.role_id === 'user-role-id'
           ? undefined
           : { id: userId },
         include: {

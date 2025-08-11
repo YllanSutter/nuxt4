@@ -94,14 +94,22 @@ const handleCreateElem = async (cible: string) => {
     
     emit('bundleCreated')
     resetForm()
+    if(props.refresh)
+    {
+      window.location.reload();   
+    }
     console.log('✅ Bundle créé avec succès!')
-    
   } catch (error) {
     console.error('❌ Erreur lors de la création:', error)
   } finally {
     isCreating.value = false
   }
 }
+
+
+const props = defineProps<{
+  refresh?:boolean;
+}>();
 </script>
 
 <template>
