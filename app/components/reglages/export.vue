@@ -2,7 +2,11 @@
   import { exportDatabase, exportGamesCSV } from '~/utils/export';
 
   
-const userCookie = useCookie('user');
+interface User {
+  role_id?: string;
+}
+
+const userCookie = useCookie<User | null>('user');
 const user = computed(() => userCookie.value);
   
   const forceRefresh = () => {
@@ -12,8 +16,8 @@ const user = computed(() => userCookie.value);
 
 <template>
 
-    <header class="border-b border-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 mb-4">
-      <div class=" flex gap-2 h-14 items-center px-4">
+    <header class=" px-4 border-b border-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 mb-4 z-[1] relative flex justify-between items-center">
+      <div class=" flex gap-2 h-14 items-center">
         <ColorModeToggle />
         <Popover>
           <PopoverTrigger as-child>
@@ -49,16 +53,16 @@ const user = computed(() => userCookie.value);
               </Button>
           </PopoverContent>
         </Popover>
-         <Popover>
+         <Popover v-if="user && typeof user === 'object' && user.role_id === 'admin-role-id'">
           <PopoverTrigger as-child>
             <Button variant="outline"> <Icon name="lucide:eye" /></Button>
           </PopoverTrigger>
           <PopoverContent class="w-[500px] flex gap-2">
             {{ user }}
-             <!-- {{ user?.map((ug:any) => ug.id).join(', ') }} -->
           </PopoverContent>
         </Popover>
-         
       </div>
+         
+      <Account v-if="user" />
     </header>
 </template>

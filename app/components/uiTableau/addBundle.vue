@@ -19,6 +19,8 @@ const emit = defineEmits<{
 
 const {
   nameBundle,
+  linkBundle,
+  imageBundle,
   numberGames,
   priceBundle,
   selectBundle,
@@ -132,6 +134,24 @@ const props = defineProps<{
               type="text"
               v-model="nameBundle"
               placeholder="Bundle Name"
+              class="col-span-2 border-0"
+            />
+          </div>
+          <div class="grid grid-cols-3 items-center gap-4">
+            <label class="text-sm font-medium">Link</label>
+            <Input
+              type="text"
+              v-model="linkBundle"
+              placeholder="Bundle Link(optionnal)"
+              class="col-span-2 border-0"
+            />
+          </div>
+          <div class="grid grid-cols-3 items-center gap-4">
+            <label class="text-sm font-medium">Image</label>
+            <Input
+              type="text"
+              v-model="imageBundle"
+              placeholder="Bundle Image(optionnal)"
               class="col-span-2 border-0"
             />
           </div>

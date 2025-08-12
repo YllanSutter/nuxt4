@@ -63,7 +63,7 @@ const forceRenderKey = computed(() => {
   <ClientOnly>
     <DropdownMenu :key="dataSignature">
       <DropdownMenuTrigger asChild>
-        <Button :class="['w-full justify-start pt-1 ']" variant="outline" :style="{ borderBottom: `1px solid ${selectedOption?.color || ''}` }">
+        <Button :class="['w-full justify-start pt-1 ']" variant="shadow" :style="{ borderBottom: `1px solid ${selectedOption?.color || ''}` }">
           <Icon
             v-if="selectedOption?.image"
             :key="forceRenderKey"
@@ -78,7 +78,6 @@ const forceRenderKey = computed(() => {
       
       <DropdownMenuContent class="w-56 max-h-96 overflow-y-auto" align="start">
         <DropdownMenuGroup>
-          <!-- Option pour vider la sélection -->
           <DropdownMenuItem @click="modelValue = ''">
             <div class="flex items-center gap-2 w-full">
               <span class="text-gray-500 italic">Aucun</span>

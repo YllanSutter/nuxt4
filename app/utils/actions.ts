@@ -14,6 +14,8 @@ export const useBundleActions = () => {
   const userRole = computed(() => user.value?.role_id);
 
   const nameBundle = ref('');
+  const linkBundle = ref('');
+  const imageBundle = ref('');
   const numberGames = ref<number | undefined>(1);
   const priceBundle = ref<number | undefined>(undefined);
   
@@ -62,7 +64,8 @@ export const useBundleActions = () => {
     { key: 'year_id', ref: selectedYearId }
   ]
 
-  const addMultipleElem = async (name: string, number: number, cible: string, price?: number, activeBundleId?: string) => {
+  const addMultipleElem = async (name: string, number: number, cible: string, price?: number, activeBundleId?: string, linkBundle?:string, imageBundle?:string) => {
+    
     const elems: any[] = [];
     const currentDate = new Date().toISOString();
     for (let i = 0; i < number; i++) {
@@ -71,7 +74,8 @@ export const useBundleActions = () => {
         role_id:userRole.value,
         name: name,
         price: price || 0,
-        link: '',
+        link: linkBundle || '',
+        image: imageBundle || '',
         platform_id: selectedPlatformId.value,
         state_id: 'private-state-id',
         month_id: selectedMonthId.value,
@@ -93,6 +97,8 @@ export const useBundleActions = () => {
     } else {
       bundleData = {
         name: nameBundle.value || name,
+        link:linkBundle || '',
+        image: imageBundle || '',
         price: priceBundle.value || price || 0,
         numberGames: number,
         user_id: userId.value,
@@ -131,6 +137,8 @@ export const useBundleActions = () => {
 
   const createElem = async (cible: string, activeBundleId?: string) => {
     const nameBundleVal = nameBundle.value;
+    const linkBundleVal = linkBundle.value || '';
+    const imageBundleVal = imageBundle.value || '';
     const numberGamesVal = numberGames.value;
     const priceVal = priceBundle.value;
     
@@ -143,7 +151,7 @@ export const useBundleActions = () => {
       }
     } else {
       if (nameBundleVal && numberGamesVal && priceVal) {
-        return await addMultipleElem(nameBundleVal, numberGamesVal, cible, priceVal);
+        return await addMultipleElem(nameBundleVal, numberGamesVal, cible, priceVal,undefined, linkBundleVal,imageBundleVal);
       } else {
         console.warn('⚠️ Tous les champs requis ne sont pas remplis');
         return null;
@@ -173,6 +181,8 @@ export const useBundleActions = () => {
 
   const resetForm = () => {
     nameBundle.value = '';
+    linkBundle.value = '';
+    imageBundle.value = '';
     numberGames.value = undefined;
     priceBundle.value = undefined;
     selectedPlatformId.value = 'platform-1'; // Utiliser platform-1 qui existe
@@ -222,6 +232,8 @@ export const useBundleActions = () => {
 
   return {
     nameBundle,
+    linkBundle,
+    imageBundle,
     numberGames,
     priceBundle,
     user,

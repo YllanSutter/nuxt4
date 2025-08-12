@@ -158,8 +158,11 @@ function handleOrderChanged(newOrder : any) {
   </div>
   
   <div v-else>
-    <!-- Mode normal : Une table par bundle -->
     <div v-for="(bundle, index) in bundlesToDisplay" :key="bundle.id" class="bundle-display">
+      <div v-if="bundle.image && bundle.image != ''" class="fixed top-0 left-0 w-svw h-svh">
+        <img :src="bundle.image" alt="" class="absolute top-0 left-0 w-full h-full object-cover  z-[-2]">
+        <div class="absolute top-0 left-0 w-full h-full bg-background/98 z-[-1]"></div>
+      </div>
       <Table :key="`table-${bundle.id}-${props.userGamesLength}-${props.mainLabels.length}-${props.forceUpdateKey}`">
         <TableHeader>
           <TableRow>
@@ -226,10 +229,13 @@ function handleOrderChanged(newOrder : any) {
           <TableRow>
             <TableCell colspan="100%">
               <div class="flex gap-2 justify-between items-center">
-                <UiTableauAddLine 
-                  :activeBundleId="bundle.id"
-                  @linesAdded="handleLinesAdded"
-                />
+                <div class="left flex gap-2 items-center">
+                  <UiTableauAddLine 
+                    :activeBundleId="bundle.id"
+                    @linesAdded="handleLinesAdded"
+                  />
+                  <a v-if="bundle.link != ''" :href="bundle.link" target="_blank" rel="noopener noreferrer" class="btn"><Icon name="solar:link-bold-duotone"></Icon></a>
+                </div>
                 <UiTableauDeleteBundle
                   :bundleId="bundle.id"
                   :bundleName="bundle.name"
@@ -238,6 +244,7 @@ function handleOrderChanged(newOrder : any) {
               </div>
             </TableCell>
           </TableRow>
+          
         </TableFooter>
       </Table>
     </div>

@@ -41,18 +41,16 @@ export default defineEventHandler(async (event) => {
       let targetBundleId = null;
       let state = bundleData.role_id == "user-role-id" ? 'private-state-id': 'public-state-id';
       let publicState = state == 'public-state-id' ? true : false;
-      console.log(bundleData);
 
       if(bundleData.isNewBundle) {
-        // Créer un nouveau bundle
         createdBundle = await prisma.bundle.create({
           data: {
             name: bundleData.name,
             price: parseFloat(bundleData.price) || 0,
             user_id: bundleData.user_id,
-            link: '',
-            image: '',
-            platform_id: bundleData.platform_id || 'platform-1', // Utiliser la plateforme envoyée
+            link: bundleData.link || '',
+            image: bundleData.image || '',
+            platform_id: bundleData.platform_id || 'platform-1', 
             state_id: state,
             month_id: bundleData.month_id || 'month-1',
             year_id: bundleData.year_id || 'year-1',

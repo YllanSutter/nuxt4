@@ -122,7 +122,7 @@ onMounted(() => {
 
 <template>
   
-  <div class="relative gap-2 overflow-auto max-w-[1200px] mx-auto mb-10 font-semibold text-xs border border-[#ffffff20] p-10 pt-12 -mt-6 rounded-md">
+  <div class="z-[1] relative gap-2 overflow-auto max-w-[1200px] mx-auto mb-10 font-semibold text-xs border border-[#ffffff20] p-10 pt-12 -mt-6 rounded-md">
     <Table class="max-w-[1000px] mx-auto ">
       <TableHeader>
         <TableRow>
@@ -145,11 +145,11 @@ onMounted(() => {
     </Table>
   </div>
 
-  <div  class="max-w-[1200px] mx-auto mb-20 overflow-auto" v-if="filteredBundles.length == 0"> 
+  <div  class="max-w-[1200px] mx-auto mb-20 overflow-auto z-[1]" v-if="filteredBundles.length == 0"> 
     <UiTableauAddBundle :refresh="true" @bundle-created="handleBundleCreated"  />
   </div>
-  <div class="max-w-[1200px] mx-auto mb-20 overflow-auto" v-else>
-    <div class="relative w-full overflow-auto max-w-[1200px] mx-auto flex flex-wrap items-center gap-1">
+  <div class="max-w-[1200px] mx-auto mb-20 overflow-auto z-[1]" v-else>
+    <div class="relative z-[1] w-full overflow-auto max-w-[1200px] mx-auto flex flex-wrap items-center gap-1">
       <UiTableauAddBundle @bundle-created="handleBundleCreated" />
       <Button 
         variant="outline" 
