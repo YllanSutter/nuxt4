@@ -182,17 +182,23 @@ export const useTableauFilters = () => {
       games.sort((a, b) => (a.order_in_list || 0) - (b.order_in_list || 0))
     })
 
+    // Filtrage additionnel : n'inclure que les bundles qui ont au moins un jeu filtré
+    const filteredBundlesWithGames = filteredBundles.filter(bundle => {
+      const jeux = bundleGameMap.get(bundle.id) || [];
+      return jeux.length > 0;
+    });
+
     // Mettre à jour le cache
     cachedFilterResults.value = {
       lastFilters: { ...globalFilters.value },
       lastDataSignature: dataSignature,
-      filteredBundles,
+      filteredBundles: filteredBundlesWithGames,
       bundleGameMap,
       filteredUserGames
     }
 
     return {
-      filteredBundles,
+      filteredBundles: filteredBundlesWithGames,
       bundleGameMap,
       filteredUserGames
     }

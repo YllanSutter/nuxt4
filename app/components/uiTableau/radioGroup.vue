@@ -63,7 +63,7 @@ const forceRenderKey = computed(() => {
   <ClientOnly>
     <DropdownMenu :key="dataSignature">
       <DropdownMenuTrigger asChild>
-        <Button :class="['w-full justify-start pt-1 ']" variant="shadow" :style="{ borderBottom: `1px solid ${selectedOption?.color || ''}` }">
+        <Button :class="['w-full justify-start pt-1 ']" variant="ghost" :style="{ borderBottom: `1px solid ${selectedOption?.color || ''}` }">
           <Icon
             v-if="selectedOption?.image"
             :key="forceRenderKey"

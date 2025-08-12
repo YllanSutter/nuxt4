@@ -27,12 +27,12 @@ const onDragEnd = async (event:any,gamesDrag:any) =>{
     @end="($event:any) => onDragEnd($event, props.games)"
   >
     <template #item="{ element, index }">
-  <tr>
-    <td class="row-handle">
+  <TableRow>
+    <td class="row-handle p-2 cursor-pointer">
       <Icon name="solar:sort-vertical-line-duotone" />
     </td>
     <slot :userGame="element" :index="index" />
-  </tr>
+  </TableRow>
 </template>
   </draggable>
 </template>
