@@ -37,7 +37,9 @@ export default defineEventHandler(async (event) => {
             include: {
               emplacement: true
             }
-          }
+          },
+          
+          user_label_visibility: userId ? { where: { user_id: userId } } : true
         }
       },
       emplacement: { 
@@ -89,7 +91,11 @@ export default defineEventHandler(async (event) => {
         } : undefined
       },
       baseGame: { name: 'asc' },
-      user_label_visibility: { id: 'asc' },
+      userLabelVisibility: { 
+        id: 'asc',
+        where: userId ? { user_id: userId } : undefined,
+        orderBy: { visible: 'desc' },
+      },
       state: { name: 'asc' },
       priceHistory: { date: 'desc' },
       gameStat: { date: 'desc' },
@@ -97,7 +103,7 @@ export default defineEventHandler(async (event) => {
         orderBy: { name: 'asc' },
         include: {
           role: true,
-          user_label_visibility: true,
+          userLabelVisibility: true,
         }
       }
     };

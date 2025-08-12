@@ -49,7 +49,7 @@
             @click="handleResetToDefault()" 
             size="sm"
           >
-            Mois/Année actuels
+            Current Month/year
           </Button>
           <Button 
             v-if="hasActiveFilters" 
@@ -57,7 +57,7 @@
             variant="outline" 
             size="sm"
           >
-            Effacer tous les filtres
+            Erase all filters
           </Button>
         </div>
       </div>

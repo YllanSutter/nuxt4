@@ -1,5 +1,9 @@
 export const useTableauData = (models?: string[] | string) => {
 
+  // if (models) {
+  //   const arr = Array.isArray(models) ? models : [models];
+  //   console.log('Modèles demandés :', arr);
+  // }
   const requestedModels = models ? 
     (Array.isArray(models) ? models : [models]) : 
     null;
@@ -39,7 +43,7 @@ export const useTableauData = (models?: string[] | string) => {
   const bundleGames = computed(() => allOptions.value?.bundleGame || [])
   const userGames = computed(() => allOptions.value?.userGame || [])
   const baseGames = computed(() => allOptions.value?.baseGame || [])
-  const userLabelVisibilities = computed(() => allOptions.value?.userLabelVisibility || [])
+  const userLabelVisibility = computed(() => allOptions.value?.userLabelVisibility || [])
   const states = computed(() => allOptions.value?.state || [])
   const priceHistories = computed(() => allOptions.value?.priceHistory || [])
   const gameStats = computed(() => allOptions.value?.gameStat || [])
@@ -185,19 +189,24 @@ export const useTableauData = (models?: string[] | string) => {
     }
   }
 
-  // Fonction pour récupérer les labels d'un emplacement spécifique (relation many-to-many)
   const getLabelsByEmplacement = (empName: string) => {
-    if (!emplacements.value || !labels.value) return []
-    const emplacement = emplacements.value.find((emp: any) => emp.name === empName)
-    if (!emplacement) return []
-    
-    return labels.value.filter((label: any) => 
-      label.label_emplacements?.some((le: any) => le.emplacement_id === emplacement.id)
-    ).sort((a: any, b: any) => {
-      const aPos = a.label_emplacements?.find((le: any) => le.emplacement_id === emplacement.id)?.position || 0
-      const bPos = b.label_emplacements?.find((le: any) => le.emplacement_id === emplacement.id)?.position || 0
-      return aPos - bPos
-    })
+    if (!emplacements.value || !labels.value) return [];
+    const emplacement = emplacements.value.find((emp: any) => emp.name === empName);
+    if (!emplacement) return [];
+    return labels.value.filter((label: any) => {
+      const isInEmplacement = label.label_emplacements?.some((le: any) => le.emplacement_id === emplacement.id);
+      if (!isInEmplacement) return false;
+      // Filtrer sur la visibilité utilisateur
+      if (Array.isArray(label.user_label_visibility) && label.user_label_visibility.length > 0) {
+        return label.user_label_visibility.some((vis: any) => vis.visible === true);
+      }
+      // Si pas de visibilité renseignée, on peut choisir de ne pas afficher (false) ou afficher (true)
+      return false;
+    }).sort((a: any, b: any) => {
+      const aPos = a.label_emplacements?.find((le: any) => le.emplacement_id === emplacement.id)?.position || 0;
+      const bPos = b.label_emplacements?.find((le: any) => le.emplacement_id === emplacement.id)?.position || 0;
+      return aPos - bPos;
+    });
   }
 
   const updateLocalData = (elemId: string, field: string, value: string, table: string) => {
@@ -269,7 +278,7 @@ export const useTableauData = (models?: string[] | string) => {
     bundleGames,
     userGames,
     baseGames,
-    userLabelVisibilities,
+    userLabelVisibility,
     states,
     priceHistories,
     gameStats,

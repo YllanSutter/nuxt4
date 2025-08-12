@@ -6,6 +6,7 @@
     bundles,
     getLabelsByEmplacement,
     mainLabels,
+    labels,
     filtres,
     calcLabels,
     refresh 
@@ -23,6 +24,8 @@
 </script>
 
 <template>
+  
+  <ReglagesExport :main-labels="labels"/>
   <div v-if="pending" class="p-4">
     Chargement des données du tableau...
   </div>

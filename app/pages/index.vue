@@ -5,7 +5,6 @@ const user = computed(() => userCookie.value);
 
 <template>
     <div>
-      <ReglagesExport v-if="user"/>
       <Tableau v-if="user"/>
       <AccountLogin v-else />
     </div>

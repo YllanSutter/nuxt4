@@ -1,6 +1,27 @@
 <script setup lang="ts">
   import { exportDatabase, exportGamesCSV } from '~/utils/export';
+  const { 
+  userLabelVisibility,
+} = useTableauData(['userLabelVisibility']);
 
+interface UserLabelVisibilityItem {
+  id: string;
+  label_id: string;
+  visible: boolean;
+}
+
+const props = defineProps<{
+  mainLabels: any[]
+}>()
+
+const userLabelVisibilityRef = ref<UserLabelVisibilityItem[]>([]);
+watch(
+  () => userLabelVisibility.value,
+  (newVal) => {
+    userLabelVisibilityRef.value = Array.isArray(newVal) ? [...newVal] : [];
+  },
+  { immediate: true, deep: true }
+);
   
 interface User {
   role_id?: string;
@@ -9,9 +30,16 @@ interface User {
 const userCookie = useCookie<User | null>('user');
 const user = computed(() => userCookie.value);
   
-  const forceRefresh = () => {
-    window.location.reload()
-  }
+const forceRefresh = () => {
+  window.location.reload()
+}
+const UserLabelVisibilityCheck = async (item:any) => 
+{
+   await $fetch('/api/updateUserLabelVisibility', {
+    method: 'POST',
+    body: { id: item.id, visible: item.visible }
+  });
+}
 </script>
 
 <template>
@@ -49,7 +77,7 @@ const user = computed(() => userCookie.value);
                 class="flex items-center gap-2"
               >
                 <Icon name="lucide:history" :size="16"></Icon>
-                Actualiser
+                Refresh
               </Button>
           </PopoverContent>
         </Popover>
@@ -57,8 +85,21 @@ const user = computed(() => userCookie.value);
           <PopoverTrigger as-child>
             <Button variant="outline"> <Icon name="lucide:eye" /></Button>
           </PopoverTrigger>
-          <PopoverContent class="w-[500px] flex gap-2">
-            {{ user }}
+          <PopoverContent class="w-[400px] grid gap-x-10 gap-y-2 grid-cols-2">
+            <Button 
+              @click="forceRefresh()" 
+              variant="outline" 
+              size="sm"
+              class="flex items-center gap-2"
+            >
+              <Icon name="lucide:history" :size="16"></Icon>
+              Refresh
+            </Button>
+            <div class="vide"></div>
+              <label @click="UserLabelVisibilityCheck(item)" v-for="(item, index) in userLabelVisibilityRef" :key="index" :for="item.id" class="flex gap-2 items-center justify-between">
+                {{ mainLabels.find((label: any) => label.id === item.label_id)?.name }}
+                <Checkbox v-model="item.visible" :id="item.id"/>
+              </label>
           </PopoverContent>
         </Popover>
       </div>

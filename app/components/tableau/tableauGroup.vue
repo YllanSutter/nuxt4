@@ -3,6 +3,8 @@
 import { getUserGamesForBundle } from '@/utils/tableauHelpers'
 import { updateElem, hasPendingModifications, saveAllModifications } from '@/utils/updateValue'
 
+
+
 const { 
   getUserGameValue, 
   getOptionsForLabel, 
@@ -121,7 +123,7 @@ onMounted(() => {
 </script>
 
 <template>
-  
+
   <div class="z-[1] relative gap-2 overflow-auto max-w-[1200px] mx-auto mb-10 font-semibold text-xs border border-[#ffffff20] p-10 pt-12 -mt-6 rounded-md">
     <Table class="max-w-[1000px] mx-auto ">
       <TableHeader>
