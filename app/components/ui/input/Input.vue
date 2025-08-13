@@ -94,7 +94,7 @@ const handleInput = (event: Event) => {
 
 <template>
   <input
-    :value="modelValue === 0 ? '' : modelValue"
+    :value="modelValue === 0 || 0.00 || '' ? '' : modelValue"
     @change="handleInput"
     data-slot="input"
     :type="type"

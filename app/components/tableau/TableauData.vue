@@ -7,6 +7,7 @@ const props = defineProps<{
   filteredBundles: any[]
   mainLabels: any[]
   calcLabels: any[]
+  filtres: any[]
   bundleGameMap: Map<string, any[]>
   activeTabIndex?: number
   getUserGameValue: Function
@@ -235,6 +236,11 @@ function handleOrderChanged(newOrder : any) {
                     @linesAdded="handleLinesAdded"
                   />
                   <a v-if="bundle.link != ''" :href="bundle.link" target="_blank" rel="noopener noreferrer" class="btn"><Icon name="solar:link-bold-duotone"></Icon></a>
+                 <UiTableauUpdateBundle
+                    :bundle="bundle"
+                    :filtres="props.filtres"
+                    :getOptionsForLabel="props.getOptionsForLabel"
+                  />
                 </div>
                 <UiTableauDeleteBundle
                   :bundleId="bundle.id"

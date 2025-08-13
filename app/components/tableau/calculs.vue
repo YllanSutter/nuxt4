@@ -110,7 +110,7 @@ const ratios = computed(() => {
       continue;
     }
 
-       if (key === 'price') {
+    if (key === 'price') {
       if (totalNumberGames > 0) {
         result[j].elems[0] = Math.round((totalPrice / totalNumberGames) * 100) / 100;
       } else {
@@ -138,7 +138,6 @@ const ratios = computed(() => {
     }
   }
 
-  // console.log('Ratios calculés:', result);
 
   return result;
 });
@@ -148,7 +147,6 @@ const ratios = computed(() => {
 <template>
     
     <TableRow :class="props.listClass">
-      
         <td v-if="emplacement === 'footer'"></td>
         <TableCell v-for="(label, index) in labels" :key="index" class="text-right">
             <div v-if="label.key !== 'delete' && label.key !== 'order_in_list' && label.key !== 'tag_id'">
@@ -156,6 +154,10 @@ const ratios = computed(() => {
                   {{ elems[index]?.elems[0] }}
                   <UiTableauSuffix :label=label :emplacement="'footer'"/>
                 </ClientOnly>
+                <template v-else-if="label.key === 'name'">
+                  {{ Math.trunc(elems[index]?.elems[0]) }}
+                  <UiTableauSuffix :label=label :emplacement="'footer'"/>
+                </template>
                 <template v-else>
                   {{ elems[index]?.elems[0] }}
                   <UiTableauSuffix :label=label :emplacement="'footer'"/>

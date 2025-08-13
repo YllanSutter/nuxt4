@@ -126,7 +126,7 @@ onMounted(() => {
          <button
       @click="signOut"
       :disabled="loading"
-        class="absolute z-10 h-full w-full"
+        class=""
       >
       </button>
       <Icon

@@ -25,7 +25,6 @@
     optionsBundles,
   } = useTableauData(['tag', 'month', 'year', 'platform', 'rating', 'bundle'])
 
-  // Appliquer les filtres initiaux dès que les mainLabels sont disponibles
   watch(() => props.mainLabels, (newLabels) => {
     if (newLabels && newLabels.length > 0 && Object.keys(filters.value).length === 0) {
       setInitialFilters(newLabels)
@@ -65,7 +64,7 @@
       <Table :key="`table-${labels.length}-${props.mainLabels.length}`">
         <TableHeader>
           <tr style="border:none!important">
-            <TableHead v-for="label in props.mainLabels" :key="label.id">
+            <TableHead v-for="label in props.mainLabels.filter((l: { type: string; name: string; }) => l.name !== 'Name' && l.name !== 'Image' && l.name !== 'Link')" :key="label.id">
               <div class="flex items-center gap-1">
                 <Icon :name="label.image"></Icon>{{ label.name }}
               </div>
@@ -75,7 +74,7 @@
         <TableBody>
           <tr>
             <TableCell 
-              v-for="label in props.mainLabels" 
+              v-for="label in props.mainLabels.filter((l: { type: string; name: string; }) => l.name !== 'Name' && l.name !== 'Image' && l.name !== 'Link')"
               :key="label.id" 
               class="font-medium"
             >

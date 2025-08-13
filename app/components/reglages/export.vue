@@ -97,7 +97,12 @@ const UserLabelVisibilityCheck = async (item:any) =>
             </Button>
             <div class="vide"></div>
               <label @click="UserLabelVisibilityCheck(item)" v-for="(item, index) in userLabelVisibilityRef" :key="index" :for="item.id" class="flex gap-2 items-center justify-between">
-                {{ mainLabels.find((label: any) => label.id === item.label_id)?.name }}
+                <div class="left flex items-center">
+                  <ClientOnly>
+                    <Icon class="mr-2" :name="mainLabels.find((label: any) => label.id === item.label_id)?.image"></Icon>
+                  </ClientOnly>
+                  {{ mainLabels.find((label: any) => label.id === item.label_id)?.name }}
+                </div>
                 <Checkbox v-model="item.visible" :id="item.id"/>
               </label>
           </PopoverContent>

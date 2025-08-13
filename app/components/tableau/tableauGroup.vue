@@ -26,6 +26,7 @@ const { filterAllData } = useTableauFilters()
 const props = defineProps<{
   mainLabels: any;
   calcLabels: any;
+  filtresLabels: any;
   bundles: any;
 }>();
 
@@ -190,6 +191,7 @@ onMounted(() => {
       :filteredBundles="filteredBundles"
       :mainLabels="mainLabels"
       :calcLabels="calcLabels"
+      :filtres="filtresLabels"
       :bundleGameMap="filteredData.bundleGameMap"
       :activeTabIndex="activeTabIndex"
       :getUserGameValue="getUserGameValue"

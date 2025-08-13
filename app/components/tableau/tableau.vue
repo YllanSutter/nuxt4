@@ -50,6 +50,7 @@
     <TableauGroup
     :main-labels=mainLabels
     :calc-labels=calcLabels
+    :filtres-labels="filtres"
     :bundles=bundles
     />
   </div>
