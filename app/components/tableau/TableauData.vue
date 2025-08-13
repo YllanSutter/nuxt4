@@ -235,12 +235,12 @@ function handleOrderChanged(newOrder : any) {
                     :activeBundleId="bundle.id"
                     @linesAdded="handleLinesAdded"
                   />
-                  <a v-if="bundle.link != ''" :href="bundle.link" target="_blank" rel="noopener noreferrer" class="btn"><Icon name="solar:link-bold-duotone"></Icon></a>
                  <UiTableauUpdateBundle
                     :bundle="bundle"
                     :filtres="props.filtres"
                     :getOptionsForLabel="props.getOptionsForLabel"
                   />
+                  <a v-if="bundle.link != ''" :href="bundle.link" target="_blank" rel="noopener noreferrer" class="btn"><Icon name="solar:link-bold-duotone"></Icon></a>
                 </div>
                 <UiTableauDeleteBundle
                   :bundleId="bundle.id"
