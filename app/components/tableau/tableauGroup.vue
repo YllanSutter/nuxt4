@@ -162,27 +162,29 @@ onMounted(() => {
         <Icon name="heroicons:squares-2x2" size="13" class="mr-1" />
         All
       </Button>
-      <div 
-        @click="setActiveTab(bundleIndex, $event)" 
-        v-for="(bundleTab, bundleIndex) in filteredBundles" 
-        :key="bundleTab.id" 
-        :class="[
-          'cursor-pointer uppercase p-2 inline-flex text-[8px] lg:text-[11px] tracking-widest border-1 border-[#ffffff20] hover:bg-[#ffffff20] transition-all duration-400 rounded-md items-center', 
-          'bundle-' + bundleIndex, 
-          activeTabIndex === bundleIndex ? 'bg-[#ffffff20]' : ''
-        ]" 
-        :style="{ borderBottom: '1px solid ' + (optionsPlatforms?.find((opt: any) => opt.id === bundleTab.platform_id)?.color || '#ffffff20') }"
-      >
-        <Icon 
-          v-if="optionsPlatforms?.find((opt: any) => opt.id === bundleTab.platform_id)?.image" 
-          size="13" 
-          class="mr-1" 
-          :name="optionsPlatforms?.find((opt: any) => opt.id === bundleTab.platform_id)?.image" 
-          :style="{ color: optionsPlatforms?.find((opt: any) => opt.id === bundleTab.platform_id)?.color }" 
-        />
-        {{ bundleTab.name }}
-        <Icon size="13" class="mr-1" v-if="activeTabIndex === bundleIndex" name="tdesign:arrow-left-down"/>
-      </div>
+        <ClientOnly>
+          <div 
+            @click="setActiveTab(bundleIndex, $event)" 
+            v-for="(bundleTab, bundleIndex) in filteredBundles" 
+            :key="bundleTab.id" 
+            :class="[
+              'cursor-pointer uppercase p-2 inline-flex text-[8px] lg:text-[11px] tracking-widest border-1 border-[#ffffff20] hover:bg-[#ffffff20] transition-all duration-400 rounded-md items-center', 
+              'bundle-' + bundleIndex, 
+              activeTabIndex === bundleIndex ? 'bg-[#ffffff20]' : ''
+            ]" 
+            :style="{ borderBottom: '1px solid ' + (optionsPlatforms?.find((opt: any) => opt.id === bundleTab.platform_id)?.color || '#ffffff20') }"
+          >
+              <Icon 
+                v-if="optionsPlatforms?.find((opt: any) => opt.id === bundleTab.platform_id)?.image" 
+                size="13" 
+                class="mr-1" 
+                :name="optionsPlatforms?.find((opt: any) => opt.id === bundleTab.platform_id)?.image" 
+                :style="{ color: optionsPlatforms?.find((opt: any) => opt.id === bundleTab.platform_id)?.color }" 
+              />
+            {{ bundleTab.name }}
+            <Icon size="13" class="mr-1" v-if="activeTabIndex === bundleIndex" name="tdesign:arrow-left-down"/>
+          </div>
+        </ClientOnly>
     </div>
 
     <!-- Composant TableauData - gère l'affichage selon le mode -->
