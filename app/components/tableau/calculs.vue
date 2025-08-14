@@ -21,19 +21,21 @@ const elems = computed(() => {
   for (let i = 0; i < props.userGamesBundle.length; i++) {
     for (let j = 0; j < props.labels.length; j++) {
       const key = props.labels[j].key;
+      // Sauter la ligne si tag_id === 'tag-3', sauf pour la clé 'price'
+      if (props.userGamesBundle[i].tag_id === 'tag-3' && key !== 'price') continue;
       let value = props.userGamesBundle[i][key];
-      
+
       // Gestion spéciale pour rating_id : récupérer la valeur numérique depuis la relation
       if (key === 'rating_id' && props.userGamesBundle[i].rating_ref) {
         value = props.userGamesBundle[i].rating_ref.value;
       }
-      
+
       if (typeof value === 'number') {
         result[j].elems[0] += value;
       } else if (typeof value === 'string' && !isNaN(parseFloat(value))) {
         result[j].elems[0] += parseFloat(value);
       }
-       else if (key == "name") {
+      else if (key == "name") {
         result[j].elems[0] += 1;
       }
       else {
@@ -45,14 +47,12 @@ const elems = computed(() => {
 
   const ratingIndex = props.labels.findIndex((label: any) => label.key === "rating_id");
   if (ratingIndex !== -1 && props.userGamesBundle.length > 0) {
-    // Calculer la moyenne en excluant les ratings = 0 (non notés)
     const validRatings = props.userGamesBundle
       .map((game: any) => game.rating_ref?.value || 0)
       .filter((rating: number) => rating > 0);
     
     if (validRatings.length > 0) {
       const totalRating = validRatings.reduce((sum: number, rating: number) => sum + rating, 0);
-      // Formatage strict pour l'hydration : string avec 2 décimales
       result[ratingIndex].elems[0] = (totalRating / validRatings.length).toFixed(2);
     } else {
       result[ratingIndex].elems[0] = "0.00";
@@ -60,7 +60,6 @@ const elems = computed(() => {
   }
 
   result.forEach((item: any, idx: number) => {
-    // Pour la cellule rating, garder le format string (déjà fait ci-dessus)
     if (props.labels[idx]?.key === "rating_id") return;
     if (typeof item.elems[0] === 'number') {
       item.elems[0] = item.elems[0].toFixed(2);
