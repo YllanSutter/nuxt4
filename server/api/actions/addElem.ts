@@ -96,6 +96,25 @@ export default defineEventHandler(async (event) => {
 
       const baseGames = await Promise.all(baseGamePromises);
 
+
+      // Calcul de l'ordre de départ pour order_in_list
+      let orderStart = 1;
+      if (!bundleData.isNewBundle && targetBundleId) {
+        // On va chercher l'ordre max du bundle côté backend
+        const maxOrder = await prisma.userGame.aggregate({
+          where: {
+            bundle_games: {
+              some: {
+                bundle_id: targetBundleId
+              }
+            }
+          },
+          _max: { order_in_list: true }
+        });
+        const maxOrderValue = maxOrder && maxOrder._max && typeof maxOrder._max.order_in_list === 'number' ? maxOrder._max.order_in_list : 0;
+        orderStart = maxOrderValue + 1;
+      }
+
       // Créer les données formatées pour Prisma
       const userGamesData = elems.map((elem: any, index: number) => {
         const price = bundleData.isNewBundle ? 
@@ -114,7 +133,7 @@ export default defineEventHandler(async (event) => {
           rating: 0, // legacy, à supprimer du schéma plus tard
           rating_id: elem.rating_id || elem.rating_ref?.id || null,
           tag_id: elem.tag_id || 'tag-1',
-          order_in_list: index + 1,
+          order_in_list: orderStart + index,
           created_at: new Date(elem.created_at) || new Date(),
           updated_at: new Date(elem.updated_at) || new Date(),
         };

@@ -65,13 +65,12 @@ export const useBundleActions = () => {
   ]
 
   const addMultipleElem = async (name: string, number: number, cible: string, price?: number, activeBundleId?: string, linkBundle?:string, imageBundle?:string) => {
-    
     const elems: any[] = [];
     const currentDate = new Date().toISOString();
     for (let i = 0; i < number; i++) {
       elems.push({
         user_id: userId.value,
-        role_id:userRole.value,
+        role_id: userRole.value,
         name: name,
         price: price || 0,
         link: linkBundle || '',
@@ -80,16 +79,15 @@ export const useBundleActions = () => {
         state_id: 'private-state-id',
         month_id: selectedMonthId.value,
         year_id: selectedYearId.value,
-        rating_id: 'rating-0', 
+        rating_id: 'rating-0',
         created_at: currentDate,
         updated_at: currentDate
       });
     }
 
     let bundleData;
-    
-    if(cible == "line" && activeBundleId) {
-      console.log('test');
+
+    if (cible == "line" && activeBundleId) {
       bundleData = {
         existingBundleId: activeBundleId,
         isNewBundle: false
@@ -97,18 +95,17 @@ export const useBundleActions = () => {
     } else {
       bundleData = {
         name: nameBundle.value || name,
-        link:linkBundle || '',
+        link: linkBundle || '',
         image: imageBundle || '',
         price: priceBundle.value || price || 0,
         numberGames: number,
         user_id: userId.value,
-        role_id:userRole.value,
+        role_id: userRole.value,
         platform_id: selectedPlatformId.value,
         year_id: selectedYearId.value,
         month_id: selectedMonthId.value,
         isNewBundle: true
       };
-      
       // Debug logs pour vérifier les IDs
       console.log('🔍 Bundle data:', {
         platform_id: selectedPlatformId.value,
@@ -116,18 +113,18 @@ export const useBundleActions = () => {
         year_id: selectedYearId.value
       });
     }
-    
+
     try {
       const response = await $fetch('/api/actions/addElem', {
         method: 'POST',
-        body: { 
+        body: {
           elems,
           bundleData
         }
       });
-      
+
       console.log('✅ Bundle et éléments créés avec succès:', response);
-      
+
       return response;
     } catch (error) {
       console.error('❌ Erreur lors de l\'ajout:', error);

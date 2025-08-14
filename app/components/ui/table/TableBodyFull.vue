@@ -27,7 +27,7 @@ const onDragEnd = async (event:any,gamesDrag:any) =>{
     @end="($event:any) => onDragEnd($event, props.games)"
   >
     <template #item="{ element, index }">
-  <TableRow>
+  <TableRow :class="[element.tag.name == 'tradedWith'?'text-[sm] border-l border-l-[#ffffff] bg-muted/20':'']">
     <td class="row-handle p-2 cursor-pointer">
       <Icon name="solar:sort-vertical-line-duotone" />
     </td>
