@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { getUserGamesForBundle, handleValueUpdate, handleModelUpdate, type TableauDataProps } from '@/utils/tableauHelpers'
 import TableBodyFull from '../ui/table/TableBodyFull.vue';
-import { UserGame } from '../../generated/prisma/index';
+
 
 const props = defineProps<{
   mode: 'showAll' | 'singleBundle'
