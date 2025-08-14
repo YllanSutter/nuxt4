@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { getUserGamesForBundle, handleValueUpdate, handleModelUpdate, type TableauDataProps } from '@/utils/tableauHelpers'
 import TableBodyFull from '../ui/table/TableBodyFull.vue';
+import { UserGame } from '../../generated/prisma/index';
 
 const props = defineProps<{
   mode: 'showAll' | 'singleBundle'
@@ -77,7 +78,6 @@ function handleOrderChanged(newOrder : any) {
 
 <template>
   <div v-if="props.mode === 'showAll'">
-    <!-- Mode showAll : Une seule table pour tous les bundles -->
     <Table :key="`table-all-${props.userGamesLength}-${props.mainLabels.length}-${props.forceUpdateKey}`">
       <TableHeader>
         <TableRow>
@@ -146,11 +146,7 @@ function handleOrderChanged(newOrder : any) {
         <TableRow>
           <TableCell colspan="100%">
             <div class="flex gap-2 justify-between items-center">
-              <UiTableauAddLine 
-                :activeBundleId="undefined"
-                @linesAdded="handleLinesAdded"
-              />
-              <span class="text-muted-foreground text-sm">Mode "All bundle" - Select a bundle to delete it</span>
+              <span class="text-muted-foreground text-sm">Mode "All bundle" - Select a bundle to add or delete</span>
             </div>
           </TableCell>
         </TableRow>
@@ -184,7 +180,7 @@ function handleOrderChanged(newOrder : any) {
                 :key="label.id" 
                 class="font-medium"
               >
-                <div class="flex items-center">
+                <div :class="['flex items-center', userGame.tag.name == 'traded' && (label.key !== 'price' && label.key !== 'delete') || userGame.tag.name == 'tradedWith' && label.key == 'price' ?'opacity-[0.3]':'']">
                   <UiTableauRadioGroup 
                     v-if="label.type == 'select'"
                     :model-value="props.getUserGameValue(userGame, label.key) || ''"
