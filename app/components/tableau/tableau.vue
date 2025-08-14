@@ -41,7 +41,7 @@
   </div>
   
   
-  <div v-else>
+  <div v-else class="pt-20">
     
     <TableauFiltres
     :main-labels=filtres

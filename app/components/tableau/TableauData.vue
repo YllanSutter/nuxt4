@@ -98,7 +98,7 @@ function handleOrderChanged(newOrder : any) {
             <TableCell 
               v-for="label in props.mainLabels" 
               :key="label.id" 
-              class="font-medium"
+              :class="['', userGame.tag.name == 'traded' && (label.key !== 'price' && label.key !== 'delete') || userGame.tag.name == 'tradedWith' && label.key == 'price' ?'opacity-[0.3]':'']"
             >
               <div class="flex items-center">
                 <UiTableauRadioGroup 

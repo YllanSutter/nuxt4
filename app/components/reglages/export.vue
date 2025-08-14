@@ -44,7 +44,7 @@ const UserLabelVisibilityCheck = async (item:any) =>
 
 <template>
 
-    <header class=" px-4 border-b border-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 mb-4 z-[1] relative flex justify-between items-center">
+    <header class="fixed top-0 left-0 w-full px-4 border-b border-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 mb-4 z-[1] flex justify-between items-center">
       <div class=" flex gap-2 h-14 items-center">
         <ColorModeToggle />
         <Popover>
