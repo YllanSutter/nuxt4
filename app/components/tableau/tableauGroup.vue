@@ -85,17 +85,9 @@ const handleLineDeleted = async () => {
 
 // Données pour les calculs du header
 const headerCalculationData = computed(() => {
-  if (showAll.value) {
-    return {
-      activeBundle: null,
-      userGamesBundle: getUserGamesForBundle(filteredData.value.bundleGameMap, filteredBundles.value)
-    }
-  } else {
-    const activeBundle = filteredBundles.value[activeTabIndex.value]
-    return {
-      activeBundle,
-      userGamesBundle: activeBundle ? getUserGamesForBundle(filteredData.value.bundleGameMap, activeBundle) : []
-    }
+  return {
+    activeBundle: null,
+    userGamesBundle: getUserGamesForBundle(filteredData.value.bundleGameMap, filteredBundles.value)
   }
 })
 

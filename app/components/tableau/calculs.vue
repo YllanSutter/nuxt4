@@ -140,7 +140,11 @@ const ratios = computed(() => {
 
   return result;
 });
-
+interface User {
+  budget?: number;
+}
+const userCookie = useCookie<User | null>('user');
+const user = computed(() => userCookie.value);
 </script>
 
 <template>
@@ -155,6 +159,14 @@ const ratios = computed(() => {
                 </ClientOnly>
                 <template v-else-if="label.key === 'name'">
                   {{ Math.trunc(elems[index]?.elems[0]) }}
+                  <UiTableauSuffix :label=label :emplacement="'footer'"/>
+                </template>
+                <template v-else-if="label.key === 'price'">
+                  {{ elems[index]?.elems[0] }}
+                  <Icon class="text-xs relative -top-[5px] left-[10px] -mr-3 pointer-events-none text-white transition-all duration-400 hover:rotate-3"
+                    :name="user?.budget !== undefined && user?.budget !== null ? (Number(elems[index]?.elems[0]) > Number(user.budget) ? 'mingcute:close-fill' : Number(elems[index]?.elems[0]) > Number(user.budget) / 2 ? 'mingcute:alert-fill' : 'mingcute:check-fill') : 'mingcute:check-fill'"
+                    :style="user?.budget !== undefined && user?.budget !== null ? (Number(elems[index]?.elems[0]) > Number(user.budget) ? 'color: red;' : Number(elems[index]?.elems[0]) > Number(user.budget) / 2 ? 'color: orange;' : 'color: green;') : 'color: green;'"
+                  />
                   <UiTableauSuffix :label=label :emplacement="'footer'"/>
                 </template>
                 <template v-else>
