@@ -157,7 +157,7 @@ function handleOrderChanged(newOrder : any) {
   <div v-else>
     <div v-for="(bundle, index) in bundlesToDisplay" :key="bundle.id" class="bundle-display">
       <div v-if="bundle.image && bundle.image != ''" class="fixed top-0 left-0 w-svw h-svh">
-        <img :src="bundle.image" alt="" class="absolute top-0 left-0 w-full h-full object-cover  z-[-2]">
+        <ClientOnly><img :src="bundle.image" alt="" class="absolute top-0 left-0 w-full h-full object-cover  z-[-2]"></ClientOnly>
         <div class="absolute top-0 left-0 w-full h-full bg-background/98 z-[-1]"></div>
       </div>
       <Table :key="`table-${bundle.id}-${props.userGamesLength}-${props.mainLabels.length}-${props.forceUpdateKey}`">
@@ -236,7 +236,7 @@ function handleOrderChanged(newOrder : any) {
                     :filtres="props.filtres"
                     :getOptionsForLabel="props.getOptionsForLabel"
                   />
-                  <a v-if="bundle.link != ''" :href="bundle.link" target="_blank" rel="noopener noreferrer" class="btn"><Icon name="solar:link-bold-duotone"></Icon></a>
+                  <ClientOnly v-if="bundle.link != '' && bundle.link != ' '"><a v-if="bundle.link != ''" :href="bundle.link" target="_blank" rel="noopener noreferrer" class="btn"><Icon name="solar:link-bold-duotone"></Icon></a></ClientOnly>
                 </div>
                 <div class="right flex gap-1 items-center">
                   <div v-for="label in filtres.filter((l: { type: string; name: string; }) => l.name == 'Month' || l.name == 'Year')" :key="label.id" :class="[label.type !== 'select'? 'col-span-3':'','grid items-center gap-4']">

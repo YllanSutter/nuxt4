@@ -20,6 +20,10 @@ const updateBundleField = (key: string, value: any) => {
         }
       }
   }
+  // Gestion spéciale pour les champs texte ou number vides
+  if ((label.type === 'text') && (sendValue === '' || sendValue === null || sendValue === undefined|| sendValue === 0)) {
+    sendValue = ' ';
+  }
   // Ajoute ou remplace la modif dans le tableau
   const idx = pendingModifs.value.findIndex(m => m.key === key);
   if (idx !== -1 && pendingModifs.value[idx]) {
@@ -106,6 +110,7 @@ const isLoading = ref(false)
               :type="label.type"
               @change="updateBundleField(label.key, props.bundle[label.key])"
             />
+            
             </div>
         </div>
         <div class="flex justify-end mt-4">

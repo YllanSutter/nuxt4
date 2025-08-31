@@ -94,11 +94,17 @@ const handleInput = (event: Event) => {
 
 <template>
   <input
-    :value="modelValue === 0 || 0.00 || '' ? '' : modelValue"
+    :value="props.type === 'number' || props.type === 'decimal'
+      ? (modelValue === 0 || modelValue === 0.0 || modelValue === '' ? '' : Number(modelValue).toFixed(2))
+      : props.type === 'text'
+      ? (modelValue === 0 || modelValue === '' ? '' : String(modelValue))
+      : (modelValue === 0 || modelValue === '' ? '' : String(modelValue))"
     @change="handleInput"
     data-slot="input"
     :type="type"
-    :placeholder="label === 'recherche' || label === 'name' ? '...':'0'"
+    :placeholder="props.type === 'number' || props.type === 'decimal'
+      ? '0'
+      : (label === 'recherche' || label === 'name' ? '...' : '...')"
     :style="label === 'name' ? { minWidth: ((modelValue?.toString().length ?? 2) * 1.1) + 'ch' } : { minWidth: labelLength + 'ch' }"
     :class="cn(
       'file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground flex h-9 w-full min-w-0 border-l dark:border-[#ffffff20] border-[#00000050] bg-transparent px-3 py-1 shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
