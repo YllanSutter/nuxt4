@@ -238,11 +238,16 @@ function handleOrderChanged(newOrder : any) {
                   />
                   <a v-if="bundle.link != ''" :href="bundle.link" target="_blank" rel="noopener noreferrer" class="btn"><Icon name="solar:link-bold-duotone"></Icon></a>
                 </div>
-                <UiTableauDeleteBundle
-                  :bundleId="bundle.id"
-                  :bundleName="bundle.name"
-                  @bundleDeleted="handleBundleDeleted"
-                />
+                <div class="right flex gap-1 items-center">
+                  <div v-for="label in filtres.filter((l: { type: string; name: string; }) => l.name == 'Month' || l.name == 'Year')" :key="label.id" :class="[label.type !== 'select'? 'col-span-3':'','grid items-center gap-4']">
+                    {{ props.getOptionsForLabel(label.key).find((m: { id: any; }) => m.id === bundle[label.key])?.name || '' }}
+                  </div>
+                  <UiTableauDeleteBundle
+                    :bundleId="bundle.id"
+                    :bundleName="bundle.name"
+                    @bundleDeleted="handleBundleDeleted"
+                  />
+                </div>
               </div>
             </TableCell>
           </TableRow>
