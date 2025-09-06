@@ -1,6 +1,6 @@
 interface ModificationEntry {
   elemId: string;
-  value: string;
+  value: any; // conserver le type réel (string | number | boolean | date...)
   label: {
     table: string;
     field: string;
@@ -19,10 +19,10 @@ const GLOBAL_SAVE_DELAY = 2000;
 
 export const updateValue = async (
   elem: any, 
-  value: string, 
+  value: any, 
   label: any,
   cible: string,
-  updateLocalDataFn?: (elemId: string, field: string, value: string, table: string) => void
+  updateLocalDataFn?: (elemId: string, field: string, value: any, table: string) => void
 ) => {
   let normalizedLabel: { table: string; field: string; type?: 'string' | 'number' | 'decimal' | 'boolean' | 'date' };
   
@@ -53,12 +53,12 @@ export const updateValue = async (
     try {
       updateLocalDataFn(elem.id, normalizedLabel.field, value, normalizedLabel.table);
     } catch (error) {
-      //console.log('⚠️ Erreur lors de la mise à jour locale:', error);
+      console.log('⚠️ Erreur lors de la mise à jour locale:', error);
     }
   }
   
-  //console.log(`📝 Modification enregistrée: ${elem.id}.${cible} = "${value}"`);
-  //console.log(`📊 Total modifications en attente: ${pendingModifications.size}`);
+  console.log(`📝 Modification enregistrée: ${elem.id}.${cible} = "${value}"`);
+  console.log(`📊 Total modifications en attente: ${pendingModifications.size}`);
   
   const existingTimer = debounceTimers.get(key);
   if (existingTimer) {
@@ -149,6 +149,16 @@ export const saveAllModifications = async () => {
     globalSaveTimer = null;
   }
   
+  // Récupérer les modifications AVANT de supprimer les timers
+  const modifications = getPendingModifications();
+  console.log(`💾 Sauvegarde de ${modifications.length} modification(s) en base de données`);
+  
+  if (modifications.length === 0) {
+    console.log('ℹ️  Aucune modification à sauvegarder');
+    return [];
+  }
+  
+  // Maintenant supprimer tous les timers
   const pendingKeys = Array.from(debounceTimers.keys());
   
   for (const key of pendingKeys) {
@@ -157,16 +167,8 @@ export const saveAllModifications = async () => {
       clearTimeout(timer);
       debounceTimers.delete(key);
       const [elemId, cible, field] = key.split(':');
-      //console.log(`⚡ Forçage sauvegarde: ${elemId}.${cible}.${field}`);
+      console.log(`⚡ Forçage sauvegarde: ${elemId}.${cible}.${field}`);
     }
-  }
-  
-  const modifications = getPendingModifications();
-  //console.log(`💾 Sauvegarde de ${modifications.length} modification(s) en base de données`);
-  
-  if (modifications.length === 0) {
-    //console.log('ℹ️  Aucune modification à sauvegarder');
-    return [];
   }
   
   try {

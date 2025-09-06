@@ -1,6 +1,11 @@
 <script setup lang="ts">
 const userCookie = useCookie('user');
-const user = computed(() => userCookie.value);
+const user = ref(userCookie.value);
+
+// Watcher pour mettre à jour user quand le cookie change
+watch(userCookie, (newValue) => {
+  user.value = newValue;
+}, { immediate: true });
 </script>
 
 <template>

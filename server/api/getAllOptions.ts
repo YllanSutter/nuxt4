@@ -1,6 +1,10 @@
 export default defineEventHandler(async (event) => {
+  console.log('🔍 [getAllOptions] Début de la requête');
+  
   const prisma = event.context.prisma;
   const query = getQuery(event);
+  
+  console.log('📊 [getAllOptions] Query params:', query);
   
   // Récupérer l'utilisateur connecté depuis les cookies
   const userCookie = getCookie(event, 'user');
@@ -147,6 +151,9 @@ export default defineEventHandler(async (event) => {
     );
     
     const finalResult = results.reduce((acc, result) => ({ ...acc, ...result }), {});
+    
+    console.log('✅ [getAllOptions] Requête terminée avec succès');
+    console.log('📈 [getAllOptions] Nombre de modèles retournés:', Object.keys(finalResult).length);
     
     return finalResult;
   } catch (error) {

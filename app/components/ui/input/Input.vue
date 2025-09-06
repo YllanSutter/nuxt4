@@ -77,6 +77,35 @@ const emits = defineEmits<{
 //   emits('update:modelValue', newValue === '' ? 0 : formattedValue);
 // })
 
+// Utiliser un ref pour éviter les problèmes d'hydratation
+const displayValue = ref('');
+
+// Fonction pour normaliser la valeur de manière cohérente
+const normalizeValue = (value: any) => {
+  if (value === null || value === undefined) {
+    return '';
+  }
+  
+  if (props.type === 'number' || props.type === 'decimal') {
+    const num = Number(value);
+    if (Number.isNaN(num) || num === 0) {
+      return '';
+    }
+    return num.toFixed(2);
+  }
+  
+  if (value === 0 || value === '') {
+    return '';
+  }
+  
+  return String(value);
+};
+
+// Watcher pour synchroniser avec modelValue
+watch(() => props.modelValue, (newValue) => {
+  displayValue.value = normalizeValue(newValue);
+}, { immediate: true });
+
 const handleInput = (event: Event) => {
   const target = event.target as HTMLInputElement | HTMLSelectElement;
   let value: string | number = target.value;
@@ -87,6 +116,9 @@ const handleInput = (event: Event) => {
   ) {
     value = Number(target.value);
   }
+  
+  // Mettre à jour displayValue pour la cohérence
+  displayValue.value = normalizeValue(value);
  
   emits('update:modelValue', value === '' ? 0 : value);
 };
@@ -94,11 +126,7 @@ const handleInput = (event: Event) => {
 
 <template>
   <input
-    :value="props.type === 'number' || props.type === 'decimal'
-      ? (modelValue === 0 || modelValue === 0.0 || modelValue === '' ? '' : Number(modelValue).toFixed(2))
-      : props.type === 'text'
-      ? (modelValue === 0 || modelValue === '' ? '' : String(modelValue))
-      : (modelValue === 0 || modelValue === '' ? '' : String(modelValue))"
+    v-model="displayValue"
     @change="handleInput"
     data-slot="input"
     :type="type"

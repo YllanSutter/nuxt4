@@ -153,10 +153,11 @@ const user = computed(() => userCookie.value);
         <td v-if="emplacement === 'footer'"></td>
         <TableCell v-for="(label, index) in labels" :key="index" class="text-right">
             <div v-if="label.key !== 'delete' && label.key !== 'order_in_list' && label.key !== 'tag_id'">
-                <ClientOnly v-if="label.key === 'rating_id'">
+              <ClientOnly>
+                <template v-if="label.key === 'rating_id'">
                   {{ elems[index]?.elems[0] }}
                   <UiTableauSuffix :label=label :emplacement="'footer'"/>
-                </ClientOnly>
+                </template>
                 <template v-else-if="label.key === 'name'">
                   {{ Math.trunc(elems[index]?.elems[0]) }}
                   <UiTableauSuffix :label=label :emplacement="'footer'"/>
@@ -173,6 +174,7 @@ const user = computed(() => userCookie.value);
                   {{ elems[index]?.elems[0] }}
                   <UiTableauSuffix :label=label :emplacement="'footer'"/>
                 </template>
+                </ClientOnly>
             </div>
         </TableCell>
    </TableRow>
@@ -182,18 +184,20 @@ const user = computed(() => userCookie.value);
         <TableCell v-for="(label, index) in labels" :key="index" class="text-right " >
             <div v-if="ratios[index]?.elems[0] !== null" class=" border-t pt-2 -mt-2 border-[#ffffff20]">
                 <span class="text-sm text-muted-foreground">
-                  <template v-if="label.key === 'playtime_hours' && typeof ratios[index]?.elems[0] === 'number'">
-                    {{ ratios[index]?.elems[0] }}€/<UiTableauSuffix :label=label></UiTableauSuffix>
-                  </template>
-                   <template v-else-if="label.key === 'price' && typeof ratios[index]?.elems[0] === 'number'">
-                    {{ ratios[index]?.elems[0] }}<UiTableauSuffix :label=label></UiTableauSuffix>/jeu
-                  </template>
-                  <template v-else-if="typeof ratios[index]?.elems[0] === 'number'">
-                    x{{ ratios[index]?.elems[0] }}<UiTableauSuffix :label=label></UiTableauSuffix>
-                  </template>
-                  <template v-else>
-                    {{ ratios[index]?.elems[0] }}
-                  </template>
+                  <ClientOnly>
+                    <template v-if="label.key === 'playtime_hours' && typeof ratios[index]?.elems[0] === 'number'">
+                      {{ ratios[index]?.elems[0] }}€/<UiTableauSuffix :label=label></UiTableauSuffix>
+                    </template>
+                    <template v-else-if="label.key === 'price' && typeof ratios[index]?.elems[0] === 'number'">
+                      {{ ratios[index]?.elems[0] }}<UiTableauSuffix :label=label></UiTableauSuffix>/jeu
+                    </template>
+                    <template v-else-if="typeof ratios[index]?.elems[0] === 'number'">
+                      x{{ ratios[index]?.elems[0] }}<UiTableauSuffix :label=label></UiTableauSuffix>
+                    </template>
+                    <template v-else>
+                      {{ ratios[index]?.elems[0] }}
+                    </template>
+                  </ClientOnly>
                 </span>
             </div>
         </TableCell>

@@ -37,6 +37,10 @@ export default defineEventHandler(async (event) => {
     user_label_visibility: {
       create: body.user_label_visibility
     }
+  },
+  include: {
+    role: true,
+    user_label_visibility: true
   }
 });
   }

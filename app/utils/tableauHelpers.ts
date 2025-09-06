@@ -41,9 +41,16 @@ export function handleValueUpdate(
       const option = getOptionsForLabel(label.key).find((opt: any) => opt.name === newValue);
       valueToSave = option ? option.id : newValue;
     }
+
+    // Normaliser les nombres pour éviter les strings côté client
+    if (label?.type === 'number') {
+      const n = Number(valueToSave);
+      if (!Number.isNaN(n)) valueToSave = n;
+    }
     
     userGame[label.key] = valueToSave;
-    updateElem(userGame, String(valueToSave), label, 'userGame', updateLocalData);
+    // Ne pas convertir en string: conserver le type pour la BDD et l'état local
+    updateElem(userGame, valueToSave, label, 'userGame', updateLocalData);
   }
 }
 

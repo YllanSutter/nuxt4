@@ -67,6 +67,11 @@ export const useAuth = () => {
         }
       });
 
+      // Mettre à jour le cookie avec les données de l'utilisateur créé
+      if (response) {
+        userCookie.value = response;
+      }
+
       return { success: true, user: response };
     } catch (error: any) {
       throw new Error(error.data?.message || error.message || 'Erreur lors de l\'inscription');

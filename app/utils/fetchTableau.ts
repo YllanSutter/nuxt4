@@ -1,9 +1,7 @@
-export const useTableauData = (models?: string[] | string) => {
+// Cache pour éviter les appels multiples
+const pendingRequests = new Set<string>();
 
-  // if (models) {
-  //   const arr = Array.isArray(models) ? models : [models];
-  //   console.log('Modèles demandés :', arr);
-  // }
+export const useTableauData = (models?: string[] | string) => {
   const requestedModels = models ? 
     (Array.isArray(models) ? models : [models]) : 
     null;
@@ -11,6 +9,14 @@ export const useTableauData = (models?: string[] | string) => {
   const cacheKey = requestedModels ? 
     `allOptions-${requestedModels.sort().join(',')}` : 
     'allOptions';
+  
+  // Vérifier si une requête est déjà en cours
+  if (pendingRequests.has(cacheKey)) {
+    console.log(`⏳ [useTableauData] Requête déjà en cours pour: ${cacheKey}`);
+  } else {
+    console.log(`🚀 [useTableauData] Nouvelle requête pour: ${cacheKey}`);
+    pendingRequests.add(cacheKey);
+  }
   
   const url = requestedModels ? 
     `/api/getAllOptions?${requestedModels.map(m => `models=${m}`).join('&')}` : 
@@ -25,9 +31,22 @@ export const useTableauData = (models?: string[] | string) => {
     refresh,
   } = useLazyFetch<any>(url, {
     key: cacheKey,
-    server: true,
+    server: false, // Désactiver le SSR pour éviter les problèmes d'hydratation
     default: () => ({}),
     dedupe: 'defer',
+    timeout: 10000, // 10 secondes de timeout
+    onRequestError({ error }) {
+      console.error('Erreur de requête getAllOptions:', error);
+      pendingRequests.delete(cacheKey);
+    },
+    onResponseError({ response }) {
+      console.error('Erreur de réponse getAllOptions:', response.status, response.statusText);
+      pendingRequests.delete(cacheKey);
+    },
+    onResponse() {
+      // Retirer de la liste des requêtes en cours quand terminé
+      pendingRequests.delete(cacheKey);
+    }
   })
 
   const roles = computed(() => allOptions.value?.role || [])
@@ -296,7 +315,7 @@ export const useTableauData = (models?: string[] | string) => {
     getOptionsForLabel,
     getLabelsByEmplacement,
     updateLocalData
-  }
+  };
 }
 
 // Supprimer l'ancien mainLabels qui était en dehors

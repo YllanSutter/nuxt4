@@ -15,9 +15,13 @@ export default defineEventHandler(async (event) => {
   const prisma = new PrismaClient();
 
   try {
-    // Chercher l'utilisateur par email
+    // Chercher l'utilisateur par email avec les relations nécessaires
     const user = await prisma.user.findUnique({
       where: { email },
+      include: {
+        role: true,
+        user_label_visibility: true
+      }
     });
 
     if (!user || !user.password) {

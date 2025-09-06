@@ -10,6 +10,9 @@ const password = ref('');
 // Utiliser le composable d'authentification
 const { user, logout, updateProfile, fetchUserData } = useAuth();
 
+// Récupérer les données de visibilité des labels
+const { userLabelVisibility } = useTableauData(['userLabelVisibility']);
+
 // Charger les données utilisateur
 const loadUser = async () => {
   try {
@@ -79,6 +82,13 @@ onMounted(() => {
     loadUser();
   }
 });
+
+// Watcher pour mettre à jour les données quand l'utilisateur change (sans immediate)
+watch(user, (newUser, oldUser) => {
+  if (newUser && newUser !== oldUser) {
+    loadUser();
+  }
+});
 </script>
 
 <template>
@@ -108,6 +118,10 @@ onMounted(() => {
               <label class="col-span-2">Nouveau mot de passe
                 <input type="password" v-model="password" autocomplete="new-password" placeholder="Laisser vide pour ne pas changer" class="w-full border p-2 border-[#ffffff20] rounded-lg" />
               </label>
+              <div class="col-span-2 text-sm text-muted-foreground">
+                <p>Visibilité des labels : {{ userLabelVisibility?.length || 0 }} éléments</p>
+                <p v-if="user?.user_label_visibility?.length">Dans le cookie : {{ user.user_label_visibility.length }} éléments</p>
+              </div>
               <div class="button primary px-4 py-2 border-[20px] border-[#ffffff20] bg-greenSpe hover:bg-green-500   transition-all duration-200 cursor-pointer lg:absolute relative lg:right-10 lg:m-0 mx-auto -mb-[100px]  lg:top-1/2 lg:-translate-y-1/2 w-[150Px] h-[150Px] flex items-center justify-center rounded-full">
                   <input
                     type="submit"
@@ -128,11 +142,12 @@ onMounted(() => {
       :disabled="loading"
         class=""
       >
-      </button>
       <Icon
-        name="solar:login-line-duotone"
-        class="scale-[1.5] left-3 mr-2 relative transition-all duration-400 hover:scale-100 hover:left-0"
-      />
+      name="solar:login-line-duotone"
+      class="scale-[1.5] left-3 mr-2 relative transition-all duration-400"
+    />
+      </button>
+    
     </div>
 </template>
 
