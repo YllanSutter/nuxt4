@@ -141,7 +141,7 @@ const handleInput = (event: Event) => {
       '[&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [appearance:textfield] bg-transparent focus:outline-none focus:ring-0 focus:border-none w-full py-2',
       props.class,
       label,
-      label=='name' ? '  ' : ' text-right test'
+      label=='name' ? '  ' : ' text-right'
     )"
   >
 </template>
