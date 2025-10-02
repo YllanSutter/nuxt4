@@ -27,30 +27,57 @@ export default defineEventHandler(async (event) => {
       return { success: true, message: 'Aucune modification à traiter' };
     }
 
-    // Grouper par table.field.value pour optimiser
-    const modsByFieldAndValue = new Map<string, string[]>();
-    
-    mods.forEach(mod => {
-      const groupKey = `${mod.label.table}|${mod.label.field}|${mod.value}`;
-      if (!modsByFieldAndValue.has(groupKey)) {
-        modsByFieldAndValue.set(groupKey, []);
-      }
-      modsByFieldAndValue.get(groupKey)!.push(mod.elemId);
-    });
+    // Nouveau: regrouper par element pour mettre à jour plusieurs champs d'un coup
+    const modsByElem = new Map<string, ModificationEntry[]>();
+    for (const m of mods) {
+      if (!modsByElem.has(m.elemId)) modsByElem.set(m.elemId, []);
+      modsByElem.get(m.elemId)!.push(m);
+    }
 
     const results: any[] = [];
-    
-    // Exécuter updateMany pour chaque groupe
-    for (const [groupKey, elemIds] of modsByFieldAndValue) {
-      const [tableName, fieldName, value] = groupKey.split('|');
-      const mod = mods.find(m => m.label.table === tableName && m.label.field === fieldName);
-      
-      if (!mod) continue;
-      
-      console.log(`🔍 Debug - Table: ${tableName}, Field: ${fieldName}, Value: "${value}", Type: "${mod.label.type}"`);
-      
-      const updateResult = await updateTable(tableName, fieldName, value, elemIds, mod.label.type);
-      results.push(updateResult);
+
+    for (const [elemId, elemMods] of modsByElem) {
+      // Regrouper par table (en pratique homogène)
+      const tables = Array.from(new Set(elemMods.map(m => m.label.table)));
+      for (const tableName of tables) {
+        const modsForTable = elemMods.filter(m => m.label.table === tableName);
+        const data: Record<string, any> = {};
+
+        for (const m of modsForTable) {
+          const converted = convertValueForType(m.label.field, m.value, m.label.type);
+          data[m.label.field] = converted;
+        }
+
+        const model = getModelForTable(tableName);
+        if (!model) {
+          console.warn(`⚠️  Table non supportée: ${tableName}`);
+          continue;
+        }
+
+        if (Object.keys(data).length === 0) {
+          console.warn(`⚠️  Aucun champ à mettre à jour pour ${tableName} id=${elemId}`);
+          continue;
+        }
+
+        console.log(`🛠️ Update unique - Table: ${tableName}, id: ${elemId}, fields: ${Object.keys(data).join(', ')}`);
+        try {
+          const result = await model.update({
+            where: { id: elemId },
+            data
+          });
+          results.push({ table: tableName, id: elemId, fields: Object.keys(data), ok: true });
+        } catch (e: any) {
+          console.error(`❌ Update failed (update) ${tableName} id=${elemId}:`, e?.message || e);
+          // Fallback: updateMany pour éviter l'exception P2025 si l'ID est introuvable
+          try {
+            const fallback = await model.updateMany({ where: { id: elemId }, data });
+            results.push({ table: tableName, id: elemId, fields: Object.keys(data), ok: fallback.count > 0, count: fallback.count, fallback: true });
+          } catch (e2: any) {
+            console.error(`💥 Update failed (updateMany) ${tableName} id=${elemId}:`, e2?.message || e2);
+            results.push({ table: tableName, id: elemId, fields: Object.keys(data), ok: false, error: e2?.message || String(e2) });
+          }
+        }
+      }
     }
 
     console.log(`✅ Modifications terminées:`, results);
@@ -72,40 +99,7 @@ export default defineEventHandler(async (event) => {
 });
 
 // Fonction universelle pour mettre à jour n'importe quelle table
-async function updateTable(
-  tableName: string, 
-  fieldName: string, 
-  value: string, 
-  elemIds: string[], 
-  fieldType: string = 'string'
-) {
-  // Conversion de valeur selon le type
-  let convertedValue: any = value;
-  // Pour rating_id, toujours stocker l'id (string), pas la valeur numérique
-  if (fieldName === 'rating_id') {
-    convertedValue = value;
-  } else {
-    switch (fieldType) {
-      case 'number':
-        convertedValue = parseFloat(value) || 0;
-        break;
-      case 'decimal':
-        convertedValue = parseFloat(value) || 0;
-        break;
-      case 'boolean':
-        convertedValue = value === 'true' || value === '1';
-        break;
-      case 'date':
-        convertedValue = value ? new Date(value) : null;
-        break;
-      default:
-        convertedValue = value;
-    }
-  }
-  console.log(`🔧 Conversion - Output: "${convertedValue}" (${typeof convertedValue})`);
-
-  const updateData = { [fieldName]: convertedValue };
-  
+function getModelForTable(tableName: string) {
   const tableModels: Record<string, any> = {
     'UserGame': prisma.userGame,
     'Bundle': prisma.bundle,
@@ -119,23 +113,21 @@ async function updateTable(
     'Month': prisma.month,
     'Year': prisma.year,
   };
+  return tableModels[tableName];
+}
 
-  const model = tableModels[tableName];
-  if (!model) {
-    throw new Error(`Table non supportée: ${tableName}`);
+function convertValueForType(fieldName: string, value: string, fieldType: string = 'string') {
+  if (fieldName === 'rating_id') return value;
+  switch (fieldType) {
+    case 'number':
+      return parseFloat(value) || 0;
+    case 'decimal':
+      return parseFloat(value) || 0;
+    case 'boolean':
+      return value === 'true' || value === '1';
+    case 'date':
+      return value ? new Date(value) : null;
+    default:
+      return value;
   }
-
-  const result = await model.updateMany({
-    where: { id: { in: elemIds } },
-    data: updateData
-  });
-
-  console.log(`📝 ${tableName}.${fieldName} = "${convertedValue}" | ${result.count} enregistrements`);
-  
-  return { 
-    table: tableName,
-    field: fieldName, 
-    value: convertedValue,
-    count: result.count 
-  };
 }

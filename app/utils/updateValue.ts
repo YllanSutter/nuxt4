@@ -14,8 +14,8 @@ interface ModificationEntry {
 const pendingModifications = new Map<string, ModificationEntry>();
 const debounceTimers = new Map<string, NodeJS.Timeout>();
 let globalSaveTimer: NodeJS.Timeout | null = null;
-const DEBOUNCE_DELAY = 1000;
-const GLOBAL_SAVE_DELAY = 2000;
+const DEBOUNCE_DELAY = 600;
+const GLOBAL_SAVE_DELAY = 900;
 
 export const updateValue = async (
   elem: any, 
@@ -197,6 +197,43 @@ export const saveAllModifications = async () => {
   }
 }
 
+// Envoi synchronisé juste avant fermeture/refresh (navigator.sendBeacon)
+export const saveAllModificationsBeacon = () => {
+  const modifications = getPendingModifications();
+  if (modifications.length === 0) return;
+
+  const modsByTable = new Map<string, ModificationEntry[]>();
+  for (const mod of modifications) {
+    const tableName = mod.label.table;
+    if (!modsByTable.has(tableName)) modsByTable.set(tableName, []);
+    modsByTable.get(tableName)!.push(mod);
+  }
+
+  for (const [table, mods] of modsByTable) {
+    const payload = {
+      table,
+      mods: mods.map(m => ({
+        elemId: m.elemId,
+        value: m.value,
+        label: m.label,
+        cible: m.cible,
+        timestamp: m.timestamp
+      }))
+    };
+
+    try {
+      const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+      // Ignorer le résultat; sendBeacon est fire-and-forget
+      navigator.sendBeacon('/api/actions/updateElem', blob);
+    } catch (e) {
+      // Fallback silencieux, rien d'autre à faire ici
+    }
+  }
+
+  // On purge localement pour éviter doublons au prochain chargement
+  clearAllModifications();
+}
+
 export const getPendingCount = (): number => {
   return pendingModifications.size;
 }
@@ -207,21 +244,29 @@ export const hasPendingModifications = (): boolean => {
 
 export const updateTableBatch = async(table: any, mods: any) => {
   try {
+    const payload = { 
+      table, 
+      mods: mods.map((mod: any) => ({
+        elemId: mod.elemId,
+        value: mod.value,
+        label: mod.label,
+        cible: mod.cible,
+        timestamp: mod.timestamp
+      }))
+    };
+    console.log('🚚 Envoi batch modifications:', {
+      table,
+      count: payload.mods.length,
+      fields: Array.from(new Set(payload.mods.map((m: any) => m.label?.field))).join(', '),
+      elemIds: Array.from(new Set(payload.mods.map((m: any) => m.elemId))).slice(0, 5)
+    });
+
     const response = await fetch('/api/actions/updateElem', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 
-        table, 
-        mods: mods.map((mod: any) => ({
-          elemId: mod.elemId,
-          value: mod.value,
-          label: mod.label,
-          cible: mod.cible,
-          timestamp: mod.timestamp
-        }))
-      })
+      body: JSON.stringify(payload)
     });
     
     if (!response.ok) {
@@ -229,7 +274,14 @@ export const updateTableBatch = async(table: any, mods: any) => {
     }
     
     const result = await response.json();
-    //console.log('✅ Réponse API:', result);
+    console.log('✅ Réponse API (batch):', {
+      table,
+      ok: response.ok,
+      status: response.status,
+      modificationsCount: result?.modificationsCount,
+      batchCount: result?.batchCount,
+      results: result?.results
+    });
     return result;
   } catch (error) {
     console.error('❌ Erreur lors de la mise à jour:', error);

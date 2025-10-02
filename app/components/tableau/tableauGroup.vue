@@ -1,7 +1,7 @@
 
 <script setup lang="ts">
 import { getUserGamesForBundle } from '@/utils/tableauHelpers'
-import { updateElem, hasPendingModifications, saveAllModifications } from '@/utils/updateValue'
+import { updateElem, hasPendingModifications, saveAllModifications, saveAllModificationsBeacon } from '@/utils/updateValue'
 
 
 
@@ -103,7 +103,9 @@ onBeforeRouteLeave(async (to, from) => {
 onMounted(() => {
   const handleBeforeUnload = async (event: BeforeUnloadEvent) => {
     if (hasPendingModifications()) {
-      await saveAllModifications();
+      try {
+        saveAllModificationsBeacon();
+      } catch {}
     }
   };
 
