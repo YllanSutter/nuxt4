@@ -17,9 +17,11 @@
     "import:pg": "node save/import-backup.cjs",
     "import:prisma": "node save/import-backup-prisma.cjs",
     "import:json-to-sql": "node save/json-to-sql.cjs",
+    "import:json-to-sql:local": "node save/json-to-sql-local.cjs",
     "import:execute-sql": "node save/execute-sql.cjs",
     "import:direct": "node save/import-json-direct.cjs",
     "import:simple": "node save/import-simple.cjs",
+    "db:build:create-tables": "node save/build-create-tables.cjs",
     "setup:label-emplacements": "node save/setup-label-emplacements.cjs"
   },
   "dependencies": {

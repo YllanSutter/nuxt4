@@ -2,9 +2,10 @@ const { Pool } = require('pg');
 const fs = require('fs');
 const path = require('path');
 
-// Configuration de la base de données
+// Configuration de la base de données (préfère DIRECT_URL si disponible)
+const connectionString = process.env.DIRECT_URL || process.env.DATABASE_URL;
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString,
   ssl: {
     rejectUnauthorized: false
   }
@@ -96,9 +97,9 @@ async function main() {
     console.log('🚀 Exécution du script SQL d\'importation...');
     
     // Vérifier la configuration
-    if (!process.env.DATABASE_URL) {
-      console.error('❌ Variable DATABASE_URL non configurée');
-      console.log('💡 Configurez votre fichier .env avec votre chaîne de connexion Neon.tech');
+    if (!connectionString) {
+      console.error('❌ Ni DIRECT_URL ni DATABASE_URL ne sont configurées');
+      console.log('💡 Configurez votre fichier .env avec vos URLs Supabase');
       process.exit(1);
     }
     
@@ -112,7 +113,8 @@ async function main() {
     }
     
     console.log(`📁 Fichier SQL: ${sqlFilePath}`);
-    console.log(`🔗 Base de données: ${process.env.DATABASE_URL.split('@')[1]?.split('/')[0] || 'Neon.tech'}`);
+    const dbg = (connectionString.split('@')[1] || '').split('/')[0] || 'database';
+    console.log(`🔗 Base de données: ${dbg}`);
     
     await executeSqlFile(sqlFilePath);
     

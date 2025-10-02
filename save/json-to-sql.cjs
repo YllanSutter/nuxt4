@@ -72,30 +72,33 @@ function convertJsonToSql(jsonFilePath, outputPath) {
     console.log('📖 Lecture du fichier JSON...');
     const data = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
     
+    const userRecord = Array.isArray(data.user) ? data.user[0] : data.user;
     let sql = `-- Script SQL généré automatiquement depuis ${path.basename(jsonFilePath)}
 -- Date de génération: ${new Date().toISOString()}
--- Utilisateur: ${data.user.name} (${data.user.email})
+-- Utilisateur: ${userRecord?.name ?? 'unknown'} (${userRecord?.email ?? 'unknown'})
 
 SET client_encoding = 'UTF8';
 
 `;
 
     // 1. Insérer le rôle (INSERT simple car données de référence)
-    if (data.user.role) {
-      sql += generateInsert('Role', [data.user.role]);
+    if (userRecord && userRecord.role) {
+      sql += generateInsert('Role', [userRecord.role]);
     }
 
     // 2. Insérer l'utilisateur (UPSERT pour mettre à jour si existe)
-    const userData = {
-      id: data.user.id,
-      name: data.user.name,
-      email: data.user.email,
-      password: data.user.password,
-      budget: parseFloat(data.user.budget),
-      created_at: data.user.created_at,
-      role_id: data.user.role_id
-    };
-    sql += generateUpsert('User', [userData]);
+    if (userRecord) {
+      const userData = {
+        id: userRecord.id,
+        name: userRecord.name,
+        email: userRecord.email,
+        password: userRecord.password,
+        budget: userRecord.budget !== undefined && userRecord.budget !== null ? parseFloat(userRecord.budget) : null,
+        created_at: userRecord.created_at,
+        role_id: userRecord.role_id
+      };
+      sql += generateUpsert('User', [userData]);
+    }
 
     // 3. Insérer les labels (UPSERT pour mettre à jour si modifiés)
     if (data.labels && data.labels.length > 0) {
@@ -113,8 +116,11 @@ SET client_encoding = 'UTF8';
     }
 
     // 4. Insérer les visibilités de labels (UPSERT pour mettre à jour les préférences)
-    if (data.user_label_visibility && data.user_label_visibility.length > 0) {
-      const visibilityData = data.user_label_visibility.map(visibility => ({
+    const userLabelVisibility = Array.isArray(data.user_label_visibility)
+      ? data.user_label_visibility
+      : (userRecord && Array.isArray(userRecord.user_label_visibility) ? userRecord.user_label_visibility : []);
+    if (userLabelVisibility && userLabelVisibility.length > 0) {
+      const visibilityData = userLabelVisibility.map(visibility => ({
         id: visibility.id,
         user_id: visibility.user_id,
         label_id: visibility.label_id,
@@ -150,12 +156,15 @@ SET client_encoding = 'UTF8';
 
     // 10. Insérer les emplacements (si présents)
     if (data.emplacements && data.emplacements.length > 0) {
-      sql += generateInsert('Emplacement', data.emplacements);
+      const emplacementsData = data.emplacements.map(e => ({ id: e.id, name: e.name }));
+      sql += generateInsert('Emplacement', emplacementsData);
     }
 
     // 11. Insérer les ratings (données de référence)
+    let ratingsCount = 0;
     if (data.ratings && data.ratings.length > 0) {
       sql += generateInsert('Rating', data.ratings);
+      ratingsCount = data.ratings.length;
     } else {
       // Fallback: collecter depuis les jeux si pas dans l'export
       const ratingsSet = new Set();
@@ -169,6 +178,7 @@ SET client_encoding = 'UTF8';
         const ratings = Array.from(ratingsSet).map(ratingStr => JSON.parse(ratingStr));
         sql += generateInsert('Rating', ratings);
       }
+      ratingsCount = ratingsSet.size;
     }
 
     // 11b. Insérer tous les utilisateurs et rôles (si disponibles)
@@ -283,7 +293,7 @@ SET client_encoding = 'UTF8';
 -- Tags: ${data.tags?.length || 0}
 -- Plateformes: ${data.platforms?.length || 0}
 -- Labels: ${data.labels?.length || 0}
--- Ratings: ${ratingsSet.size}
+-- Ratings: ${ratingsCount}
 -- Jeux de base: ${baseGamesSet.size}
 -- Relations bundle-jeux: ${allBundleGames.length}
 
@@ -301,7 +311,7 @@ SET client_encoding = 'UTF8';
     console.log(`   - Tags: ${data.tags?.length || 0}`);
     console.log(`   - Plateformes: ${data.platforms?.length || 0}`);
     console.log(`   - Labels: ${data.labels?.length || 0}`);
-    console.log(`   - Ratings: ${ratingsSet.size}`);
+    console.log(`   - Ratings: ${ratingsCount}`);
     console.log(`   - Jeux de base: ${baseGamesSet.size}`);
     console.log(`   - Relations bundle-jeux: ${allBundleGames.length}`);
     

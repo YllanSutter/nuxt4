@@ -1,0 +1,2469 @@
+{
+  "user": [
+    {
+      "id": "user-2283",
+      "name": "Yllan",
+      "email": "sutter.yllan@laposte.net",
+      "password": "$2b$10$QiCUIM/HVytl1DTEw40Aluih1OFmxq8lKMQ/ZegeoN7qM7zI/igLO",
+      "budget": "50",
+      "created_at": "2025-08-02T11:30:30.213Z",
+      "role_id": "admin-role-id",
+      "user_label_visibility": [
+        {
+          "id": "14a473a5-4f64-40f6-b064-2a193e51ae23",
+          "user_id": "user-2283",
+          "label_id": "label-name",
+          "visible": true,
+          "label": {
+            "id": "label-name",
+            "name": "Name",
+            "key": "name",
+            "type": "text",
+            "image": "mingcute:text-line",
+            "default_visible": true,
+            "position": 2,
+            "color": "#3498db"
+          }
+        },
+        {
+          "id": "dd22bc37-b6f4-4112-ae1c-3b88d31e57b0",
+          "user_id": "user-2283",
+          "label_id": "label-year-filter",
+          "visible": true,
+          "label": {
+            "id": "label-year-filter",
+            "name": "Year",
+            "key": "year_id",
+            "type": "select",
+            "image": "mingcute:calendar-2-line",
+            "default_visible": true,
+            "position": 2,
+            "color": "#2ecc71"
+          }
+        },
+        {
+          "id": "0ef77503-06ce-4abf-bf02-4de5c78345e3",
+          "user_id": "user-2283",
+          "label_id": "label-price",
+          "visible": true,
+          "label": {
+            "id": "label-price",
+            "name": "Price",
+            "key": "price",
+            "type": "number",
+            "image": "mingcute:coin-line",
+            "default_visible": true,
+            "position": 3,
+            "color": "#f39c12"
+          }
+        },
+        {
+          "id": "56cadda1-ec19-42c6-bd88-9f73867461cb",
+          "user_id": "user-2283",
+          "label_id": "label-black-market-price",
+          "visible": true,
+          "label": {
+            "id": "label-black-market-price",
+            "name": "Black market",
+            "key": "black_market_price",
+            "type": "number",
+            "image": "mingcute:coin-2-line",
+            "default_visible": true,
+            "position": 4,
+            "color": "#95a5a6"
+          }
+        },
+        {
+          "id": "bdae7599-5ca6-4225-b172-a62e36e4ee6f",
+          "user_id": "user-2283",
+          "label_id": "label-initial-price",
+          "visible": true,
+          "label": {
+            "id": "label-initial-price",
+            "name": "Initial price",
+            "key": "initial_price",
+            "type": "number",
+            "image": "solar:tag-price-outline",
+            "default_visible": true,
+            "position": 6,
+            "color": "#9b59b6"
+          }
+        },
+        {
+          "id": "15846496-9e19-4d14-8959-8b8727e46461",
+          "user_id": "user-2283",
+          "label_id": "label-playtime",
+          "visible": true,
+          "label": {
+            "id": "label-playtime",
+            "name": "Playtime",
+            "key": "playtime_hours",
+            "type": "number",
+            "image": "mingcute:time-line",
+            "default_visible": true,
+            "position": 7,
+            "color": "#1abc9c"
+          }
+        },
+        {
+          "id": "b6b8db0f-753b-4744-9c39-ba7b5d491f3b",
+          "user_id": "user-2283",
+          "label_id": "label-rating",
+          "visible": true,
+          "label": {
+            "id": "label-rating",
+            "name": "Rating",
+            "key": "rating_id",
+            "type": "select",
+            "image": "mingcute:star-line",
+            "default_visible": true,
+            "position": 8,
+            "color": "#e67e22"
+          }
+        },
+        {
+          "id": "b9dcd13d-2e79-4392-aa87-f53e02cde8c6",
+          "user_id": "user-2283",
+          "label_id": "label-search",
+          "visible": true,
+          "label": {
+            "id": "label-search",
+            "name": "Search",
+            "key": "search",
+            "type": "text",
+            "image": "mingcute:search-line",
+            "default_visible": true,
+            "position": 15,
+            "color": "#6c757d"
+          }
+        },
+        {
+          "id": "9231ed4f-361a-47b9-a50e-1f6da375e93f",
+          "user_id": "user-2283",
+          "label_id": "label-image",
+          "visible": true,
+          "label": {
+            "id": "label-image",
+            "name": "Image",
+            "key": "image",
+            "type": "text",
+            "image": "mingcute:pic-line",
+            "default_visible": true,
+            "position": 16,
+            "color": "#17a2b8"
+          }
+        },
+        {
+          "id": "d7b3cee6-0b44-4345-95f6-70c9f9f4eee4",
+          "user_id": "user-2283",
+          "label_id": "label-stats",
+          "visible": false,
+          "label": {
+            "id": "label-stats",
+            "name": "Stats",
+            "key": "stats",
+            "type": "text",
+            "image": "mingcute:chart-pie-2-line",
+            "default_visible": true,
+            "position": 17,
+            "color": "#28a745"
+          }
+        },
+        {
+          "id": "50667412-f3e0-4801-b1d0-1eef153d7602",
+          "user_id": "user-2283",
+          "label_id": "label-delete",
+          "visible": true,
+          "label": {
+            "id": "label-delete",
+            "name": "Delete",
+            "key": "delete",
+            "type": "boolean",
+            "image": "mingcute:close-circle-fill",
+            "default_visible": true,
+            "position": 10,
+            "color": "#f00"
+          }
+        },
+        {
+          "id": "02341206-dc1d-40b9-ab29-68c22352bc9e",
+          "user_id": "user-2283",
+          "label_id": "label-link",
+          "visible": true,
+          "label": {
+            "id": "label-link",
+            "name": "Link",
+            "key": "link",
+            "type": "text",
+            "image": "mingcute:link-2-line",
+            "default_visible": true,
+            "position": 19,
+            "color": "#fff"
+          }
+        },
+        {
+          "id": "5998d6fc-a2ad-45ce-b396-4c3e17f36332",
+          "user_id": "user-2283",
+          "label_id": "label-month-filter",
+          "visible": true,
+          "label": {
+            "id": "label-month-filter",
+            "name": "Month",
+            "key": "month_id",
+            "type": "select",
+            "image": "mingcute:calendar-line",
+            "default_visible": true,
+            "position": 1,
+            "color": "#3498db"
+          }
+        },
+        {
+          "id": "176d18cf-63d2-4dc7-9720-21b148dbef55",
+          "user_id": "user-2283",
+          "label_id": "label-tag",
+          "visible": true,
+          "label": {
+            "id": "label-tag",
+            "name": "Tag",
+            "key": "tag_id",
+            "type": "select",
+            "image": "mingcute:tag-line",
+            "default_visible": true,
+            "position": 1,
+            "color": "#e74c3c"
+          }
+        },
+        {
+          "id": "f0c022ef-145a-4641-90c8-1502740652d5",
+          "user_id": "user-2283",
+          "label_id": "label-platform-filter",
+          "visible": true,
+          "label": {
+            "id": "label-platform-filter",
+            "name": "Platform",
+            "key": "platform_id",
+            "type": "select",
+            "image": "mingcute:device-line",
+            "default_visible": true,
+            "position": 3,
+            "color": "#e74c3c"
+          }
+        },
+        {
+          "id": "df8d1a40-06be-47be-a9a0-c0168f4a1567",
+          "user_id": "user-2283",
+          "label_id": "label-ratio",
+          "visible": true,
+          "label": {
+            "id": "label-ratio",
+            "name": "Ratio",
+            "key": "ratio",
+            "type": "text",
+            "image": "mingcute:chart-vertical-line",
+            "default_visible": true,
+            "position": 18,
+            "color": "#fd7e14"
+          }
+        },
+        {
+          "id": "1b7cafbb-8355-47e9-b8e2-41c6ceb3d595",
+          "user_id": "user-2283",
+          "label_id": "label-order",
+          "visible": false,
+          "label": {
+            "id": "label-order",
+            "name": "Order",
+            "key": "order_in_list",
+            "type": "number",
+            "image": "solar:sort-from-bottom-to-top-bold",
+            "default_visible": false,
+            "position": 0,
+            "color": "#34495e"
+          }
+        },
+        {
+          "id": "1f65ebf8-607a-4030-bc25-fe910727d2e0",
+          "user_id": "user-2283",
+          "label_id": "label-sale-price",
+          "visible": true,
+          "label": {
+            "id": "label-sale-price",
+            "name": "Sale price",
+            "key": "sale_price",
+            "type": "number",
+            "image": "solar:sale-outline",
+            "default_visible": true,
+            "position": 5,
+            "color": "#2ecc71"
+          }
+        },
+        {
+          "id": "44cc6801-fb28-4d6d-bc76-b30ffada887f",
+          "user_id": "user-2283",
+          "label_id": "label-bundle-filter",
+          "visible": true,
+          "label": {
+            "id": "label-bundle-filter",
+            "name": "Bundle",
+            "key": "bundle_id",
+            "type": "select",
+            "image": "mingcute:package-line",
+            "default_visible": true,
+            "position": 4,
+            "color": "#f39c12"
+          }
+        }
+      ],
+      "role": {
+        "id": "admin-role-id",
+        "name": "admin",
+        "description": "Administrator role"
+      }
+    }
+  ],
+  "userGames": [
+    {
+      "id": "7cd0405b-2707-41ff-96db-7ae10e76a685",
+      "user_id": "user-2283",
+      "base_game_id": "1d77ff9e-8add-4988-8b27-c5dcb882dd8a",
+      "name": "WWE 2K25",
+      "price": "1.03",
+      "black_market_price": "12.34",
+      "sale_price": "29.99",
+      "initial_price": "59.99",
+      "playtime_hours": "0",
+      "rating": "0",
+      "rating_id": "rating-0",
+      "tag_id": "tag-3",
+      "order_in_list": 0,
+      "created_at": "2025-09-04T05:52:00.948Z",
+      "updated_at": "2025-09-05T06:40:56.845Z",
+      "base_game": {
+        "id": "1d77ff9e-8add-4988-8b27-c5dcb882dd8a",
+        "name": "Humble choice septembre 2025"
+      },
+      "rating_ref": {
+        "id": "rating-0",
+        "name": "0",
+        "value": 0,
+        "image": "mingcute:star-line",
+        "color": "#f39c12"
+      },
+      "tag": {
+        "id": "tag-3",
+        "name": "traded",
+        "image": "stash:arrows-switch-solid",
+        "color": "#95a5a6"
+      },
+      "bundle_games": [
+        {
+          "id": "c466a182-44e7-4825-a5cb-c07c35a9001e",
+          "bundle_id": "e170e652-26aa-4568-8717-9ff31c0469a5",
+          "user_game_id": "7cd0405b-2707-41ff-96db-7ae10e76a685",
+          "order_in_bundle": 7,
+          "bundle": {
+            "id": "e170e652-26aa-4568-8717-9ff31c0469a5",
+            "user_id": "user-2283",
+            "name": "Humble choice septembre 2025",
+            "price": "8.24",
+            "link": "https://www.humblebundle.com/membership/home",
+            "image": "",
+            "platform_id": "platform-5",
+            "state_id": "public-state-id",
+            "month_id": "month-9",
+            "year_id": "year-3",
+            "is_public": true,
+            "created_at": "2025-09-04T05:51:59.211Z",
+            "updated_at": "2025-09-04T05:51:59.211Z"
+          }
+        }
+      ],
+      "price_history": [],
+      "game_stats": []
+  }],
+  "bundles": [
+    {
+      "id": "3ead264f-331f-4d57-a782-e4342b1f5728",
+      "user_id": "user-2283",
+      "name": "One special day",
+      "price": "12",
+      "link": "https://www.greenmangamingbundles.com/fr-fr/bundles/one-special-day-2025/",
+      "image": "https://media.greenmangamingbundles.com/media/images/carousel_one-special-day-v3.original.jpg",
+      "platform_id": "platform-2",
+      "state_id": "public-state-id",
+      "month_id": "month-10",
+      "year_id": "year-3",
+      "is_public": true,
+      "created_at": "2025-10-02T08:16:16.835Z",
+      "updated_at": "2025-10-02T08:16:16.835Z",
+      "platform": {
+        "id": "platform-2",
+        "name": "green man Gaming",
+        "image": "streamline-sharp:alien-solid",
+        "color": "#76b900"
+      },
+      "state": {
+        "id": "public-state-id",
+        "name": "public",
+        "description": "Bundle public"
+      },
+      "month": {
+        "id": "month-10",
+        "name": "octobre"
+      },
+      "year": {
+        "id": "year-3",
+        "name": "2025"
+      },
+      "bundle_games": [
+        {
+          "id": "34d0ec61-d49c-4a76-a77e-9761cb6e4ad4",
+          "bundle_id": "3ead264f-331f-4d57-a782-e4342b1f5728",
+          "user_game_id": "d0a30fe4-279a-4d46-9d46-f1d9aa41dd5a",
+          "order_in_bundle": 1,
+          "user_game": {
+            "id": "d0a30fe4-279a-4d46-9d46-f1d9aa41dd5a",
+            "user_id": "user-2283",
+            "base_game_id": "0de125ab-0e6a-47b1-b885-82bd1645ef92",
+            "name": "Battle Shapers",
+            "price": "1.5",
+            "black_market_price": "0",
+            "sale_price": "0",
+            "initial_price": "24.5",
+            "playtime_hours": "0",
+            "rating": "0",
+            "rating_id": "rating-0",
+            "tag_id": "tag-5",
+            "order_in_list": 0,
+            "created_at": "2025-10-02T08:16:16.530Z",
+            "updated_at": "2025-10-02T08:19:05.519Z",
+            "base_game": {
+              "id": "0de125ab-0e6a-47b1-b885-82bd1645ef92",
+              "name": "One special day"
+            },
+            "tag": {
+              "id": "tag-5",
+              "name": "keep",
+              "image": "fluent:star-edit-20-filled",
+              "color": "#2ecc71"
+            }
+          }
+        }]
+  }],
+  "tags": [
+    {
+      "id": "tag-1",
+      "name": "base",
+      "image": "mingcute:tag-2-fill",
+      "color": "#34495e"
+    },
+    {
+      "id": "tag-6",
+      "name": "gived",
+      "image": "entypo:hand",
+      "color": "#9b59b6"
+    },
+    {
+      "id": "tag-5",
+      "name": "keep",
+      "image": "fluent:star-edit-20-filled",
+      "color": "#2ecc71"
+    },
+    {
+      "id": "tag-4",
+      "name": "platine",
+      "image": "solar:stars-bold-duotone",
+      "color": "#f39c12"
+    },
+    {
+      "id": "tag-2",
+      "name": "trade",
+      "image": "lucide:shuffle",
+      "color": "#e74c3c"
+    },
+    {
+      "id": "tag-3",
+      "name": "traded",
+      "image": "stash:arrows-switch-solid",
+      "color": "#95a5a6"
+    },
+    {
+      "id": "tag-7",
+      "name": "tradedWith",
+      "image": "stash:arrows-switch-solid",
+      "color": "#9b59b6"
+    }
+  ],
+  "platforms": [
+    {
+      "id": "platform-6",
+      "name": "Autres",
+      "image": "bxs:game",
+      "color": "#ffcc00"
+    },
+    {
+      "id": "platform-3",
+      "name": "Fanatical",
+      "image": "simple-icons:freecad",
+      "color": "#ff6b35"
+    },
+    {
+      "id": "platform-1",
+      "name": "Gamesplanet",
+      "image": "simple-icons:planetscale",
+      "color": "#00a8ff"
+    },
+    {
+      "id": "platform-5",
+      "name": "Humble",
+      "image": "simple-icons:humblebundle",
+      "color": "#cc2929"
+    },
+    {
+      "id": "platform-4",
+      "name": "Steam",
+      "image": "simple-icons:steam",
+      "color": "#00bcff"
+    },
+    {
+      "id": "platform-2",
+      "name": "green man Gaming",
+      "image": "streamline-sharp:alien-solid",
+      "color": "#76b900"
+    }
+  ],
+  "months": [
+    {
+      "id": "month-1",
+      "name": "janvier"
+    },
+    {
+      "id": "month-10",
+      "name": "octobre"
+    },
+    {
+      "id": "month-11",
+      "name": "novembre"
+    },
+    {
+      "id": "month-12",
+      "name": "décembre"
+    },
+    {
+      "id": "month-2",
+      "name": "février"
+    },
+    {
+      "id": "month-3",
+      "name": "mars"
+    },
+    {
+      "id": "month-4",
+      "name": "avril"
+    },
+    {
+      "id": "month-5",
+      "name": "mai"
+    },
+    {
+      "id": "month-6",
+      "name": "juin"
+    },
+    {
+      "id": "month-7",
+      "name": "juillet"
+    },
+    {
+      "id": "month-8",
+      "name": "août"
+    },
+    {
+      "id": "month-9",
+      "name": "septembre"
+    }
+  ],
+  "years": [
+    {
+      "id": "year-1",
+      "name": "2023"
+    },
+    {
+      "id": "year-2",
+      "name": "2024"
+    },
+    {
+      "id": "year-3",
+      "name": "2025"
+    },
+    {
+      "id": "year-4",
+      "name": "2026"
+    }
+  ],
+  "states": [
+    {
+      "id": "private-state-id",
+      "name": "private",
+      "description": "Bundle privé"
+    },
+    {
+      "id": "public-state-id",
+      "name": "public",
+      "description": "Bundle public"
+    }
+  ],
+  "ratings": [
+    {
+      "id": "rating-0",
+      "name": "0",
+      "value": 0,
+      "image": "mingcute:star-line",
+      "color": "#f39c12"
+    },
+    {
+      "id": "rating-1",
+      "name": "1",
+      "value": 1,
+      "image": "mingcute:star-half-fill",
+      "color": "#f39c12"
+    },
+    {
+      "id": "rating-2",
+      "name": "2",
+      "value": 2,
+      "image": "mingcute:star-half-fill",
+      "color": "#f39c12"
+    },
+    {
+      "id": "rating-3",
+      "name": "3",
+      "value": 3,
+      "image": "mingcute:star-half-fill",
+      "color": "#f39c12"
+    },
+    {
+      "id": "rating-4",
+      "name": "4",
+      "value": 4,
+      "image": "mingcute:star-fill",
+      "color": "#f39c12"
+    },
+    {
+      "id": "rating-5",
+      "name": "5",
+      "value": 5,
+      "image": "mingcute:star-fill",
+      "color": "#f39c12"
+    }
+  ],
+  "roles": [
+    {
+      "id": "admin-role-id",
+      "name": "admin",
+      "description": "Administrator role"
+    },
+    {
+      "id": "user-role-id",
+      "name": "user",
+      "description": "user"
+    }
+  ],
+  "labels": [
+    {
+      "id": "label-order",
+      "name": "Order",
+      "key": "order_in_list",
+      "type": "number",
+      "image": "solar:sort-from-bottom-to-top-bold",
+      "default_visible": false,
+      "position": 0,
+      "color": "#34495e",
+      "label_emplacements": [
+        {
+          "id": "labelempl-main-7",
+          "label_id": "label-order",
+          "emplacement_id": "emplacement-main",
+          "position": 9,
+          "emplacement": {
+            "id": "emplacement-main",
+            "name": "main"
+          }
+        }
+      ]
+    },
+    {
+      "id": "label-month-filter",
+      "name": "Month",
+      "key": "month_id",
+      "type": "select",
+      "image": "mingcute:calendar-line",
+      "default_visible": true,
+      "position": 1,
+      "color": "#3498db",
+      "label_emplacements": [
+        {
+          "id": "labelempl-filt-2",
+          "label_id": "label-month-filter",
+          "emplacement_id": "emplacement-filtres",
+          "position": 4,
+          "emplacement": {
+            "id": "emplacement-filtres",
+            "name": "filtres"
+          }
+        }
+      ]
+    },
+    {
+      "id": "label-tag",
+      "name": "Tag",
+      "key": "tag_id",
+      "type": "select",
+      "image": "mingcute:tag-line",
+      "default_visible": true,
+      "position": 1,
+      "color": "#e74c3c",
+      "label_emplacements": [
+        {
+          "id": "labelempl-main-13",
+          "label_id": "label-tag",
+          "emplacement_id": "emplacement-main",
+          "position": 1,
+          "emplacement": {
+            "id": "emplacement-main",
+            "name": "main"
+          }
+        },
+        {
+          "id": "labelempl-filt-6",
+          "label_id": "label-tag",
+          "emplacement_id": "emplacement-filtres",
+          "position": 3,
+          "emplacement": {
+            "id": "emplacement-filtres",
+            "name": "filtres"
+          }
+        }
+      ]
+    },
+    {
+      "id": "label-name",
+      "name": "Name",
+      "key": "name",
+      "type": "text",
+      "image": "mingcute:text-line",
+      "default_visible": true,
+      "position": 2,
+      "color": "#3498db",
+      "label_emplacements": [
+        {
+          "id": "labelempl-calc-7",
+          "label_id": "label-name",
+          "emplacement_id": "emplacement-calculs",
+          "position": 1,
+          "emplacement": {
+            "id": "emplacement-calculs",
+            "name": "calculs"
+          }
+        },
+        {
+          "id": "labelempl-main-6",
+          "label_id": "label-name",
+          "emplacement_id": "emplacement-main",
+          "position": 2,
+          "emplacement": {
+            "id": "emplacement-main",
+            "name": "main"
+          }
+        },
+        {
+          "id": "labelempl-filt-0",
+          "label_id": "label-name",
+          "emplacement_id": "emplacement-filtres",
+          "position": 0,
+          "emplacement": {
+            "id": "emplacement-filtres",
+            "name": "filtres"
+          }
+        }
+      ]
+    },
+    {
+      "id": "label-year-filter",
+      "name": "Year",
+      "key": "year_id",
+      "type": "select",
+      "image": "mingcute:calendar-2-line",
+      "default_visible": true,
+      "position": 2,
+      "color": "#2ecc71",
+      "label_emplacements": [
+        {
+          "id": "labelempl-filt-7",
+          "label_id": "label-year-filter",
+          "emplacement_id": "emplacement-filtres",
+          "position": 5,
+          "emplacement": {
+            "id": "emplacement-filtres",
+            "name": "filtres"
+          }
+        }
+      ]
+    },
+    {
+      "id": "label-price",
+      "name": "Price",
+      "key": "price",
+      "type": "number",
+      "image": "mingcute:coin-line",
+      "default_visible": true,
+      "position": 3,
+      "color": "#f39c12",
+      "label_emplacements": [
+        {
+          "id": "labelempl-calc-4",
+          "label_id": "label-price",
+          "emplacement_id": "emplacement-calculs",
+          "position": 2,
+          "emplacement": {
+            "id": "emplacement-calculs",
+            "name": "calculs"
+          }
+        },
+        {
+          "id": "labelempl-main-10",
+          "label_id": "label-price",
+          "emplacement_id": "emplacement-main",
+          "position": 3,
+          "emplacement": {
+            "id": "emplacement-main",
+            "name": "main"
+          }
+        }
+      ]
+    },
+    {
+      "id": "label-platform-filter",
+      "name": "Platform",
+      "key": "platform_id",
+      "type": "select",
+      "image": "mingcute:device-line",
+      "default_visible": true,
+      "position": 3,
+      "color": "#e74c3c",
+      "label_emplacements": [
+        {
+          "id": "labelempl-filt-3",
+          "label_id": "label-platform-filter",
+          "emplacement_id": "emplacement-filtres",
+          "position": 6,
+          "emplacement": {
+            "id": "emplacement-filtres",
+            "name": "filtres"
+          }
+        }
+      ]
+    },
+    {
+      "id": "label-bundle-filter",
+      "name": "Bundle",
+      "key": "bundle_id",
+      "type": "select",
+      "image": "mingcute:package-line",
+      "default_visible": true,
+      "position": 4,
+      "color": "#f39c12",
+      "label_emplacements": [
+        {
+          "id": "labelempl-filt-1",
+          "label_id": "label-bundle-filter",
+          "emplacement_id": "emplacement-filtres",
+          "position": 9,
+          "emplacement": {
+            "id": "emplacement-filtres",
+            "name": "filtres"
+          }
+        }
+      ]
+    },
+    {
+      "id": "label-black-market-price",
+      "name": "Black market",
+      "key": "black_market_price",
+      "type": "number",
+      "image": "mingcute:coin-2-line",
+      "default_visible": true,
+      "position": 4,
+      "color": "#95a5a6",
+      "label_emplacements": [
+        {
+          "id": "labelempl-calc-1",
+          "label_id": "label-black-market-price",
+          "emplacement_id": "emplacement-calculs",
+          "position": 3,
+          "emplacement": {
+            "id": "emplacement-calculs",
+            "name": "calculs"
+          }
+        },
+        {
+          "id": "labelempl-main-1",
+          "label_id": "label-black-market-price",
+          "emplacement_id": "emplacement-main",
+          "position": 4,
+          "emplacement": {
+            "id": "emplacement-main",
+            "name": "main"
+          }
+        }
+      ]
+    },
+    {
+      "id": "label-sale-price",
+      "name": "Sale price",
+      "key": "sale_price",
+      "type": "number",
+      "image": "solar:sale-outline",
+      "default_visible": true,
+      "position": 5,
+      "color": "#2ecc71",
+      "label_emplacements": [
+        {
+          "id": "labelempl-calc-5",
+          "label_id": "label-sale-price",
+          "emplacement_id": "emplacement-calculs",
+          "position": 4,
+          "emplacement": {
+            "id": "emplacement-calculs",
+            "name": "calculs"
+          }
+        },
+        {
+          "id": "labelempl-main-12",
+          "label_id": "label-sale-price",
+          "emplacement_id": "emplacement-main",
+          "position": 5,
+          "emplacement": {
+            "id": "emplacement-main",
+            "name": "main"
+          }
+        }
+      ]
+    },
+    {
+      "id": "label-initial-price",
+      "name": "Initial price",
+      "key": "initial_price",
+      "type": "number",
+      "image": "solar:tag-price-outline",
+      "default_visible": true,
+      "position": 6,
+      "color": "#9b59b6",
+      "label_emplacements": [
+        {
+          "id": "labelempl-calc-2",
+          "label_id": "label-initial-price",
+          "emplacement_id": "emplacement-calculs",
+          "position": 5,
+          "emplacement": {
+            "id": "emplacement-calculs",
+            "name": "calculs"
+          }
+        },
+        {
+          "id": "labelempl-main-4",
+          "label_id": "label-initial-price",
+          "emplacement_id": "emplacement-main",
+          "position": 6,
+          "emplacement": {
+            "id": "emplacement-main",
+            "name": "main"
+          }
+        }
+      ]
+    },
+    {
+      "id": "label-playtime",
+      "name": "Playtime",
+      "key": "playtime_hours",
+      "type": "number",
+      "image": "mingcute:time-line",
+      "default_visible": true,
+      "position": 7,
+      "color": "#1abc9c",
+      "label_emplacements": [
+        {
+          "id": "labelempl-calc-3",
+          "label_id": "label-playtime",
+          "emplacement_id": "emplacement-calculs",
+          "position": 6,
+          "emplacement": {
+            "id": "emplacement-calculs",
+            "name": "calculs"
+          }
+        },
+        {
+          "id": "labelempl-main-9",
+          "label_id": "label-playtime",
+          "emplacement_id": "emplacement-main",
+          "position": 7,
+          "emplacement": {
+            "id": "emplacement-main",
+            "name": "main"
+          }
+        }
+      ]
+    },
+    {
+      "id": "label-rating",
+      "name": "Rating",
+      "key": "rating_id",
+      "type": "select",
+      "image": "mingcute:star-line",
+      "default_visible": true,
+      "position": 8,
+      "color": "#e67e22",
+      "label_emplacements": [
+        {
+          "id": "labelempl-calc-6",
+          "label_id": "label-rating",
+          "emplacement_id": "emplacement-calculs",
+          "position": 7,
+          "emplacement": {
+            "id": "emplacement-calculs",
+            "name": "calculs"
+          }
+        },
+        {
+          "id": "labelempl-main-11",
+          "label_id": "label-rating",
+          "emplacement_id": "emplacement-main",
+          "position": 8,
+          "emplacement": {
+            "id": "emplacement-main",
+            "name": "main"
+          }
+        },
+        {
+          "id": "labelempl-filt-4",
+          "label_id": "label-rating",
+          "emplacement_id": "emplacement-filtres",
+          "position": 7,
+          "emplacement": {
+            "id": "emplacement-filtres",
+            "name": "filtres"
+          }
+        }
+      ]
+    },
+    {
+      "id": "label-delete",
+      "name": "Delete",
+      "key": "delete",
+      "type": "boolean",
+      "image": "mingcute:close-circle-fill",
+      "default_visible": true,
+      "position": 10,
+      "color": "#f00",
+      "label_emplacements": [
+        {
+          "id": "labelempl-main-2",
+          "label_id": "label-delete",
+          "emplacement_id": "emplacement-main",
+          "position": 10,
+          "emplacement": {
+            "id": "emplacement-main",
+            "name": "main"
+          }
+        }
+      ]
+    },
+    {
+      "id": "label-search",
+      "name": "Search",
+      "key": "search",
+      "type": "text",
+      "image": "mingcute:search-line",
+      "default_visible": true,
+      "position": 15,
+      "color": "#6c757d",
+      "label_emplacements": [
+        {
+          "id": "labelempl-filt-5",
+          "label_id": "label-search",
+          "emplacement_id": "emplacement-filtres",
+          "position": 8,
+          "emplacement": {
+            "id": "emplacement-filtres",
+            "name": "filtres"
+          }
+        }
+      ]
+    },
+    {
+      "id": "label-image",
+      "name": "Image",
+      "key": "image",
+      "type": "text",
+      "image": "mingcute:pic-line",
+      "default_visible": true,
+      "position": 16,
+      "color": "#17a2b8",
+      "label_emplacements": [
+        {
+          "id": "labelempl-filt-02",
+          "label_id": "label-image",
+          "emplacement_id": "emplacement-filtres",
+          "position": 2,
+          "emplacement": {
+            "id": "emplacement-filtres",
+            "name": "filtres"
+          }
+        }
+      ]
+    },
+    {
+      "id": "label-stats",
+      "name": "Stats",
+      "key": "stats",
+      "type": "text",
+      "image": "mingcute:chart-pie-2-line",
+      "default_visible": true,
+      "position": 17,
+      "color": "#28a745",
+      "label_emplacements": []
+    },
+    {
+      "id": "label-ratio",
+      "name": "Ratio",
+      "key": "ratio",
+      "type": "text",
+      "image": "mingcute:chart-vertical-line",
+      "default_visible": true,
+      "position": 18,
+      "color": "#fd7e14",
+      "label_emplacements": []
+    },
+    {
+      "id": "label-link",
+      "name": "Link",
+      "key": "link",
+      "type": "text",
+      "image": "mingcute:link-2-line",
+      "default_visible": true,
+      "position": 19,
+      "color": "#fff",
+      "label_emplacements": [
+        {
+          "id": "labelempl-filt-01",
+          "label_id": "label-link",
+          "emplacement_id": "emplacement-filtres",
+          "position": 0,
+          "emplacement": {
+            "id": "emplacement-filtres",
+            "name": "filtres"
+          }
+        }
+      ]
+    }
+  ],
+  "emplacements": [
+    {
+      "id": "emplacement-calculs",
+      "name": "calculs",
+      "label_emplacements": [
+        {
+          "id": "labelempl-calc-6",
+          "label_id": "label-rating",
+          "emplacement_id": "emplacement-calculs",
+          "position": 7,
+          "label": {
+            "id": "label-rating",
+            "name": "Rating",
+            "key": "rating_id",
+            "type": "select",
+            "image": "mingcute:star-line",
+            "default_visible": true,
+            "position": 8,
+            "color": "#e67e22"
+          }
+        },
+        {
+          "id": "labelempl-calc-2",
+          "label_id": "label-initial-price",
+          "emplacement_id": "emplacement-calculs",
+          "position": 5,
+          "label": {
+            "id": "label-initial-price",
+            "name": "Initial price",
+            "key": "initial_price",
+            "type": "number",
+            "image": "solar:tag-price-outline",
+            "default_visible": true,
+            "position": 6,
+            "color": "#9b59b6"
+          }
+        },
+        {
+          "id": "labelempl-calc-5",
+          "label_id": "label-sale-price",
+          "emplacement_id": "emplacement-calculs",
+          "position": 4,
+          "label": {
+            "id": "label-sale-price",
+            "name": "Sale price",
+            "key": "sale_price",
+            "type": "number",
+            "image": "solar:sale-outline",
+            "default_visible": true,
+            "position": 5,
+            "color": "#2ecc71"
+          }
+        },
+        {
+          "id": "labelempl-calc-4",
+          "label_id": "label-price",
+          "emplacement_id": "emplacement-calculs",
+          "position": 2,
+          "label": {
+            "id": "label-price",
+            "name": "Price",
+            "key": "price",
+            "type": "number",
+            "image": "mingcute:coin-line",
+            "default_visible": true,
+            "position": 3,
+            "color": "#f39c12"
+          }
+        },
+        {
+          "id": "labelempl-calc-1",
+          "label_id": "label-black-market-price",
+          "emplacement_id": "emplacement-calculs",
+          "position": 3,
+          "label": {
+            "id": "label-black-market-price",
+            "name": "Black market",
+            "key": "black_market_price",
+            "type": "number",
+            "image": "mingcute:coin-2-line",
+            "default_visible": true,
+            "position": 4,
+            "color": "#95a5a6"
+          }
+        },
+        {
+          "id": "labelempl-calc-3",
+          "label_id": "label-playtime",
+          "emplacement_id": "emplacement-calculs",
+          "position": 6,
+          "label": {
+            "id": "label-playtime",
+            "name": "Playtime",
+            "key": "playtime_hours",
+            "type": "number",
+            "image": "mingcute:time-line",
+            "default_visible": true,
+            "position": 7,
+            "color": "#1abc9c"
+          }
+        },
+        {
+          "id": "labelempl-calc-7",
+          "label_id": "label-name",
+          "emplacement_id": "emplacement-calculs",
+          "position": 1,
+          "label": {
+            "id": "label-name",
+            "name": "Name",
+            "key": "name",
+            "type": "text",
+            "image": "mingcute:text-line",
+            "default_visible": true,
+            "position": 2,
+            "color": "#3498db"
+          }
+        }
+      ]
+    },
+    {
+      "id": "emplacement-filtres",
+      "name": "filtres",
+      "label_emplacements": [
+        {
+          "id": "labelempl-filt-0",
+          "label_id": "label-name",
+          "emplacement_id": "emplacement-filtres",
+          "position": 0,
+          "label": {
+            "id": "label-name",
+            "name": "Name",
+            "key": "name",
+            "type": "text",
+            "image": "mingcute:text-line",
+            "default_visible": true,
+            "position": 2,
+            "color": "#3498db"
+          }
+        },
+        {
+          "id": "labelempl-filt-02",
+          "label_id": "label-image",
+          "emplacement_id": "emplacement-filtres",
+          "position": 2,
+          "label": {
+            "id": "label-image",
+            "name": "Image",
+            "key": "image",
+            "type": "text",
+            "image": "mingcute:pic-line",
+            "default_visible": true,
+            "position": 16,
+            "color": "#17a2b8"
+          }
+        },
+        {
+          "id": "labelempl-filt-6",
+          "label_id": "label-tag",
+          "emplacement_id": "emplacement-filtres",
+          "position": 3,
+          "label": {
+            "id": "label-tag",
+            "name": "Tag",
+            "key": "tag_id",
+            "type": "select",
+            "image": "mingcute:tag-line",
+            "default_visible": true,
+            "position": 1,
+            "color": "#e74c3c"
+          }
+        },
+        {
+          "id": "labelempl-filt-7",
+          "label_id": "label-year-filter",
+          "emplacement_id": "emplacement-filtres",
+          "position": 5,
+          "label": {
+            "id": "label-year-filter",
+            "name": "Year",
+            "key": "year_id",
+            "type": "select",
+            "image": "mingcute:calendar-2-line",
+            "default_visible": true,
+            "position": 2,
+            "color": "#2ecc71"
+          }
+        },
+        {
+          "id": "labelempl-filt-2",
+          "label_id": "label-month-filter",
+          "emplacement_id": "emplacement-filtres",
+          "position": 4,
+          "label": {
+            "id": "label-month-filter",
+            "name": "Month",
+            "key": "month_id",
+            "type": "select",
+            "image": "mingcute:calendar-line",
+            "default_visible": true,
+            "position": 1,
+            "color": "#3498db"
+          }
+        },
+        {
+          "id": "labelempl-filt-4",
+          "label_id": "label-rating",
+          "emplacement_id": "emplacement-filtres",
+          "position": 7,
+          "label": {
+            "id": "label-rating",
+            "name": "Rating",
+            "key": "rating_id",
+            "type": "select",
+            "image": "mingcute:star-line",
+            "default_visible": true,
+            "position": 8,
+            "color": "#e67e22"
+          }
+        },
+        {
+          "id": "labelempl-filt-3",
+          "label_id": "label-platform-filter",
+          "emplacement_id": "emplacement-filtres",
+          "position": 6,
+          "label": {
+            "id": "label-platform-filter",
+            "name": "Platform",
+            "key": "platform_id",
+            "type": "select",
+            "image": "mingcute:device-line",
+            "default_visible": true,
+            "position": 3,
+            "color": "#e74c3c"
+          }
+        },
+        {
+          "id": "labelempl-filt-1",
+          "label_id": "label-bundle-filter",
+          "emplacement_id": "emplacement-filtres",
+          "position": 9,
+          "label": {
+            "id": "label-bundle-filter",
+            "name": "Bundle",
+            "key": "bundle_id",
+            "type": "select",
+            "image": "mingcute:package-line",
+            "default_visible": true,
+            "position": 4,
+            "color": "#f39c12"
+          }
+        },
+        {
+          "id": "labelempl-filt-5",
+          "label_id": "label-search",
+          "emplacement_id": "emplacement-filtres",
+          "position": 8,
+          "label": {
+            "id": "label-search",
+            "name": "Search",
+            "key": "search",
+            "type": "text",
+            "image": "mingcute:search-line",
+            "default_visible": true,
+            "position": 15,
+            "color": "#6c757d"
+          }
+        },
+        {
+          "id": "labelempl-filt-01",
+          "label_id": "label-link",
+          "emplacement_id": "emplacement-filtres",
+          "position": 0,
+          "label": {
+            "id": "label-link",
+            "name": "Link",
+            "key": "link",
+            "type": "text",
+            "image": "mingcute:link-2-line",
+            "default_visible": true,
+            "position": 19,
+            "color": "#fff"
+          }
+        }
+      ]
+    },
+    {
+      "id": "emplacement-main",
+      "name": "main",
+      "label_emplacements": [
+        {
+          "id": "labelempl-main-6",
+          "label_id": "label-name",
+          "emplacement_id": "emplacement-main",
+          "position": 2,
+          "label": {
+            "id": "label-name",
+            "name": "Name",
+            "key": "name",
+            "type": "text",
+            "image": "mingcute:text-line",
+            "default_visible": true,
+            "position": 2,
+            "color": "#3498db"
+          }
+        },
+        {
+          "id": "labelempl-main-1",
+          "label_id": "label-black-market-price",
+          "emplacement_id": "emplacement-main",
+          "position": 4,
+          "label": {
+            "id": "label-black-market-price",
+            "name": "Black market",
+            "key": "black_market_price",
+            "type": "number",
+            "image": "mingcute:coin-2-line",
+            "default_visible": true,
+            "position": 4,
+            "color": "#95a5a6"
+          }
+        },
+        {
+          "id": "labelempl-main-12",
+          "label_id": "label-sale-price",
+          "emplacement_id": "emplacement-main",
+          "position": 5,
+          "label": {
+            "id": "label-sale-price",
+            "name": "Sale price",
+            "key": "sale_price",
+            "type": "number",
+            "image": "solar:sale-outline",
+            "default_visible": true,
+            "position": 5,
+            "color": "#2ecc71"
+          }
+        },
+        {
+          "id": "labelempl-main-13",
+          "label_id": "label-tag",
+          "emplacement_id": "emplacement-main",
+          "position": 1,
+          "label": {
+            "id": "label-tag",
+            "name": "Tag",
+            "key": "tag_id",
+            "type": "select",
+            "image": "mingcute:tag-line",
+            "default_visible": true,
+            "position": 1,
+            "color": "#e74c3c"
+          }
+        },
+        {
+          "id": "labelempl-main-10",
+          "label_id": "label-price",
+          "emplacement_id": "emplacement-main",
+          "position": 3,
+          "label": {
+            "id": "label-price",
+            "name": "Price",
+            "key": "price",
+            "type": "number",
+            "image": "mingcute:coin-line",
+            "default_visible": true,
+            "position": 3,
+            "color": "#f39c12"
+          }
+        },
+        {
+          "id": "labelempl-main-9",
+          "label_id": "label-playtime",
+          "emplacement_id": "emplacement-main",
+          "position": 7,
+          "label": {
+            "id": "label-playtime",
+            "name": "Playtime",
+            "key": "playtime_hours",
+            "type": "number",
+            "image": "mingcute:time-line",
+            "default_visible": true,
+            "position": 7,
+            "color": "#1abc9c"
+          }
+        },
+        {
+          "id": "labelempl-main-2",
+          "label_id": "label-delete",
+          "emplacement_id": "emplacement-main",
+          "position": 10,
+          "label": {
+            "id": "label-delete",
+            "name": "Delete",
+            "key": "delete",
+            "type": "boolean",
+            "image": "mingcute:close-circle-fill",
+            "default_visible": true,
+            "position": 10,
+            "color": "#f00"
+          }
+        },
+        {
+          "id": "labelempl-main-4",
+          "label_id": "label-initial-price",
+          "emplacement_id": "emplacement-main",
+          "position": 6,
+          "label": {
+            "id": "label-initial-price",
+            "name": "Initial price",
+            "key": "initial_price",
+            "type": "number",
+            "image": "solar:tag-price-outline",
+            "default_visible": true,
+            "position": 6,
+            "color": "#9b59b6"
+          }
+        },
+        {
+          "id": "labelempl-main-11",
+          "label_id": "label-rating",
+          "emplacement_id": "emplacement-main",
+          "position": 8,
+          "label": {
+            "id": "label-rating",
+            "name": "Rating",
+            "key": "rating_id",
+            "type": "select",
+            "image": "mingcute:star-line",
+            "default_visible": true,
+            "position": 8,
+            "color": "#e67e22"
+          }
+        },
+        {
+          "id": "labelempl-main-7",
+          "label_id": "label-order",
+          "emplacement_id": "emplacement-main",
+          "position": 9,
+          "label": {
+            "id": "label-order",
+            "name": "Order",
+            "key": "order_in_list",
+            "type": "number",
+            "image": "solar:sort-from-bottom-to-top-bold",
+            "default_visible": false,
+            "position": 0,
+            "color": "#34495e"
+          }
+        }
+      ]
+    }
+  ],
+  "labelEmplacements": [
+    {
+      "id": "labelempl-filt-0",
+      "label_id": "label-name",
+      "emplacement_id": "emplacement-filtres",
+      "position": 0,
+      "label": {
+        "id": "label-name",
+        "name": "Name",
+        "key": "name",
+        "type": "text",
+        "image": "mingcute:text-line",
+        "default_visible": true,
+        "position": 2,
+        "color": "#3498db"
+      },
+      "emplacement": {
+        "id": "emplacement-filtres",
+        "name": "filtres"
+      }
+    },
+    {
+      "id": "labelempl-filt-01",
+      "label_id": "label-link",
+      "emplacement_id": "emplacement-filtres",
+      "position": 0,
+      "label": {
+        "id": "label-link",
+        "name": "Link",
+        "key": "link",
+        "type": "text",
+        "image": "mingcute:link-2-line",
+        "default_visible": true,
+        "position": 19,
+        "color": "#fff"
+      },
+      "emplacement": {
+        "id": "emplacement-filtres",
+        "name": "filtres"
+      }
+    },
+    {
+      "id": "labelempl-calc-7",
+      "label_id": "label-name",
+      "emplacement_id": "emplacement-calculs",
+      "position": 1,
+      "label": {
+        "id": "label-name",
+        "name": "Name",
+        "key": "name",
+        "type": "text",
+        "image": "mingcute:text-line",
+        "default_visible": true,
+        "position": 2,
+        "color": "#3498db"
+      },
+      "emplacement": {
+        "id": "emplacement-calculs",
+        "name": "calculs"
+      }
+    },
+    {
+      "id": "labelempl-main-13",
+      "label_id": "label-tag",
+      "emplacement_id": "emplacement-main",
+      "position": 1,
+      "label": {
+        "id": "label-tag",
+        "name": "Tag",
+        "key": "tag_id",
+        "type": "select",
+        "image": "mingcute:tag-line",
+        "default_visible": true,
+        "position": 1,
+        "color": "#e74c3c"
+      },
+      "emplacement": {
+        "id": "emplacement-main",
+        "name": "main"
+      }
+    },
+    {
+      "id": "labelempl-calc-4",
+      "label_id": "label-price",
+      "emplacement_id": "emplacement-calculs",
+      "position": 2,
+      "label": {
+        "id": "label-price",
+        "name": "Price",
+        "key": "price",
+        "type": "number",
+        "image": "mingcute:coin-line",
+        "default_visible": true,
+        "position": 3,
+        "color": "#f39c12"
+      },
+      "emplacement": {
+        "id": "emplacement-calculs",
+        "name": "calculs"
+      }
+    },
+    {
+      "id": "labelempl-main-6",
+      "label_id": "label-name",
+      "emplacement_id": "emplacement-main",
+      "position": 2,
+      "label": {
+        "id": "label-name",
+        "name": "Name",
+        "key": "name",
+        "type": "text",
+        "image": "mingcute:text-line",
+        "default_visible": true,
+        "position": 2,
+        "color": "#3498db"
+      },
+      "emplacement": {
+        "id": "emplacement-main",
+        "name": "main"
+      }
+    },
+    {
+      "id": "labelempl-filt-02",
+      "label_id": "label-image",
+      "emplacement_id": "emplacement-filtres",
+      "position": 2,
+      "label": {
+        "id": "label-image",
+        "name": "Image",
+        "key": "image",
+        "type": "text",
+        "image": "mingcute:pic-line",
+        "default_visible": true,
+        "position": 16,
+        "color": "#17a2b8"
+      },
+      "emplacement": {
+        "id": "emplacement-filtres",
+        "name": "filtres"
+      }
+    },
+    {
+      "id": "labelempl-filt-6",
+      "label_id": "label-tag",
+      "emplacement_id": "emplacement-filtres",
+      "position": 3,
+      "label": {
+        "id": "label-tag",
+        "name": "Tag",
+        "key": "tag_id",
+        "type": "select",
+        "image": "mingcute:tag-line",
+        "default_visible": true,
+        "position": 1,
+        "color": "#e74c3c"
+      },
+      "emplacement": {
+        "id": "emplacement-filtres",
+        "name": "filtres"
+      }
+    },
+    {
+      "id": "labelempl-calc-1",
+      "label_id": "label-black-market-price",
+      "emplacement_id": "emplacement-calculs",
+      "position": 3,
+      "label": {
+        "id": "label-black-market-price",
+        "name": "Black market",
+        "key": "black_market_price",
+        "type": "number",
+        "image": "mingcute:coin-2-line",
+        "default_visible": true,
+        "position": 4,
+        "color": "#95a5a6"
+      },
+      "emplacement": {
+        "id": "emplacement-calculs",
+        "name": "calculs"
+      }
+    },
+    {
+      "id": "labelempl-main-10",
+      "label_id": "label-price",
+      "emplacement_id": "emplacement-main",
+      "position": 3,
+      "label": {
+        "id": "label-price",
+        "name": "Price",
+        "key": "price",
+        "type": "number",
+        "image": "mingcute:coin-line",
+        "default_visible": true,
+        "position": 3,
+        "color": "#f39c12"
+      },
+      "emplacement": {
+        "id": "emplacement-main",
+        "name": "main"
+      }
+    },
+    {
+      "id": "labelempl-main-1",
+      "label_id": "label-black-market-price",
+      "emplacement_id": "emplacement-main",
+      "position": 4,
+      "label": {
+        "id": "label-black-market-price",
+        "name": "Black market",
+        "key": "black_market_price",
+        "type": "number",
+        "image": "mingcute:coin-2-line",
+        "default_visible": true,
+        "position": 4,
+        "color": "#95a5a6"
+      },
+      "emplacement": {
+        "id": "emplacement-main",
+        "name": "main"
+      }
+    },
+    {
+      "id": "labelempl-calc-5",
+      "label_id": "label-sale-price",
+      "emplacement_id": "emplacement-calculs",
+      "position": 4,
+      "label": {
+        "id": "label-sale-price",
+        "name": "Sale price",
+        "key": "sale_price",
+        "type": "number",
+        "image": "solar:sale-outline",
+        "default_visible": true,
+        "position": 5,
+        "color": "#2ecc71"
+      },
+      "emplacement": {
+        "id": "emplacement-calculs",
+        "name": "calculs"
+      }
+    },
+    {
+      "id": "labelempl-filt-2",
+      "label_id": "label-month-filter",
+      "emplacement_id": "emplacement-filtres",
+      "position": 4,
+      "label": {
+        "id": "label-month-filter",
+        "name": "Month",
+        "key": "month_id",
+        "type": "select",
+        "image": "mingcute:calendar-line",
+        "default_visible": true,
+        "position": 1,
+        "color": "#3498db"
+      },
+      "emplacement": {
+        "id": "emplacement-filtres",
+        "name": "filtres"
+      }
+    },
+    {
+      "id": "labelempl-main-12",
+      "label_id": "label-sale-price",
+      "emplacement_id": "emplacement-main",
+      "position": 5,
+      "label": {
+        "id": "label-sale-price",
+        "name": "Sale price",
+        "key": "sale_price",
+        "type": "number",
+        "image": "solar:sale-outline",
+        "default_visible": true,
+        "position": 5,
+        "color": "#2ecc71"
+      },
+      "emplacement": {
+        "id": "emplacement-main",
+        "name": "main"
+      }
+    },
+    {
+      "id": "labelempl-filt-7",
+      "label_id": "label-year-filter",
+      "emplacement_id": "emplacement-filtres",
+      "position": 5,
+      "label": {
+        "id": "label-year-filter",
+        "name": "Year",
+        "key": "year_id",
+        "type": "select",
+        "image": "mingcute:calendar-2-line",
+        "default_visible": true,
+        "position": 2,
+        "color": "#2ecc71"
+      },
+      "emplacement": {
+        "id": "emplacement-filtres",
+        "name": "filtres"
+      }
+    },
+    {
+      "id": "labelempl-calc-2",
+      "label_id": "label-initial-price",
+      "emplacement_id": "emplacement-calculs",
+      "position": 5,
+      "label": {
+        "id": "label-initial-price",
+        "name": "Initial price",
+        "key": "initial_price",
+        "type": "number",
+        "image": "solar:tag-price-outline",
+        "default_visible": true,
+        "position": 6,
+        "color": "#9b59b6"
+      },
+      "emplacement": {
+        "id": "emplacement-calculs",
+        "name": "calculs"
+      }
+    },
+    {
+      "id": "labelempl-filt-3",
+      "label_id": "label-platform-filter",
+      "emplacement_id": "emplacement-filtres",
+      "position": 6,
+      "label": {
+        "id": "label-platform-filter",
+        "name": "Platform",
+        "key": "platform_id",
+        "type": "select",
+        "image": "mingcute:device-line",
+        "default_visible": true,
+        "position": 3,
+        "color": "#e74c3c"
+      },
+      "emplacement": {
+        "id": "emplacement-filtres",
+        "name": "filtres"
+      }
+    },
+    {
+      "id": "labelempl-main-4",
+      "label_id": "label-initial-price",
+      "emplacement_id": "emplacement-main",
+      "position": 6,
+      "label": {
+        "id": "label-initial-price",
+        "name": "Initial price",
+        "key": "initial_price",
+        "type": "number",
+        "image": "solar:tag-price-outline",
+        "default_visible": true,
+        "position": 6,
+        "color": "#9b59b6"
+      },
+      "emplacement": {
+        "id": "emplacement-main",
+        "name": "main"
+      }
+    },
+    {
+      "id": "labelempl-calc-3",
+      "label_id": "label-playtime",
+      "emplacement_id": "emplacement-calculs",
+      "position": 6,
+      "label": {
+        "id": "label-playtime",
+        "name": "Playtime",
+        "key": "playtime_hours",
+        "type": "number",
+        "image": "mingcute:time-line",
+        "default_visible": true,
+        "position": 7,
+        "color": "#1abc9c"
+      },
+      "emplacement": {
+        "id": "emplacement-calculs",
+        "name": "calculs"
+      }
+    },
+    {
+      "id": "labelempl-calc-6",
+      "label_id": "label-rating",
+      "emplacement_id": "emplacement-calculs",
+      "position": 7,
+      "label": {
+        "id": "label-rating",
+        "name": "Rating",
+        "key": "rating_id",
+        "type": "select",
+        "image": "mingcute:star-line",
+        "default_visible": true,
+        "position": 8,
+        "color": "#e67e22"
+      },
+      "emplacement": {
+        "id": "emplacement-calculs",
+        "name": "calculs"
+      }
+    },
+    {
+      "id": "labelempl-main-9",
+      "label_id": "label-playtime",
+      "emplacement_id": "emplacement-main",
+      "position": 7,
+      "label": {
+        "id": "label-playtime",
+        "name": "Playtime",
+        "key": "playtime_hours",
+        "type": "number",
+        "image": "mingcute:time-line",
+        "default_visible": true,
+        "position": 7,
+        "color": "#1abc9c"
+      },
+      "emplacement": {
+        "id": "emplacement-main",
+        "name": "main"
+      }
+    },
+    {
+      "id": "labelempl-filt-4",
+      "label_id": "label-rating",
+      "emplacement_id": "emplacement-filtres",
+      "position": 7,
+      "label": {
+        "id": "label-rating",
+        "name": "Rating",
+        "key": "rating_id",
+        "type": "select",
+        "image": "mingcute:star-line",
+        "default_visible": true,
+        "position": 8,
+        "color": "#e67e22"
+      },
+      "emplacement": {
+        "id": "emplacement-filtres",
+        "name": "filtres"
+      }
+    },
+    {
+      "id": "labelempl-main-11",
+      "label_id": "label-rating",
+      "emplacement_id": "emplacement-main",
+      "position": 8,
+      "label": {
+        "id": "label-rating",
+        "name": "Rating",
+        "key": "rating_id",
+        "type": "select",
+        "image": "mingcute:star-line",
+        "default_visible": true,
+        "position": 8,
+        "color": "#e67e22"
+      },
+      "emplacement": {
+        "id": "emplacement-main",
+        "name": "main"
+      }
+    },
+    {
+      "id": "labelempl-filt-5",
+      "label_id": "label-search",
+      "emplacement_id": "emplacement-filtres",
+      "position": 8,
+      "label": {
+        "id": "label-search",
+        "name": "Search",
+        "key": "search",
+        "type": "text",
+        "image": "mingcute:search-line",
+        "default_visible": true,
+        "position": 15,
+        "color": "#6c757d"
+      },
+      "emplacement": {
+        "id": "emplacement-filtres",
+        "name": "filtres"
+      }
+    },
+    {
+      "id": "labelempl-filt-1",
+      "label_id": "label-bundle-filter",
+      "emplacement_id": "emplacement-filtres",
+      "position": 9,
+      "label": {
+        "id": "label-bundle-filter",
+        "name": "Bundle",
+        "key": "bundle_id",
+        "type": "select",
+        "image": "mingcute:package-line",
+        "default_visible": true,
+        "position": 4,
+        "color": "#f39c12"
+      },
+      "emplacement": {
+        "id": "emplacement-filtres",
+        "name": "filtres"
+      }
+    },
+    {
+      "id": "labelempl-main-7",
+      "label_id": "label-order",
+      "emplacement_id": "emplacement-main",
+      "position": 9,
+      "label": {
+        "id": "label-order",
+        "name": "Order",
+        "key": "order_in_list",
+        "type": "number",
+        "image": "solar:sort-from-bottom-to-top-bold",
+        "default_visible": false,
+        "position": 0,
+        "color": "#34495e"
+      },
+      "emplacement": {
+        "id": "emplacement-main",
+        "name": "main"
+      }
+    },
+    {
+      "id": "labelempl-main-2",
+      "label_id": "label-delete",
+      "emplacement_id": "emplacement-main",
+      "position": 10,
+      "label": {
+        "id": "label-delete",
+        "name": "Delete",
+        "key": "delete",
+        "type": "boolean",
+        "image": "mingcute:close-circle-fill",
+        "default_visible": true,
+        "position": 10,
+        "color": "#f00"
+      },
+      "emplacement": {
+        "id": "emplacement-main",
+        "name": "main"
+      }
+    }
+  ],
+  "user_label_visibility": [
+    {
+      "id": "14a473a5-4f64-40f6-b064-2a193e51ae23",
+      "user_id": "user-2283",
+      "label_id": "label-name",
+      "visible": true,
+      "label": {
+        "id": "label-name",
+        "name": "Name",
+        "key": "name",
+        "type": "text",
+        "image": "mingcute:text-line",
+        "default_visible": true,
+        "position": 2,
+        "color": "#3498db"
+      }
+    },
+    {
+      "id": "dd22bc37-b6f4-4112-ae1c-3b88d31e57b0",
+      "user_id": "user-2283",
+      "label_id": "label-year-filter",
+      "visible": true,
+      "label": {
+        "id": "label-year-filter",
+        "name": "Year",
+        "key": "year_id",
+        "type": "select",
+        "image": "mingcute:calendar-2-line",
+        "default_visible": true,
+        "position": 2,
+        "color": "#2ecc71"
+      }
+    },
+    {
+      "id": "0ef77503-06ce-4abf-bf02-4de5c78345e3",
+      "user_id": "user-2283",
+      "label_id": "label-price",
+      "visible": true,
+      "label": {
+        "id": "label-price",
+        "name": "Price",
+        "key": "price",
+        "type": "number",
+        "image": "mingcute:coin-line",
+        "default_visible": true,
+        "position": 3,
+        "color": "#f39c12"
+      }
+    },
+    {
+      "id": "56cadda1-ec19-42c6-bd88-9f73867461cb",
+      "user_id": "user-2283",
+      "label_id": "label-black-market-price",
+      "visible": true,
+      "label": {
+        "id": "label-black-market-price",
+        "name": "Black market",
+        "key": "black_market_price",
+        "type": "number",
+        "image": "mingcute:coin-2-line",
+        "default_visible": true,
+        "position": 4,
+        "color": "#95a5a6"
+      }
+    },
+    {
+      "id": "bdae7599-5ca6-4225-b172-a62e36e4ee6f",
+      "user_id": "user-2283",
+      "label_id": "label-initial-price",
+      "visible": true,
+      "label": {
+        "id": "label-initial-price",
+        "name": "Initial price",
+        "key": "initial_price",
+        "type": "number",
+        "image": "solar:tag-price-outline",
+        "default_visible": true,
+        "position": 6,
+        "color": "#9b59b6"
+      }
+    },
+    {
+      "id": "15846496-9e19-4d14-8959-8b8727e46461",
+      "user_id": "user-2283",
+      "label_id": "label-playtime",
+      "visible": true,
+      "label": {
+        "id": "label-playtime",
+        "name": "Playtime",
+        "key": "playtime_hours",
+        "type": "number",
+        "image": "mingcute:time-line",
+        "default_visible": true,
+        "position": 7,
+        "color": "#1abc9c"
+      }
+    },
+    {
+      "id": "b6b8db0f-753b-4744-9c39-ba7b5d491f3b",
+      "user_id": "user-2283",
+      "label_id": "label-rating",
+      "visible": true,
+      "label": {
+        "id": "label-rating",
+        "name": "Rating",
+        "key": "rating_id",
+        "type": "select",
+        "image": "mingcute:star-line",
+        "default_visible": true,
+        "position": 8,
+        "color": "#e67e22"
+      }
+    },
+    {
+      "id": "b9dcd13d-2e79-4392-aa87-f53e02cde8c6",
+      "user_id": "user-2283",
+      "label_id": "label-search",
+      "visible": true,
+      "label": {
+        "id": "label-search",
+        "name": "Search",
+        "key": "search",
+        "type": "text",
+        "image": "mingcute:search-line",
+        "default_visible": true,
+        "position": 15,
+        "color": "#6c757d"
+      }
+    },
+    {
+      "id": "9231ed4f-361a-47b9-a50e-1f6da375e93f",
+      "user_id": "user-2283",
+      "label_id": "label-image",
+      "visible": true,
+      "label": {
+        "id": "label-image",
+        "name": "Image",
+        "key": "image",
+        "type": "text",
+        "image": "mingcute:pic-line",
+        "default_visible": true,
+        "position": 16,
+        "color": "#17a2b8"
+      }
+    },
+    {
+      "id": "d7b3cee6-0b44-4345-95f6-70c9f9f4eee4",
+      "user_id": "user-2283",
+      "label_id": "label-stats",
+      "visible": false,
+      "label": {
+        "id": "label-stats",
+        "name": "Stats",
+        "key": "stats",
+        "type": "text",
+        "image": "mingcute:chart-pie-2-line",
+        "default_visible": true,
+        "position": 17,
+        "color": "#28a745"
+      }
+    },
+    {
+      "id": "50667412-f3e0-4801-b1d0-1eef153d7602",
+      "user_id": "user-2283",
+      "label_id": "label-delete",
+      "visible": true,
+      "label": {
+        "id": "label-delete",
+        "name": "Delete",
+        "key": "delete",
+        "type": "boolean",
+        "image": "mingcute:close-circle-fill",
+        "default_visible": true,
+        "position": 10,
+        "color": "#f00"
+      }
+    },
+    {
+      "id": "02341206-dc1d-40b9-ab29-68c22352bc9e",
+      "user_id": "user-2283",
+      "label_id": "label-link",
+      "visible": true,
+      "label": {
+        "id": "label-link",
+        "name": "Link",
+        "key": "link",
+        "type": "text",
+        "image": "mingcute:link-2-line",
+        "default_visible": true,
+        "position": 19,
+        "color": "#fff"
+      }
+    },
+    {
+      "id": "5998d6fc-a2ad-45ce-b396-4c3e17f36332",
+      "user_id": "user-2283",
+      "label_id": "label-month-filter",
+      "visible": true,
+      "label": {
+        "id": "label-month-filter",
+        "name": "Month",
+        "key": "month_id",
+        "type": "select",
+        "image": "mingcute:calendar-line",
+        "default_visible": true,
+        "position": 1,
+        "color": "#3498db"
+      }
+    },
+    {
+      "id": "176d18cf-63d2-4dc7-9720-21b148dbef55",
+      "user_id": "user-2283",
+      "label_id": "label-tag",
+      "visible": true,
+      "label": {
+        "id": "label-tag",
+        "name": "Tag",
+        "key": "tag_id",
+        "type": "select",
+        "image": "mingcute:tag-line",
+        "default_visible": true,
+        "position": 1,
+        "color": "#e74c3c"
+      }
+    },
+    {
+      "id": "f0c022ef-145a-4641-90c8-1502740652d5",
+      "user_id": "user-2283",
+      "label_id": "label-platform-filter",
+      "visible": true,
+      "label": {
+        "id": "label-platform-filter",
+        "name": "Platform",
+        "key": "platform_id",
+        "type": "select",
+        "image": "mingcute:device-line",
+        "default_visible": true,
+        "position": 3,
+        "color": "#e74c3c"
+      }
+    },
+    {
+      "id": "df8d1a40-06be-47be-a9a0-c0168f4a1567",
+      "user_id": "user-2283",
+      "label_id": "label-ratio",
+      "visible": true,
+      "label": {
+        "id": "label-ratio",
+        "name": "Ratio",
+        "key": "ratio",
+        "type": "text",
+        "image": "mingcute:chart-vertical-line",
+        "default_visible": true,
+        "position": 18,
+        "color": "#fd7e14"
+      }
+    },
+    {
+      "id": "1b7cafbb-8355-47e9-b8e2-41c6ceb3d595",
+      "user_id": "user-2283",
+      "label_id": "label-order",
+      "visible": false,
+      "label": {
+        "id": "label-order",
+        "name": "Order",
+        "key": "order_in_list",
+        "type": "number",
+        "image": "solar:sort-from-bottom-to-top-bold",
+        "default_visible": false,
+        "position": 0,
+        "color": "#34495e"
+      }
+    },
+    {
+      "id": "1f65ebf8-607a-4030-bc25-fe910727d2e0",
+      "user_id": "user-2283",
+      "label_id": "label-sale-price",
+      "visible": true,
+      "label": {
+        "id": "label-sale-price",
+        "name": "Sale price",
+        "key": "sale_price",
+        "type": "number",
+        "image": "solar:sale-outline",
+        "default_visible": true,
+        "position": 5,
+        "color": "#2ecc71"
+      }
+    },
+    {
+      "id": "44cc6801-fb28-4d6d-bc76-b30ffada887f",
+      "user_id": "user-2283",
+      "label_id": "label-bundle-filter",
+      "visible": true,
+      "label": {
+        "id": "label-bundle-filter",
+        "name": "Bundle",
+        "key": "bundle_id",
+        "type": "select",
+        "image": "mingcute:package-line",
+        "default_visible": true,
+        "position": 4,
+        "color": "#f39c12"
+      }
+    }
+  ]
+}

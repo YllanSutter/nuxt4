@@ -1,17 +1,12 @@
 -- Script SQL généré automatiquement depuis backup.json
--- Date de génération: 2025-10-02T11:06:07.016Z
--- Utilisateur: Yllan (sutter.yllan@laposte.net)
+-- Date de génération: 2025-10-02T10:51:32.687Z
+-- Utilisateur: undefined (undefined)
 
 SET client_encoding = 'UTF8';
 
--- Table Role
-INSERT INTO "Role" ("id", "name", "description") VALUES
-('admin-role-id', 'admin', 'Administrator role')
-ON CONFLICT ("id") DO NOTHING;
-
 -- Table User
 INSERT INTO "User" ("id", "name", "email", "password", "budget", "created_at", "role_id") VALUES
-('user-2283', 'Yllan', 'sutter.yllan@laposte.net', '$2b$10$QiCUIM/HVytl1DTEw40Aluih1OFmxq8lKMQ/ZegeoN7qM7zI/igLO', 50, '2025-08-02T11:30:30.213Z', 'admin-role-id')
+(NULL, NULL, NULL, NULL, NaN, NULL, NULL)
 ON CONFLICT ("id") DO UPDATE SET
 "name" = EXCLUDED."name", "email" = EXCLUDED."email", "password" = EXCLUDED."password", "budget" = EXCLUDED."budget", "created_at" = EXCLUDED."created_at", "role_id" = EXCLUDED."role_id";
 
@@ -115,10 +110,10 @@ INSERT INTO "State" ("id", "name", "description") VALUES
 ON CONFLICT ("id") DO NOTHING;
 
 -- Table Emplacement
-INSERT INTO "Emplacement" ("id", "name") VALUES
-('emplacement-calculs', 'calculs'),
-('emplacement-filtres', 'filtres'),
-('emplacement-main', 'main')
+INSERT INTO "Emplacement" ("id", "name", "label_emplacements") VALUES
+('emplacement-calculs', 'calculs', '[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]'),
+('emplacement-filtres', 'filtres', '[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]'),
+('emplacement-main', 'main', '[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object],[object Object]')
 ON CONFLICT ("id") DO NOTHING;
 
 -- Table Rating
