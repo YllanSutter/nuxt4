@@ -10,30 +10,38 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email: query.email as string },
-      include: {
-        role: true,
-        bundles: true,
-        user_games: {
-          include: {
-            base_game: true,
-            tag: true
+    try {
+      const user = await prisma.user.findUnique({
+        where: { email: query.email as string },
+        include: {
+          role: true,
+          bundles: true,
+          user_games: {
+            include: {
+              base_game: true,
+              tag: true
+            }
           }
         }
-      }
-    });
+      });
 
-    if (!user) {
+      if (!user) {
+        throw createError({
+          statusCode: 404,
+          statusMessage: 'Utilisateur non trouvé'
+        });
+      }
+
+      // Retourner sans le mot de passe
+      const { password, ...userWithoutPassword } = user;
+      return userWithoutPassword;
+    } catch (error) {
+      console.error('❌ Erreur lors de la récupération de l\'utilisateur:', error);
       throw createError({
-        statusCode: 404,
-        statusMessage: 'Utilisateur non trouvé'
+        statusCode: 500,
+        statusMessage: 'Erreur serveur lors de la récupération de l\'utilisateur'
       });
     }
-
-    // Retourner sans le mot de passe
-    const { password, ...userWithoutPassword } = user;
-    return userWithoutPassword;
   }
 
   if (event.method === 'PUT') {

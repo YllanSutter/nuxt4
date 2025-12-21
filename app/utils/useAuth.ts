@@ -92,6 +92,8 @@ export const useAuth = () => {
     try {
       const response = await $fetch<User>(`/api/users/${user.value.email}`, {
         method: 'PUT',
+        timeout: 10000,
+        retry: 2,
         body: {
           email: user.value.email,
           ...updates
@@ -115,12 +117,21 @@ export const useAuth = () => {
     try {
       const response = await $fetch<User>(`/api/users/${user.value.email}`, {
         method: 'GET',
+        timeout: 10000,
+        retry: 2,
+        retryDelay: 500,
         params: { email: user.value.email }
       });
 
       userCookie.value = response;
       return response;
     } catch (error: any) {
+      console.error('❌ Erreur fetchUserData:', error);
+      // Ne pas throw si l'utilisateur est déjà en cache
+      if (user.value) {
+        console.warn('⚠️ Utilisation des données utilisateur en cache');
+        return user.value;
+      }
       throw new Error(error.data?.message || error.message || 'Erreur lors du chargement des données');
     }
   };

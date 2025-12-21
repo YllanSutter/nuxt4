@@ -12,7 +12,7 @@ export const useTableauData = (models?: string[] | string) => {
   
   // Vérifier si une requête est déjà en cours
   if (pendingRequests.has(cacheKey)) {
-    console.log(`⏳ [useTableauData] Requête déjà en cours pour: ${cacheKey}`);
+    // console.log(`⏳ [useTableauData] Requête déjà en cours pour: ${cacheKey}`);
   } else {
     console.log(`🚀 [useTableauData] Nouvelle requête pour: ${cacheKey}`);
     pendingRequests.add(cacheKey);

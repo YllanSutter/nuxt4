@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { getUserGamesForBundle, handleValueUpdate, handleModelUpdate, type TableauDataProps } from '@/utils/tableauHelpers'
-import TableBodyFull from '../ui/table/TableBodyFull.vue';
+import TableBodyFull from '../ui/table/TableBodyFull.vue'
+import UiTableauGameNameInput from '../uiTableau/gameNameInput.vue'
 
 
 const props = defineProps<{
@@ -34,6 +35,45 @@ const getGamesForBundle = (bundle: any) => {
 const handleLineDeleted = () => emit('lineDeleted')
 const handleBundleDeleted = () => emit('bundleDeleted')
 const handleLinesAdded = () => emit('linesAdded')
+
+type GameOption = { id: string; name: string }
+
+const ensureBaseGame = async (option: GameOption) => {
+  if (!option?.id || !option?.name) return
+  try {
+    await $fetch('/api/actions/upsertBaseGame', {
+      method: 'POST',
+      body: {
+        id: option.id,
+        name: option.name
+      }
+    })
+  } catch (error) {
+    console.error('❌ Impossible de créer/mettre à jour le baseGame', error)
+  }
+}
+
+const handleNameCommit = (userGame: any, label: any, value: string) => {
+  const incoming = (value || '').trim()
+  const current = (props.getUserGameValue(userGame, label.key) || '').trim()
+  if (incoming === current) return
+  props.updateElem(userGame, incoming, label, 'userGame', props.updateLocalData)
+}
+
+const handleNameSelect = async (userGame: any, label: any, option: GameOption) => {
+  if (!option) return
+  handleModelUpdate(userGame, option.name, label.key)
+  userGame.base_game_id = option.id
+  await ensureBaseGame(option)
+  props.updateElem(userGame, option.name, label, 'userGame', props.updateLocalData)
+  props.updateElem(
+    userGame,
+    option.id,
+    { key: 'base_game_id', field: 'base_game_id', table: 'UserGame', type: 'string' },
+    'userGame',
+    props.updateLocalData
+  )
+}
 
 // Logique pour déterminer les bundles à afficher
 const bundlesToDisplay = computed(() => {
@@ -122,6 +162,14 @@ function handleOrderChanged(newOrder : any) {
                   @lineDeleted="handleLineDeleted"
                   @bundleDeleted="handleBundleDeleted"
                 />
+                <UiTableauGameNameInput
+                  v-else-if="label.key === 'name'"
+                  :model-value="props.getUserGameValue(userGame, label.key) || ''"
+                  :base-game-id="userGame.base_game_id"
+                  @update:model-value="(newValue) => handleModelUpdate(userGame, newValue, label.key)"
+                  @commit="(value) => handleNameCommit(userGame, label, value)"
+                  @select="(option) => handleNameSelect(userGame, label, option)"
+                />
                 <Input 
                   v-else
                   :model-value="props.getUserGameValue(userGame, label.key) || ''"
@@ -201,6 +249,14 @@ function handleOrderChanged(newOrder : any) {
                     :bundleId="bundle.id"
                     @lineDeleted="handleLineDeleted"
                     @bundleDeleted="handleBundleDeleted"
+                  />
+                  <UiTableauGameNameInput
+                    v-else-if="label.key === 'name'"
+                    :model-value="props.getUserGameValue(userGame, label.key) || ''"
+                    :base-game-id="userGame.base_game_id"
+                    @update:model-value="(newValue) => handleModelUpdate(userGame, newValue, label.key)"
+                    @commit="(value) => handleNameCommit(userGame, label, value)"
+                    @select="(option) => handleNameSelect(userGame, label, option)"
                   />
                   <Input 
                     v-else

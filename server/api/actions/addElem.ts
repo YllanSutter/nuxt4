@@ -78,16 +78,36 @@ export default defineEventHandler(async (event) => {
       }
      
 
-      // Créer d'abord les BaseGame si nécessaire
+      // Créer d'abord les BaseGame si nécessaire (en respectant un éventuel id fourni)
       const baseGamePromises = elems.map(async (elem: any) => {
-        // Chercher ou créer un BaseGame
+        const name = (elem.name || '').trim();
+        const providedId = elem.base_game_id ? String(elem.base_game_id) : null;
+
+        if (providedId) {
+          const existingById = await prisma.baseGame.findUnique({ where: { id: providedId } });
+          if (existingById) {
+            if (name && existingById.name !== name) {
+              await prisma.baseGame.update({ where: { id: providedId }, data: { name } });
+              return { ...existingById, name };
+            }
+            return existingById;
+          }
+
+          return prisma.baseGame.create({
+            data: {
+              id: providedId,
+              name: name || 'Unknown game'
+            }
+          });
+        }
+
         let baseGame = await prisma.baseGame.findFirst({
-          where: { name: elem.name }
+          where: { name: name || undefined }
         });
         
         if (!baseGame) {
           baseGame = await prisma.baseGame.create({
-            data: { name: elem.name }
+            data: { name: name || 'Unknown game' }
           });
         }
         
@@ -121,10 +141,12 @@ export default defineEventHandler(async (event) => {
           (parseFloat(bundleData.price) / elems.length) : 
           (parseFloat(elem.price) || 0);
 
+        const name = (elem.name || '').trim()
+
         return {
           user_id: elem.user_id,
           base_game_id: baseGames[index].id,
-          name: '',
+          name: name,
           price: price,
           black_market_price: 0,
           sale_price: 0,
