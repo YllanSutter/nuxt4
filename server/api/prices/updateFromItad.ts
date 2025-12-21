@@ -141,18 +141,33 @@ export default defineEventHandler(async (event): Promise<{ statusCode: number; b
 
       const salePrice = typeof sale === 'number' ? sale : (amounts.length ? amounts[0] : 0)
       const initialPrice = typeof regular === 'number' ? regular : (amounts.length ? Math.max(...amounts) : salePrice)
-      const blackMarketPrice = amounts.length ? Math.max(...amounts) : initialPrice
 
-      // Mise à jour DB
+      // Détection grey-market (G2A, Kinguin, Eneba, Gamivo, Instant Gaming, CDKeys, Royal, K4G, Plati, MMOGA, HRK)
+      const isBlackMarketShop = (s: any) => {
+        const name = String(s?.shop?.name || s?.shop || '').toLowerCase()
+        return [
+          'g2a','kinguin','eneba','gamivo','instant','cdkeys','royal','k4g','plati','mmoga','hrk'
+        ].some(sig => name.includes(sig))
+      }
+      const blackCandidates = candidates.filter((c: any) => isBlackMarketShop(c))
+      const blackAmounts = blackCandidates
+        .map((c: any) => getAmount(c?.regular) ?? getAmount(c?.price))
+        .filter((n: any) => typeof n === 'number')
+      const blackMarketPrice = blackAmounts.length ? Math.max(...blackAmounts) : undefined
+
+      // Mise à jour DB (ne pas toucher `black_market_price` si non détecté)
+      const data: any = {
+        sale_price: salePrice,
+        initial_price: initialPrice,
+        updated_at: new Date()
+      }
+      if (blackMarketPrice !== undefined) {
+        data.black_market_price = blackMarketPrice
+      }
+
       await prisma.userGame.update({
         where: { id: String(mapEntry.userGameId) as unknown as any },
-        data: {
-          sale_price: salePrice,
-          initial_price: initialPrice,
-          black_market_price: blackMarketPrice,
-          price: salePrice > 0 ? salePrice : initialPrice,
-          updated_at: new Date()
-        }
+        data
       })
 
       updates.push({

@@ -61,9 +61,10 @@ const updatePrices = async () => {
         if (prices) {
           updateLocalData(id, 'sale_price', prices.sale as any, 'UserGame')
           updateLocalData(id, 'initial_price', prices.initial as any, 'UserGame')
-          updateLocalData(id, 'black_market_price', prices.blackMarket as any, 'UserGame')
-          // Champ d'affichage principal
-          updateLocalData(id, 'price', (prices.sale > 0 ? prices.sale : prices.initial) as any, 'UserGame')
+          if (prices.blackMarket !== undefined) {
+            updateLocalData(id, 'black_market_price', prices.blackMarket as any, 'UserGame')
+          }
+          // Ne pas écraser le champ `price` saisi manuellement
         }
       }
     }

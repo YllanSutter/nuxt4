@@ -80,47 +80,58 @@ const emits = defineEmits<{
 // Utiliser un ref pour éviter les problèmes d'hydratation
 const displayValue = ref('');
 
-// Fonction pour normaliser la valeur de manière cohérente
-const normalizeValue = (value: any) => {
-  if (value === null || value === undefined) {
-    return '';
-  }
-  
-  if (props.type === 'number' || props.type === 'decimal') {
-    const num = Number(value);
-    if (Number.isNaN(num) || num === 0) {
-      return '';
-    }
-    return num.toFixed(2);
-  }
-  
-  if (value === 0 || value === '') {
-    return '';
-  }
-  
-  return String(value);
-};
-
-// Watcher pour synchroniser avec modelValue
+// Watcher pour synchroniser avec modelValue sans formatage agressif
 watch(() => props.modelValue, (newValue) => {
-  displayValue.value = normalizeValue(newValue);
-}, { immediate: true });
-
-const handleInput = (event: Event) => {
-  const target = event.target as HTMLInputElement | HTMLSelectElement;
-  let value: string | number = target.value;
-
-  if (
-    target.type === 'number' ||
-    (props.type === 'select' && props.label && props.label.endsWith('Id'))
-  ) {
-    value = Number(target.value);
+  if (newValue === null || newValue === undefined) {
+    displayValue.value = ''
+    return
   }
-  
-  // Mettre à jour displayValue pour la cohérence
-  displayValue.value = normalizeValue(value);
- 
-  emits('update:modelValue', value === '' ? 0 : value);
+  // Pour les champs numériques, afficher tel quel si chaîne
+  // et sinon convertir en chaîne sans imposer 2 décimales
+  if (props.type === 'number' || props.type === 'decimal') {
+    if (typeof newValue === 'string') {
+      displayValue.value = newValue
+    } else {
+      displayValue.value = String(newValue)
+    }
+    return
+  }
+  // Autres types
+  displayValue.value = newValue === 0 || newValue === '' ? '' : String(newValue)
+}, { immediate: true })
+
+// Saisie: mettre à jour l'affichage; pour numérique, n'émettre qu'au blur/change
+const handleInput = (event: Event) => {
+  const target = event.target as HTMLInputElement | HTMLSelectElement
+  const raw = target.value
+  displayValue.value = raw
+
+  // Pour les champs non numériques, émettre immédiatement
+  if (!(props.type === 'number' || props.type === 'decimal')) {
+    emits('update:modelValue', raw === '' ? 0 : raw)
+  }
+}
+
+// Émission finale (blur/change) avec parsing des décimales
+const emitFinal = (event: Event) => {
+  const target = event.target as HTMLInputElement | HTMLSelectElement
+  const raw = target.value
+
+  // Sélection (IDs) -> nombre
+  if (props.type === 'select' && props.label && props.label.endsWith('Id')) {
+    const num = Number(raw)
+    emits('update:modelValue', raw === '' || Number.isNaN(num) ? 0 : num)
+    return
+  }
+
+  if (props.type === 'number' || props.type === 'decimal') {
+    const normalized = raw.replace(',', '.')
+    const num = Number(normalized)
+    emits('update:modelValue', raw === '' || Number.isNaN(num) ? 0 : num)
+    return
+  }
+
+  emits('update:modelValue', raw === '' ? 0 : raw)
 };
 </script>
 
@@ -128,9 +139,12 @@ const handleInput = (event: Event) => {
   <input
     v-model="displayValue"
     @input="handleInput"
-    @change="handleInput"
+    @blur="emitFinal"
+    @change="emitFinal"
     data-slot="input"
-    :type="type"
+    :type="(type === 'number' || type === 'decimal') ? 'text' : type"
+    :inputmode="(type === 'number' || type === 'decimal') ? 'decimal' : undefined"
+    :pattern="(type === 'number' || type === 'decimal') ? '[0-9]*[\\.,]?[0-9]*' : undefined"
     :placeholder="props.type === 'number' || props.type === 'decimal'
       ? '0'
       : (label === 'recherche' || label === 'name' ? '...' : '...')"
