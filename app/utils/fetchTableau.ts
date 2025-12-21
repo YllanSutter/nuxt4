@@ -228,34 +228,38 @@ export const useTableauData = (models?: string[] | string) => {
     });
   }
 
-  const updateLocalData = (elemId: string, field: string, value: string, table: string) => {
-    // Gestion spéciale pour rating_id : mettre à jour aussi rating_ref.value localement
-    const tableMap: Record<string, any> = {
-      'UserGame': userGames,
-      'Bundle': bundles,
-      'User': users,
-      'Platform': platforms,
-      'Tag': tags,
-      'Rating': ratings,
-    };
-    const targetArray = tableMap[table];
-    if (targetArray?.value) {
-      const item = targetArray.value.find((item: any) => item.id === elemId);
-      if (item) {
-        const oldValue = item[field];
-        item[field] = value;
+  const updateLocalData = (elemId: string, field: string, value: any, table: string) => {
+    // Muter directement la source (allOptions.value[...]) car les computed sont readonly
+    const tablePropMap: Record<string, string> = {
+      'UserGame': 'userGame',
+      'Bundle': 'bundle',
+      'User': 'user',
+      'Platform': 'platform',
+      'Tag': 'tag',
+      'Rating': 'rating',
+    }
+    const prop = tablePropMap[table]
+    if (!prop) return
+    const sourceArray = allOptions.value ? (allOptions.value as any)[prop] : undefined
+    if (Array.isArray(sourceArray)) {
+      const idx = sourceArray.findIndex((item: any) => item.id === elemId)
+      if (idx !== -1) {
+        const item = sourceArray[idx]
+        const oldValue = item[field]
+        item[field] = value
         // Si on modifie rating_id, mettre à jour rating_ref aussi
         if (field === 'rating_id' && item.rating_ref) {
-          // Chercher la nouvelle note dans optionsRatings
-          const ratingObj = optionsRatings.value.find((r: any) => r.id === value);
+          const ratingObj = optionsRatings.value.find((r: any) => r.id === value)
           if (ratingObj) {
-            item.rating_ref.value = ratingObj.value;
-            item.rating_ref.name = ratingObj.name;
-            item.rating_ref.color = ratingObj.color;
-            item.rating_ref.image = ratingObj.image;
+            item.rating_ref.value = ratingObj.value
+            item.rating_ref.name = ratingObj.name
+            item.rating_ref.color = ratingObj.color
+            item.rating_ref.image = ratingObj.image
           }
         }
-        console.log(`✅ ${table}.${elemId}.${field}: "${oldValue}" → "${value}"`);
+        console.log(`✅ ${table}.${elemId}.${field}: "${oldValue}" → "${value}"`)
+        // Forcer la réactivité: réassigner l'array dans allOptions
+        ;(allOptions.value as any)[prop] = [...sourceArray]
       }
     }
   }

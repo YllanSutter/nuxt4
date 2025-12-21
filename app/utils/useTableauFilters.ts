@@ -226,6 +226,12 @@ export const useTableauFilters = () => {
     setFilter,
     filterAllData, // Fonction optimisée
     hasActiveFilters,
-    clearAllFilters
+    clearAllFilters,
+    // Invalide le cache pour forcer un recalcul complet au prochain appel
+    invalidateCache: () => {
+      cachedFilterResults.value.filteredBundles = []
+      cachedFilterResults.value.bundleGameMap = new Map()
+      cachedFilterResults.value.filteredUserGames = []
+    }
   }
 }

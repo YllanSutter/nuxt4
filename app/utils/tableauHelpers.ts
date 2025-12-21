@@ -58,7 +58,6 @@ export function handleValueUpdate(
  * Gère la mise à jour directe des valeurs dans le modèle
  */
 export function handleModelUpdate(userGame: any, newValue: any, labelKey: string) {
-  console.log(newValue);
   if (newValue !== null && newValue !== undefined) {
     userGame[labelKey] = newValue;
   }

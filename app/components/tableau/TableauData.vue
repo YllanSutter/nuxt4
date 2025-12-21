@@ -25,6 +25,8 @@ const emit = defineEmits<{
   bundleDeleted: []
   linesAdded: []
 }>()
+// Clé locale pour forcer le re-render à la mise à jour de prix
+const localForceUpdateKey = ref(0)
 
 // Fonction locale pour récupérer les jeux d'un bundle
 const getGamesForBundle = (bundle: any) => {
@@ -34,7 +36,12 @@ const getGamesForBundle = (bundle: any) => {
 // Fonctions de gestion des événements
 const handleLineDeleted = () => emit('lineDeleted')
 const handleBundleDeleted = () => emit('bundleDeleted')
-const handleLinesAdded = () => emit('linesAdded')
+const handleLinesAdded = () => {
+  // Incrémenter la clé locale pour forcer un re-render du tableau
+  localForceUpdateKey.value++
+  // Propager l'évènement au parent pour qu'il mette à jour sa propre clé si nécessaire
+  emit('linesAdded')
+}
 
 type GameOption = { id: string; name: string }
 
@@ -118,7 +125,7 @@ function handleOrderChanged(newOrder : any) {
 
 <template>
   <div v-if="props.mode === 'showAll'">
-    <Table :key="`table-all-${props.userGamesLength}-${props.mainLabels.length}-${props.forceUpdateKey}`">
+    <Table :key="`table-all-${props.userGamesLength}-${props.mainLabels.length}-${props.forceUpdateKey}-${localForceUpdateKey}`">
       <TableHeader>
         <TableRow>
           <TableHead v-for="label in props.mainLabels" :key="label.id">
@@ -208,7 +215,7 @@ function handleOrderChanged(newOrder : any) {
         <ClientOnly><img :src="bundle.image" alt="" class="absolute top-0 left-0 w-full h-full object-cover  z-[-2]"></ClientOnly>
         <div class="absolute top-0 left-0 w-full h-full bg-background/98 z-[-1]"></div>
       </div>
-      <Table :key="`table-${bundle.id}-${props.userGamesLength}-${props.mainLabels.length}-${props.forceUpdateKey}`">
+      <Table :key="`table-${bundle.id}-${props.userGamesLength}-${props.mainLabels.length}-${props.forceUpdateKey}-${localForceUpdateKey}`">
         <TableHeader>
           <TableRow>
             <td></td>
@@ -291,6 +298,10 @@ function handleOrderChanged(newOrder : any) {
                     :bundle="bundle"
                     :filtres="props.filtres"
                     :getOptionsForLabel="props.getOptionsForLabel"
+                  />
+                  <UiTableauUpdatePrices
+                    :bundleId="bundle.id"
+                    @pricesUpdated="handleLinesAdded"
                   />
                   <ClientOnly v-if="bundle.link != '' && bundle.link != ' '"><a v-if="bundle.link != ''" :href="bundle.link" target="_blank" rel="noopener noreferrer" class="btn"><Icon name="solar:link-bold-duotone"></Icon></a></ClientOnly>
                 </div>

@@ -24,4 +24,9 @@ export default defineNuxtConfig({
      */
     componentDir: './app/components/ui'
   },
+  runtimeConfig: {
+    ITAD_CLIENT_ID: process.env.ITAD_CLIENT_ID,
+    ITAD_CLIENT_SECRET: process.env.ITAD_CLIENT_SECRET,
+    ITAD_API_KEY: process.env.ITAD_API_KEY,
+  }
 })
