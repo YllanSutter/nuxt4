@@ -182,8 +182,10 @@ function handleOrderChanged(newOrder : any) {
                   :model-value="props.getUserGameValue(userGame, label.key) || ''"
                   :label="label.key"
                   :type="label.type"
-                  @change="props.updateElem(userGame, props.getUserGameValue(userGame, label.key), label, 'userGame', props.updateLocalData)"
-                  @update:model-value="(newValue) => handleModelUpdate(userGame, newValue, label.key)"
+                  @update:model-value="(newValue) => {
+                    handleModelUpdate(userGame, newValue, label.key);
+                    props.updateElem(userGame, newValue, label, 'userGame', props.updateLocalData);
+                  }"
                 />
                 <UiTableauSuffix v-if="label.type !== 'select' && label.key !== 'delete'" :label="label"></UiTableauSuffix>
               </div>
@@ -270,8 +272,10 @@ function handleOrderChanged(newOrder : any) {
                     :model-value="props.getUserGameValue(userGame, label.key) || ''"
                     :label="label.key"
                     :type="label.type"
-                    @change="props.updateElem(userGame, props.getUserGameValue(userGame, label.key), label, 'userGame', props.updateLocalData)"
-                    @update:model-value="(newValue) => handleModelUpdate(userGame, newValue, label.key)"
+                    @update:model-value="(newValue) => {
+                      handleModelUpdate(userGame, newValue, label.key);
+                      props.updateElem(userGame, newValue, label, 'userGame', props.updateLocalData);
+                    }"
                   />
                   <UiTableauSuffix v-if="label.type !== 'select' && label.key !== 'delete'" :label="label"></UiTableauSuffix>
                 </div>

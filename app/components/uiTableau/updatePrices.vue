@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Button } from '~/components/ui/button'
 import { useTableauFilters } from '@/utils/useTableauFilters'
+import { updateValue } from '@/utils/updateValue'
 
 const props = defineProps<{
   userGameIds?: string[]
@@ -59,12 +60,40 @@ const updatePrices = async () => {
         const id = String(u.gameId)
         const prices = u.prices || {}
         if (prices) {
+          // Enregistrer dans le système de modifications
+          if (prices.sale !== undefined) {
+            updateValue(
+              { id, name: u.gameName },
+              prices.sale,
+              { table: 'UserGame', field: 'sale_price', type: 'decimal' },
+              'UserGame',
+              updateLocalData
+            )
+          }
+          if (prices.initial !== undefined) {
+            updateValue(
+              { id, name: u.gameName },
+              prices.initial,
+              { table: 'UserGame', field: 'initial_price', type: 'decimal' },
+              'UserGame',
+              updateLocalData
+            )
+          }
+          if (prices.blackMarket !== undefined) {
+            updateValue(
+              { id, name: u.gameName },
+              prices.blackMarket,
+              { table: 'UserGame', field: 'black_market_price', type: 'decimal' },
+              'UserGame',
+              updateLocalData
+            )
+          }
+          // Mettre à jour aussi localement pour cohérence immédiate
           updateLocalData(id, 'sale_price', prices.sale as any, 'UserGame')
           updateLocalData(id, 'initial_price', prices.initial as any, 'UserGame')
           if (prices.blackMarket !== undefined) {
             updateLocalData(id, 'black_market_price', prices.blackMarket as any, 'UserGame')
           }
-          // Ne pas écraser le champ `price` saisi manuellement
         }
       }
     }

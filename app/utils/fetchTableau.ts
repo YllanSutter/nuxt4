@@ -14,7 +14,7 @@ export const useTableauData = (models?: string[] | string) => {
   if (pendingRequests.has(cacheKey)) {
     // console.log(`⏳ [useTableauData] Requête déjà en cours pour: ${cacheKey}`);
   } else {
-    console.log(`🚀 [useTableauData] Nouvelle requête pour: ${cacheKey}`);
+    // console.log(`🚀 [useTableauData] Nouvelle requête pour: ${cacheKey}`);
     pendingRequests.add(cacheKey);
   }
   
@@ -257,7 +257,7 @@ export const useTableauData = (models?: string[] | string) => {
             item.rating_ref.image = ratingObj.image
           }
         }
-        console.log(`✅ ${table}.${elemId}.${field}: "${oldValue}" → "${value}"`)
+        // console.log(`✅ ${table}.${elemId}.${field}: "${oldValue}" → "${value}"`)
         // Forcer la réactivité: réassigner l'array dans allOptions
         ;(allOptions.value as any)[prop] = [...sourceArray]
       }
@@ -268,7 +268,7 @@ export const useTableauData = (models?: string[] | string) => {
   const mainLabels = computed(() => getLabelsByEmplacement('main'))
 
   const clearCacheAndRefresh = async () => {
-    console.log('🔄 [fetchTableau] Vidage du cache et rafraîchissement des données...');
+    // console.log('🔄 [fetchTableau] Vidage du cache et rafraîchissement des données...');
     console.trace('🔍 [fetchTableau] Appelé depuis:');
     // Vider le cache Nuxt
     if (existingData) {
@@ -276,7 +276,7 @@ export const useTableauData = (models?: string[] | string) => {
     }
     // Rafraîchir les données depuis l'API
     await refresh();
-    console.log('✅ [fetchTableau] Cache vidé et données rafraîchies');
+    // console.log('✅ [fetchTableau] Cache vidé et données rafraîchies');
   }
 
   const filtres = computed(() => getLabelsByEmplacement('filtres'));

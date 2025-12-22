@@ -3,5 +3,6 @@
   "css.lint.unknownAtRules": "ignore",
   "less.validate": false,
   "scss.validate": false,
-  "nuxt.isNuxtApp": false
+  "nuxt.isNuxtApp": false,
+  "postman.settings.dotenv-detection-notification-visibility": false
 }

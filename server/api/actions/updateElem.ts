@@ -21,13 +21,17 @@ export default defineEventHandler(async (event) => {
       mods: ModificationEntry[] 
     };
 
-    console.log(`🔧 Mise à jour ${table}:`, mods);
+    console.log(`🔧 Mise à jour ${table}:`, {
+      count: mods.length,
+      elemCount: new Set(mods.map(m => m.elemId)).size,
+      fields: Array.from(new Set(mods.map(m => m.label.field)))
+    });
 
     if (!mods || mods.length === 0) {
-      return { success: true, message: 'Aucune modification à traiter' };
+      return { success: true, ok: true, message: 'Aucune modification à traiter', modificationsCount: 0, batchCount: 0, results: [] };
     }
 
-    // Nouveau: regrouper par element pour mettre à jour plusieurs champs d'un coup
+    // Regrouper par element pour mettre à jour plusieurs champs d'un coup
     const modsByElem = new Map<string, ModificationEntry[]>();
     for (const m of mods) {
       if (!modsByElem.has(m.elemId)) modsByElem.set(m.elemId, []);
@@ -35,6 +39,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const results: any[] = [];
+    let totalModifications = 0;
 
     for (const [elemId, elemMods] of modsByElem) {
       // Regrouper par table (en pratique homogène)
@@ -59,40 +64,82 @@ export default defineEventHandler(async (event) => {
           continue;
         }
 
-        console.log(`🛠️ Update unique - Table: ${tableName}, id: ${elemId}, fields: ${Object.keys(data).join(', ')}`);
+        console.log(`🛠️ Update - Table: ${tableName}, id: ${elemId}, fields: ${Object.keys(data).join(', ')}`);
         try {
           const result = await model.update({
             where: { id: elemId },
             data
           });
-          results.push({ table: tableName, id: elemId, fields: Object.keys(data), ok: true });
+          results.push({ 
+            table: tableName, 
+            id: elemId, 
+            fields: Object.keys(data), 
+            ok: true 
+          });
+          totalModifications += Object.keys(data).length;
         } catch (e: any) {
-          console.error(`❌ Update failed (update) ${tableName} id=${elemId}:`, e?.message || e);
+          console.error(`❌ Update failed (first attempt) ${tableName} id=${elemId}:`, e?.message || e);
           // Fallback: updateMany pour éviter l'exception P2025 si l'ID est introuvable
           try {
-            const fallback = await model.updateMany({ where: { id: elemId }, data });
-            results.push({ table: tableName, id: elemId, fields: Object.keys(data), ok: fallback.count > 0, count: fallback.count, fallback: true });
+            const fallback = await model.updateMany({ 
+              where: { id: elemId }, 
+              data 
+            });
+            if (fallback.count > 0) {
+              results.push({ 
+                table: tableName, 
+                id: elemId, 
+                fields: Object.keys(data), 
+                ok: true, 
+                fallback: true 
+              });
+              totalModifications += Object.keys(data).length;
+            } else {
+              results.push({ 
+                table: tableName, 
+                id: elemId, 
+                fields: Object.keys(data), 
+                ok: false, 
+                error: 'Element not found (updateMany returned 0)' 
+              });
+            }
           } catch (e2: any) {
-            console.error(`💥 Update failed (updateMany) ${tableName} id=${elemId}:`, e2?.message || e2);
-            results.push({ table: tableName, id: elemId, fields: Object.keys(data), ok: false, error: e2?.message || String(e2) });
+            console.error(`💥 Update failed (fallback updateMany) ${tableName} id=${elemId}:`, e2?.message || e2);
+            results.push({ 
+              table: tableName, 
+              id: elemId, 
+              fields: Object.keys(data), 
+              ok: false, 
+              error: e2?.message || String(e2) 
+            });
           }
         }
       }
     }
 
-    console.log(`✅ Modifications terminées:`, results);
+    const successCount = results.filter(r => r.ok).length;
+    const failureCount = results.filter(r => !r.ok).length;
+
+    console.log(`✅ Modifications terminées: ${successCount} succès, ${failureCount} échecs - Total champs: ${totalModifications}/${mods.length}`);
     
     return {
-      success: true,
-      modificationsCount: mods.length,
+      success: failureCount === 0,
+      ok: failureCount === 0,
+      modificationsCount: totalModifications,
       batchCount: results.length,
-      results
+      results,
+      summary: {
+        total: mods.length,
+        successful: successCount,
+        failed: failureCount
+      }
     };
 
   } catch (error) {
     console.error('❌ Erreur updateElem:', error);
     return {
       success: false,
+      ok: false,
       error: error instanceof Error ? error.message : 'Erreur inconnue'
     };
   }

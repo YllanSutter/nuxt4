@@ -6,5 +6,7 @@
     <main>
       <NuxtPage />
     </main>
+    <!-- Monitoring des modifications -->
+    <DebugModifications />
   </div>
 </template>
