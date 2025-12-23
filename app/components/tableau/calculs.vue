@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useTableauFilters } from '@/utils/useTableauFilters'
 
 const props= defineProps<{
     labels:any;
@@ -7,6 +8,14 @@ const props= defineProps<{
     listClass:string;
     emplacement?:string
 }>();
+
+const { 
+  optionsMonths,
+  optionsYears,
+} = useTableauData(['month', 'year'])
+
+const { filters } = useTableauFilters()
+const selectedMonth = computed(() => filters.value.month_id ?? '')
 
 const elems = computed(() => {
   if (!props.labels || !props.userGamesBundle) {
@@ -145,6 +154,58 @@ interface User {
 }
 const userCookie = useCookie<User | null>('user');
 const user = computed(() => userCookie.value);
+
+const isAnnualBudget = computed(() => !selectedMonth.value || selectedMonth.value === 'Tout')
+
+const getBudgetTarget = () => {
+  const budget = user.value?.budget
+  if (budget === undefined || budget === null) return null
+  const numericBudget = Number(budget)
+  if (Number.isNaN(numericBudget)) return null
+  return isAnnualBudget.value ? numericBudget * 12 : numericBudget
+}
+
+const getBudgetIcon = (priceRaw: any) => {
+  const target = getBudgetTarget()
+  const price = Number(priceRaw)
+  const effectivePrice = price
+  if (target === null || Number.isNaN(effectivePrice)) return 'mingcute:check-fill'
+  if (effectivePrice > target) return 'mingcute:close-fill'
+  if (effectivePrice > target / 2) return 'mingcute:alert-fill'
+  return 'mingcute:check-fill'
+}
+
+const getBudgetStyle = (priceRaw: any) => {
+  const target = getBudgetTarget()
+  const price = Number(priceRaw)
+  const effectivePrice = price
+  if (target === null || Number.isNaN(effectivePrice)) return 'color: green;'
+  if (effectivePrice > target) return 'color: red;'
+  if (effectivePrice > target / 2) return 'color: orange;'
+  return 'color: green;'
+}
+
+const getBudgetOverrun = (priceRaw: any) => {
+  const target = getBudgetTarget()
+  const price = Number(priceRaw)
+  const effectivePrice = price
+  if (target === null || Number.isNaN(effectivePrice)) return null
+  const diff = effectivePrice - target
+  if (diff === 0) return 'Budget exact'
+  const formatted = Math.abs(diff).toFixed(2)
+  const suffix = isAnnualBudget.value ? ' (annuel)' : ' (mensuel)'
+  if (diff > 0) return `Dépasse de ${formatted}€${suffix}`
+  return `Reste ${formatted}€${suffix}`
+}
+
+const getBudgetTooltip = (priceRaw: any) => {
+  const message = getBudgetOverrun(priceRaw)
+  if (!message) return null
+  const target = getBudgetTarget()
+  const label = isAnnualBudget.value ? '| Budget annuel' : '| Budget mensuel'
+  const targetText = target !== null ? target.toFixed(2) : 'N/A'
+  return `${message}\n${label}: ${targetText}€`
+}
 </script>
 
 <template>
@@ -164,10 +225,19 @@ const user = computed(() => userCookie.value);
                 </template>
                 <template v-else-if="label.key === 'price'">
                   {{ elems[index]?.elems[0] }}
-                  <Icon class="text-xs relative -top-[5px] left-[10px] -mr-3 pointer-events-none text-white transition-all duration-400 hover:rotate-3"
-                    :name="user?.budget !== undefined && user?.budget !== null ? (Number(elems[index]?.elems[0]) > Number(user.budget) ? 'mingcute:close-fill' : Number(elems[index]?.elems[0]) > Number(user.budget) / 2 ? 'mingcute:alert-fill' : 'mingcute:check-fill') : 'mingcute:check-fill'"
-                    :style="user?.budget !== undefined && user?.budget !== null ? (Number(elems[index]?.elems[0]) > Number(user.budget) ? 'color: red;' : Number(elems[index]?.elems[0]) > Number(user.budget) / 2 ? 'color: orange;' : 'color: green;') : 'color: green;'"
-                  />
+                  <span class="relative inline-flex group align-middle">
+                    <Icon
+                      class="text-xs relative -top-[5px] left-[10px] -mr-3  text-white transition-all duration-400 group-hover:rotate-3"
+                      :name="getBudgetIcon(elems[index]?.elems[0])"
+                      :style="getBudgetStyle(elems[index]?.elems[0])"
+                    />
+                    <span
+                      v-if="getBudgetTooltip(elems[index]?.elems[0])"
+                      class="flex pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-full mb-2  bg-background border border-[#ffffff20] p-4 text-[11px] text-slate-200 shadow transition-opacity duration-150 opacity-0 group-hover:opacity-100"
+                    >
+                      {{ getBudgetTooltip(elems[index]?.elems[0]) }}
+                    </span>
+                  </span>
                   <UiTableauSuffix :label=label :emplacement="'footer'"/>
                 </template>
                 <template v-else>

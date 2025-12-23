@@ -79,7 +79,7 @@
               class="font-medium"
             >
              
-              <div class="flex items-center gap-1 bg-background rounded-md overflow-hidden border border-[#ffffff20]">   
+              <div class="flex items-center gap-1 bg-[#ffffff20] rounded-md overflow-hidden border border-[#ffffff20]">   
                   <UiTableauRadioGroup 
                     :model-value="getFilterValue(label.key)"
                     v-if="label.type == 'select'"

@@ -121,6 +121,19 @@ function handleOrderChanged(newOrder : any) {
     )
   })
 }
+
+const isLabelVisible = (label: any) => {
+  if (!label) return null
+  const userVisibility = label.user_label_visibility?.find((v: any) => typeof v.visible === 'boolean')
+  if (userVisibility) return userVisibility.visible
+  return Boolean(label.default_visible)
+}
+
+const imageFilterVisible = computed(() => {
+  const imageLabel = props.filtres?.find((l: any) => l.key === 'image')
+  if (!imageLabel) return null
+  return isLabelVisible(imageLabel)
+})
 </script>
 
 <template>
@@ -213,9 +226,13 @@ function handleOrderChanged(newOrder : any) {
   
   <div v-else>
     <div v-for="(bundle, index) in bundlesToDisplay" :key="bundle.id" class="bundle-display">
-      <div v-if="bundle.image && bundle.image != ''" class="fixed top-0 left-0 w-svw h-svh">
+      <div v-if="bundle.image && bundle.image != '' && imageFilterVisible" class="fixed top-0 left-0 w-svw h-svh">
         <ClientOnly><img :src="bundle.image" alt="" class="absolute top-0 left-0 w-full h-full object-cover  z-[-2]"></ClientOnly>
         <div class="absolute top-0 left-0 w-full h-full bg-background/98 z-[-1]"></div>
+        <!-- {{ filtres }} -->
+      </div>
+       <div v-if="bundle.image && bundle.image != '' && imageFilterVisible" class="h-[500px] relative w-full my-2">
+        <ClientOnly><img :src="bundle.image" alt="" class="absolute top-0 left-0 w-full h-full object-cover rounded-sm "></ClientOnly>
       </div>
       <Table :key="`table-${bundle.id}-${props.userGamesLength}-${props.mainLabels.length}-${props.forceUpdateKey}-${localForceUpdateKey}`">
         <TableHeader>
@@ -313,6 +330,12 @@ function handleOrderChanged(newOrder : any) {
                   <div v-for="label in filtres.filter((l: { type: string; name: string; }) => l.name == 'Month' || l.name == 'Year')" :key="label.id" :class="[label.type !== 'select'? 'col-span-3':'','grid items-center gap-4']">
                     {{ props.getOptionsForLabel(label.key).find((m: { id: any; }) => m.id === bundle[label.key])?.name || '' }}
                   </div>
+                  <span
+                    v-if="imageFilterVisible !== null"
+                    class="text-[10px] px-2 py-1 rounded border border-[#ffffff30] text-muted-foreground"
+                  >
+                    Image: {{ imageFilterVisible ? 'visible' : 'hidden' }}
+                  </span>
                   <UiTableauDeleteBundle
                     :bundleId="bundle.id"
                     :bundleName="bundle.name"
