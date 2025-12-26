@@ -17,6 +17,13 @@ const {
 const { filters } = useTableauFilters()
 const selectedMonth = computed(() => filters.value.month_id ?? '')
 
+const priceKeys = ['price', 'black_market_price', 'sale_price', 'initial_price']
+const isGiftGame = (game: any) => {
+  const tagName = (game?.tag?.name ?? game?.tag)?.toString().toLowerCase()
+  const tagId = (game?.tag_id ?? game?.tagId)?.toString().toLowerCase()
+  return tagName === 'gift' || tagId === 'gift'
+}
+
 const elems = computed(() => {
   if (!props.labels || !props.userGamesBundle) {
     return [];
@@ -28,15 +35,20 @@ const elems = computed(() => {
   }));
 
   for (let i = 0; i < props.userGamesBundle.length; i++) {
+    const currentGame = props.userGamesBundle[i];
+    const isGift = isGiftGame(currentGame);
+
     for (let j = 0; j < props.labels.length; j++) {
       const key = props.labels[j].key;
+
+      if (isGift && priceKeys.includes(key)) continue;
       // Sauter la ligne si tag_id === 'tag-3', sauf pour la clé 'price'
-      if (props.userGamesBundle[i].tag_id === 'tag-3' && key !== 'price') continue;
-      let value = props.userGamesBundle[i][key];
+      if (currentGame.tag_id === 'tag-3' && key !== 'price') continue;
+      let value = currentGame[key];
 
       // Gestion spéciale pour rating_id : récupérer la valeur numérique depuis la relation
-      if (key === 'rating_id' && props.userGamesBundle[i].rating_ref) {
-        value = props.userGamesBundle[i].rating_ref.value;
+      if (key === 'rating_id' && currentGame.rating_ref) {
+        value = currentGame.rating_ref.value;
       }
 
       if (typeof value === 'number') {
